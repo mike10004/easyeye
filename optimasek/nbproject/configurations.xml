@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="89">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>include/Masek.h</itemPath>
+      <itemPath>include/global.h</itemPath>
+      <itemPath>include/portability.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/adjgamma.cpp</itemPath>
+      <itemPath>src/canny.cpp</itemPath>
+      <itemPath>src/circlecoordinates.cpp</itemPath>
+      <itemPath>src/encode.cpp</itemPath>
+      <itemPath>src/findcircle.cpp</itemPath>
+      <itemPath>src/findline.cpp</itemPath>
+      <itemPath>src/gaborconvolve.cpp</itemPath>
+      <itemPath>src/gauss.cpp</itemPath>
+      <itemPath>src/global.cpp</itemPath>
+      <itemPath>src/houcircle.cpp</itemPath>
+      <itemPath>src/hysthresh.cpp</itemPath>
+      <itemPath>src/interp2.cpp</itemPath>
+      <itemPath>src/linecoords.cpp</itemPath>
+      <itemPath>src/nonmaxsup.cpp</itemPath>
+      <itemPath>src/normalizeiris.cpp</itemPath>
+      <itemPath>src/portability.cc</itemPath>
+      <itemPath>src/radon.cpp</itemPath>
+      <itemPath>src/segmentiris.cpp</itemPath>
+      <itemPath>src/shiftbits.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+    <Elem>include</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="include/Masek.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/global.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/portability.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/adjgamma.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/canny.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/circlecoordinates.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/encode.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/findcircle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/findline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/gaborconvolve.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/gauss.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/global.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/houcircle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/hysthresh.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/interp2.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/linecoords.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/nonmaxsup.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/normalizeiris.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/portability.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/radon.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/segmentiris.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/shiftbits.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="include/Masek.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/global.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/portability.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/adjgamma.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/canny.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/circlecoordinates.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/encode.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/findcircle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/findline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/gaborconvolve.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/gauss.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/global.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/houcircle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/hysthresh.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/interp2.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/linecoords.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/nonmaxsup.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/normalizeiris.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/portability.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/radon.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/segmentiris.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/shiftbits.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
