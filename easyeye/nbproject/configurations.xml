@@ -1,0 +1,1037 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="90">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="common-include" displayName="common" projectFiles="true">
+        <itemPath>src/easyeye/common/base64.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_config.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_diagnostics.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_serial.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_types.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_utils.h</itemPath>
+        <itemPath>src/easyeye/common/mylog.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="encode" projectFiles="true">
+        <itemPath>src/easyeye/encode/easyeye_encode.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="match-include" displayName="match" projectFiles="true">
+        <itemPath>src/easyeye/match/HDCalculator.h</itemPath>
+        <itemPath>src/easyeye/match/easyeye_match.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="segment-include" displayName="segment" projectFiles="true">
+        <itemPath>src/easyeye/segment/FindEyelidMix.h</itemPath>
+        <itemPath>src/easyeye/segment/FindIrisCircle.h</itemPath>
+        <itemPath>src/easyeye/segment/FindPupilCircleNew.h</itemPath>
+        <itemPath>src/easyeye/segment/ImageUtility.h</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_extrema_noise.h</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_imaging.h</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_segment.h</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="common-src" displayName="common" projectFiles="true">
+        <itemPath>src/easyeye/common/base64.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_config.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_diagnostics.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_serial.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_types.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_utils.cc</itemPath>
+        <itemPath>src/easyeye/common/mylog.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="encode" projectFiles="true">
+        <itemPath>src/easyeye/encode/easyeye_encode.cc</itemPath>
+        <itemPath>src/easyeye/encode/easyeye_encoding.cc</itemPath>
+        <itemPath>src/easyeye/encode/easyeye_encoding_serial.cc</itemPath>
+        <itemPath>src/easyeye/encode/easyeye_normalize.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="match-src" displayName="match" projectFiles="true">
+        <itemPath>src/easyeye/match/HDCalculator.cc</itemPath>
+        <itemPath>src/easyeye/match/easyeye_match.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="segment-src" displayName="segment" projectFiles="true">
+        <itemPath>src/easyeye/segment/FindEyelidMix.cpp</itemPath>
+        <itemPath>src/easyeye/segment/FindIrisCircle.cpp</itemPath>
+        <itemPath>src/easyeye/segment/FindPupilCircleNew.cpp</itemPath>
+        <itemPath>src/easyeye/segment/ImageUtility.cpp</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_extrema_noise.cpp</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_imaging.cc</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_segment.cc</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f2" displayName="base64" projectFiles="true" kind="TEST">
+        <itemPath>tests/base64_test.cc</itemPath>
+        <itemPath>tests/testutils_base64.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7"
+                     displayName="bitpacking"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/BitPackingTest.cc</itemPath>
+        <itemPath>tests/BitPackingTest.h</itemPath>
+        <itemPath>tests/bitpacking_test_runner.cc</itemPath>
+        <itemPath>tests/testutils_bitpacking.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f10"
+                     displayName="common_serial"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/CommonSerialTest.cc</itemPath>
+        <itemPath>tests/CommonSerialTest.h</itemPath>
+        <itemPath>tests/common_serial_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5"
+                     displayName="diagnostics"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/DiagnosticsTest.cpp</itemPath>
+        <itemPath>tests/DiagnosticsTest.h</itemPath>
+        <itemPath>tests/diagnostics_test_runner.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f9" displayName="encoding" projectFiles="true" kind="TEST">
+        <itemPath>tests/EncodingTest.cc</itemPath>
+        <itemPath>tests/EncodingTest.h</itemPath>
+        <itemPath>tests/encoding_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f11"
+                     displayName="find_eyelids"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/FindEyelidsTest.cc</itemPath>
+        <itemPath>tests/FindEyelidsTest.h</itemPath>
+        <itemPath>tests/find_eyelids_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="imaging" projectFiles="true" kind="TEST">
+        <itemPath>tests/ImagingTest.cc</itemPath>
+        <itemPath>tests/ImagingTest.h</itemPath>
+        <itemPath>tests/imaging_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="matching" projectFiles="true" kind="TEST">
+        <itemPath>tests/MatchingTest.cc</itemPath>
+        <itemPath>tests/MatchingTest.h</itemPath>
+        <itemPath>tests/matching_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3"
+                     displayName="segment_serial"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/SegmentationSerializerTest.cc</itemPath>
+        <itemPath>tests/SegmentationSerializerTest.h</itemPath>
+        <itemPath>tests/segment_serial_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6"
+                     displayName="segmenter"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/segmentation_correctness_test.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f8" displayName="utils" projectFiles="true" kind="TEST">
+        <itemPath>tests/testdata.h</itemPath>
+        <itemPath>tests/testutils.cc</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>common</Elem>
+    <Elem>match</Elem>
+    <Elem>segment</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>../optimasek/include</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+        <requiredProjects>
+          <makeArtifact PL="../optimasek"
+                        CT="3"
+                        CN="Debug"
+                        AC="true"
+                        BL="false"
+                        WD="../optimasek"
+                        BC="${MAKE}  -f Makefile CONF=Debug"
+                        CC="${MAKE}  -f Makefile CONF=Debug clean"
+                        OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboptimasek.a">
+          </makeArtifact>
+        </requiredProjects>
+      </compileType>
+      <folder path="TestFiles">
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../optimasek"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../optimasek"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboptimasek.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibLibItem>opencv_core</linkerLibLibItem>
+            <linkerLibLibItem>opencv_highgui</linkerLibLibItem>
+            <linkerLibLibItem>opencv_imgproc</linkerLibLibItem>
+            <linkerLibLibItem>opencv_objdetect</linkerLibLibItem>
+            <linkerLibLibItem>jsoncpp</linkerLibLibItem>
+            <linkerLibLibItem>json-c</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f10">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f10</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f11">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f11</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <item path="src/easyeye/common/base64.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/base64.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_config.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_config.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_diagnostics.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_diagnostics.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_serial.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_serial.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_types.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_utils.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_utils.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/mylog.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/mylog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_encode.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_encode.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_encoding.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_encoding_serial.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_normalize.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/match/HDCalculator.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/match/easyeye_match.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindEyelidMix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindEyelidMix.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindIrisCircle.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindIrisCircle.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindPupilCircleNew.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindPupilCircleNew.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/ImageUtility.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/ImageUtility.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_extrema_noise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_extrema_noise.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_imaging.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_imaging.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_segment.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/BitPackingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/BitPackingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/CommonSerialTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/CommonSerialTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/DiagnosticsTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/DiagnosticsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/EncodingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/EncodingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/FindEyelidsTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/FindEyelidsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/ImagingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/ImagingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/MatchingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/MatchingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/SegmentationSerializerTest.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/SegmentationSerializerTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/base64_test.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/bitpacking_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/common_serial_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/diagnostics_test_runner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/encoding_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/find_eyelids_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/imaging_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/matching_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/segment_serial_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/segmentation_correctness_test.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testdata.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testutils.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testutils_base64.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testutils_bitpacking.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>../optimasek/include</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+        <requiredProjects>
+          <makeArtifact PL="../optimasek"
+                        CT="3"
+                        CN="Release"
+                        AC="false"
+                        BL="false"
+                        WD="../optimasek"
+                        BC="${MAKE}  -f Makefile CONF=Release"
+                        CC="${MAKE}  -f Makefile CONF=Release clean"
+                        OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboptimasek.a">
+          </makeArtifact>
+        </requiredProjects>
+      </compileType>
+      <folder path="TestFiles">
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../optimasek"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../optimasek"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboptimasek.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibLibItem>opencv_core</linkerLibLibItem>
+            <linkerLibLibItem>opencv_highgui</linkerLibLibItem>
+            <linkerLibLibItem>opencv_imgproc</linkerLibLibItem>
+            <linkerLibLibItem>opencv_objdetect</linkerLibLibItem>
+            <linkerLibLibItem>jsoncpp</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f10">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f10</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f11">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f11</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <item path="src/easyeye/common/base64.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/base64.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_config.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_config.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_diagnostics.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_diagnostics.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_serial.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_serial.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_types.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_utils.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_utils.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/mylog.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/common/mylog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_encode.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_encoding_serial.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/match/HDCalculator.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/match/easyeye_match.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindEyelidMix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindEyelidMix.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindIrisCircle.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindIrisCircle.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindPupilCircleNew.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/FindPupilCircleNew.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/ImageUtility.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/ImageUtility.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_extrema_noise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_extrema_noise.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_imaging.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_imaging.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_segment.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/BitPackingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/BitPackingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/CommonSerialTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/CommonSerialTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/DiagnosticsTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/DiagnosticsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/EncodingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/EncodingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/FindEyelidsTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/FindEyelidsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/ImagingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/ImagingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/MatchingTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/MatchingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/SegmentationSerializerTest.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/SegmentationSerializerTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/base64_test.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/bitpacking_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/common_serial_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/diagnostics_test_runner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/encoding_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/find_eyelids_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/imaging_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/matching_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/segment_serial_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/segmentation_correctness_test.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testdata.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testutils.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testutils_base64.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testutils_bitpacking.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
