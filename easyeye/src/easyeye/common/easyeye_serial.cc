@@ -1,14 +1,15 @@
 #include "easyeye_types.h"
-#include "base64.h"
 #include "easyeye_serial.h"
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <json/json_object.h>
 #include <json/json_tokener.h>
+#include "mylog.h"
 
 using namespace easyeye;
 using namespace std;
+using mylog::Logs;
 
 bool serial::PointAdapter::FromJson(const Json::Value& src, void* dst) {
         cv::Point2i* pp = (cv::Point2i*)dst;
@@ -137,3 +138,74 @@ bool serial::Deserialize(const Json::Value& src, EyelidsLocation& v)
     return Deserialize(src, &a, v);
 }
 
+unsigned char BitPacking::SetBit( unsigned char ch, int i ) 
+{
+  unsigned char mask = 1 << i ;  // we could cast to unsigned char, just to be safe
+  return mask | ch ;  // using bitwise OR
+}
+
+
+
+/**
+ * Converts a source array of integers, each of which represents a bit and is the 
+ * value 0 or 1, into an array of bytes, each of which represents 8 bits from 
+ * the source integer array.
+ * @param src
+ * @param len
+ * @param dst
+ * @return 
+ */
+void BitPacking::Pack(int* src, const size_t len, unsigned char* dst)
+{
+//    static int bits[] = {
+    int n = 0;
+    if ((len % 8) != 0) {
+        Logs::GetLogger().Log(mylog::ERROR, "input array length %d is not a multiple of 8\n", len);
+    }
+    unsigned char b;
+    int srcval;
+    for (int i = 0; i < len/ 8; i++) {
+        b = 0;
+        for (int j = 0; j < 8; j++) {
+            srcval = src[i * 8 + j];
+            if (srcval != 0) {
+                b = SetBit(b, j);
+            }
+        }
+        dst[i] = b;
+        n += 1;
+    }
+}
+
+void BitPacking::Unpack(const vector<unsigned char>& src, int* dst)
+{
+    unsigned char b;
+    int val;
+    int n = 0;
+    const size_t len = src.size();
+    for (size_t i = 0; i < len; i++) {
+        b = src[i];
+        for (int j = 0; j < 8; j++) {
+            if ((b & (1 << j)) != 0) val = 1;
+            else val = 0;
+            dst[i * 8 + j] = val;
+            n += 1;
+        }
+    }
+}
+
+void BitPacking::Unpack(unsigned char const* src, const size_t len, int* dst)
+{
+    unsigned char b;
+    int val;
+    int n = 0;
+    for (size_t i = 0; i < len; i++) {
+        b = src[i];
+        for (int j = 0; j < 8; j++) {
+            if ((b & (1 << j)) != 0) val = 1;
+            else val = 0;
+            dst[i * 8 + j] = val;
+            n += 1;
+        }
+    }
+}

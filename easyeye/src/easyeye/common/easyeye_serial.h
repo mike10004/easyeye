@@ -15,9 +15,21 @@
 #include <json/json_object.h>
 #include <json/json_tokener.h>
 #include <jsoncpp/json/json.h>
+#include <vector>
 
 namespace easyeye 
 {
+
+    class BitPacking
+    {
+    public:
+        static void Pack(int* src, const size_t src_len, unsigned char* dst);
+        static void Unpack(unsigned char const* src, const size_t src_len, int* dst);
+        static void Unpack(const std::vector<unsigned char>& src, int* dst);
+    private:
+        BitPacking();
+        static unsigned char SetBit( unsigned char ch, int i );
+    };
 
     namespace serial
     {
