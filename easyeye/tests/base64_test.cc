@@ -9,6 +9,7 @@
 #include <iostream>
 #include "../src/easyeye/common/base64.h"
 #include "../src/easyeye/common/easyeye_utils.h"
+#include "../src/easyeye/common/easyeye_serial.h"
 #include "testutils_base64.h"
 #include "BitPackingTest.h"
 

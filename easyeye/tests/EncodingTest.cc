@@ -52,7 +52,7 @@ EncodingTest::~EncodingTest() {
 }
 
 void EncodingTest::setUp() {
-    mylog::SetLogLevel(mylog::TRACE);
+    mylog::Logs::GetLogger().set_level(mylog::TRACE);
 }
 
 void EncodingTest::tearDown() {

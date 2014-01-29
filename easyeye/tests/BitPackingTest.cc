@@ -8,7 +8,7 @@
 #include "../src/easyeye/common/base64.h"
 #include "BitPackingTest.h"
 #include <string>
-#include "../src/easyeye/common/easyeye_utils.h"
+#include "../src/easyeye/common/easyeye_serial.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>

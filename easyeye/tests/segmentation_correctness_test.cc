@@ -161,7 +161,7 @@ void printParamsAsCsv(ostream& out, const char* category, const char* eyeImagePa
 bool traceSegmentation(const char* eyeImagePathname, BoundaryPair& expected, const char* serialized_segmentation_pathname) 
 {
     cout << "traceSegmentation: " << eyeImagePathname << endl;
-    mylog::SetLogLevel(mylog::TRACE);
+    mylog::Logs::GetLogger().set_level(mylog::TRACE);
     Segmentation result;
     Segmenter segmenter;
     Diagnostician diags(eyeImagePathname);

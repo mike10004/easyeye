@@ -34,7 +34,7 @@ void SegmentationSerializerTest::tearDown() {
 }
 
 void SegmentationSerializerTest::testSerializeAndDeserialize() {
-    mylog::SetLogLevel(mylog::TRACE);
+    mylog::Logs::GetLogger().set_level(mylog::TRACE);
     Segmenter segmenter;
     Segmentation expected;
     cv::Mat eyeImage = cv::imread("../testdata/images/gallery_022.bmp", CV_LOAD_IMAGE_GRAYSCALE);
