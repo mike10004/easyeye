@@ -10,6 +10,8 @@
 #include <easyeye/common/easyeye_utils.h>
 #include <easyeye_extract_main.h>
 
+using easyeye::extract::Extract;
+
 void testExtractAndWriteUnwritable() {
     std::cout << "easyeye_extract_main_test testExtractAndWriteUnwritable" << std::endl;
     char* argv[] = {
@@ -18,9 +20,10 @@ void testExtractAndWriteUnwritable() {
         (char*) "/tmp" // this is a directory -- we'll fail to open it for writing
     };
     int argc = 3;
-    int rv = easyeye::Extract::Main(argc, argv);
+    Extract program;
+    int rv = program.Main(argc, argv);
     std::cout << "main returned " << rv << std::endl;
-    if (rv != easyeye::ProgramCode::kErrorIO) {
+    if (rv != easyeye::program::kErrorIO) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWrite (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
     } else {
         std::cout << "eziextract_main test succeeded" << std::endl;
@@ -36,7 +39,8 @@ void testExtractAndWrite() {
         (char*) "/tmp/easyeye-extract-test-encoding.json"
     };
     int argc = 3;
-    int rv = easyeye::Extract::Main(argc, argv);
+    Extract program;
+    int rv = program.Main(argc, argv);
     std::cout << "main returned " << rv << std::endl;
     bool is_file = easyeye::IOUtils::is_file("/tmp/easyeye-extract-test-encoding.json");
     if (rv != 0 || !is_file) {
@@ -54,7 +58,8 @@ void testExtractAndWriteNull() {
         (char*) "/dev/null"
     };
     int argc = 3;
-    int rv = easyeye::Extract::Main(argc, argv);
+    Extract program;
+    int rv = program.Main(argc, argv);
     std::cout << "main returned " << rv << std::endl;
     if (rv != 0) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWriteNull (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
@@ -71,7 +76,8 @@ void testExtractAndDoNotWrite() {
     argv[0] = arg0;//"./eziextract";
     argv[1] = arg1;//"tests/images/011.bmp";
     int argc = 2;
-    int rv = easyeye::Extract::Main(argc, argv);
+    Extract program;
+    int rv = program.Main(argc, argv);
     std::cout << "main returned " << rv << std::endl;
     if (rv != 0) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndDoNotWrite (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;

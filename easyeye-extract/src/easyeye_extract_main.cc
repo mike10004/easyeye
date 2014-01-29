@@ -21,40 +21,43 @@
 #include <getopt.h>
 
 using namespace easyeye;
+using namespace easyeye::extract;
 using namespace std;
+using mylog::Logs;
+using easyeye::program::Program;
+using easyeye::program::Options;
+using easyeye::program::Code;
 
-const char* Extract::kProgName = "easyeye-extract";
-
-void Extract::PrintHelp(std::ostream& out)
+Extract::Extract() : program::Program("easyeye-extract", "0.1.0"), extract_options_()
 {
-    
+}
+
+Extract::~Extract() {}
+
+bool Extract::IsPositionalsOk(const std::vector<std::string>& positionals)
+{
+    return positionals.size() == 1 || positionals.size() == 2;
+}
+
+void Extract::PrintHelpHeader(std::ostream& out)
+{
+    out << "Segment iris images and encode features." << endl;
+}
+
+void Extract::PrintHelpFooter(std::ostream& out)
+{
+    out << "Feature encoding is printed as json text." << endl;
 }
 
 void Extract::PrintUsage(ostream& out)
 {
-        out << Extract::kProgName << ": usage error" << endl;
-        out << "Usage:" << endl;
-        out << "    " << Extract::kProgName << " [options] IMAGEFILE [ENCODING]" << endl;
-        out << "Extracts iris features from an eye image and optionally writes the encoding"
-                << " in json format to file." << endl;
+    out << "Usage:" << endl;
+    out << "    " << name << " [options] IMAGEFILE [ENCODING]" << endl;
+    out << "Extracts iris features from an eye image and optionally writes the encoding"
+            << " in json format to file." << endl;
 }
 
-int Extract::Main(const int argc, char* argv[]) {
-	vector<string> args;
-	for (int i = 0; i < argc; i++) {
-		const char* arg = argv[i];
-		string s(arg);
-		args.push_back(s);
-	}
-    if (args.size() < 2 || args.size() > 4) {
-        PrintUsage(cerr);
-        return Extract::kErrorUsage;
-    }
-	int rv = Main(args);
-	return rv;
-}
-
-void PrintResult(ostream& out, const char* image_pathname, Segmentation& seg)
+void PrintCsvResult(ostream& out, const string& image_pathname, const Segmentation& seg)
 {
     string delim = ", ";
     out << image_pathname << delim 
@@ -68,21 +71,22 @@ void PrintResult(ostream& out, const char* image_pathname, Segmentation& seg)
             << endl;
 }
 
-int Extract::Main(ExtractOptions& options, const vector<string>& pathnames) {
+Code Extract::Execute(const vector<string>& pathnames) {
+    ExtractOptions& options = static_cast<ExtractOptions&>(options_);
     bool writeEncoding = pathnames.size() == 2;
-    const char* eyeImagePathname = pathnames[0].c_str();
-    mylog::SetLogLevel(options.verbose ? mylog::TRACE : mylog::INFO);
+    const string& eyeImagePathname = pathnames[0];
+    Logs::GetLogger().set_level(options.verbose ? mylog::TRACE : mylog::INFO);
     cv::Mat eyeImage = cv::imread(eyeImagePathname, CV_LOAD_IMAGE_GRAYSCALE);
     if (eyeImage.data == NULL) {
-        mylog::Log(mylog::ERROR, "%s: failed to load image from file %s\n", Extract::kProgName, eyeImagePathname);
-        return Extract::kErrorIO;
+        cerr << name << ": failed to load image from file " << eyeImagePathname << endl;
+        return program::kErrorIO;
     }
     Segmentation segmentation;
     Segmenter segmenter;
     segmenter.SegmentEyeImage(eyeImage, segmentation);
     
-    int rv = 0;
-    PrintResult(cout, eyeImagePathname, segmentation);
+    Code rv = program::kExitSuccess;
+    PrintCsvResult(cout, eyeImagePathname, segmentation);
     if (segmentation.status == Result::SUCCESS && writeEncoding) {
         ofstream fout(pathnames[1].c_str());
         if (fout.is_open()) {
@@ -95,117 +99,39 @@ int Extract::Main(ExtractOptions& options, const vector<string>& pathnames) {
                 if (encoding.status == Result::SUCCESS) {
                     string json = serial::Serialize(encoding);
                     fout << json;
+                    rv = fout.good() ? program::kExitSuccess : program::kErrorIO;
                 } else {
-                    cerr << Extract::kProgName << ": encoding failed with error " << Result::DescribeStatus(encoding.status) << endl;
-                    rv = Extract::kErrorOther;
+                    cerr << name << ": encoding failed with error " << Result::DescribeStatus(encoding.status) << endl;
+                    rv = program::kErrorOther;
                 }
             } else {
-                cerr << Extract::kProgName << ": normalization failed with error " << Result::DescribeStatus(normalization.status) << endl;
-                rv = Extract::kErrorOther;
+                cerr << name << ": normalization failed with error " << Result::DescribeStatus(normalization.status) << endl;
+                rv = program::kErrorOther;
             }
         } else {
-            cerr << Extract::kProgName << ": failed to open encoding output file for writing" << endl;
-            rv = Extract::kErrorIO;
+            cerr << name << ": failed to open encoding output file for writing" << endl;
+            rv = program::kErrorIO;
         }
     } else if (segmentation.status != Result::SUCCESS) {
-        cerr << Extract::kProgName << ": segmentation failed with error " << Result::DescribeStatus(segmentation.status) << endl;
-        rv = Extract::kErrorOther;
+        cerr << name << ": segmentation failed with error " << Result::DescribeStatus(segmentation.status) << endl;
+        rv = program::kErrorOther;
     }
     
     return rv;
 }
 
-int Extract::ParseArgs(const vector<string>& args, ExtractOptions& options, vector<string>& positionals) 
+void Extract::OptionParsed(const std::string& long_form, bool has_arg, const std::string optarg)
 {
-    int c;
-    const int argc = args.size();
-    char** argv = new char*[argc];
-    for (size_t i = 0; i < args.size(); i++) {
-        argv[i] = (char*) args[i].c_str();
-    }
-    int version_flag = 0, help_flag = 0, verbose_flag = 0;
-    bool option_error = false;
-    while (true) {
-        static struct option long_options[] = {
-               {"version", no_argument,       &version_flag, 1},
-               {"help",   no_argument,       &help_flag, 0},
-               {"verbose", no_argument, &verbose_flag, 'v'},
-//               {"add",     no_argument,       0, 'a'},
-//               {"append",  no_argument,       0, 'b'},
-//               {"delete",  required_argument, 0, 'd'},
-//               {"create",  required_argument, 0, 'c'},
-//               {"file",    required_argument, 0, 'f'},
-               {0, 0, 0, 0}
-             };
-        /* getopt_long stores the option index here. */
-        int option_index = 0;
-
-        c = getopt_long (argc, argv, "abc:d:f:",
-                         long_options, &option_index);
-
-        /* Detect the end of the options. */
-        if (c == -1)
-          break;
-
-        switch (c) {
-            case 0:
-              if (long_options[option_index].flag != 0) break;
-            //            printf ("option %s", long_options[option_index].name);
-            //            if (optarg)
-            //              printf (" with arg %s", optarg);
-            //            printf ("\n");
-              break;
-            case 'a':
-              puts ("option -a\n");
-              break;
-            case '?':
-              /* getopt_long already printed an error message. */
-                option_error = true;
-              break;
-            default:
-                option_error = true;
-                break;
-        }
-    }
-    options.version = version_flag != 0;
-    options.help = help_flag != 0;
-    options.verbose = verbose_flag != 0;
-    positionals.clear();
-    while (optind < argc) {
-        positionals.push_back(argv[optind++]);
-    }
     
-    delete argv;
-    
-    if (positionals.size() < 1 || positionals.size() > 2) {
-        cerr << kProgName << ": usage error; exactly 1 or 2 arguments required" << endl;
-        option_error = true;
-    }
-    
-    if (option_error) {
-        return kErrorUsage;
-    }
-    return 0;
 }
-
-
-int Extract::Main(const vector<string>& args) 
-{
-    ExtractOptions options;
-    vector<string> positionals;
-    int rv = ParseArgs(args, options, positionals);
-    if (rv != 0) {
-        PrintUsage(cerr);
-        return rv;
-    }
-    return Main(options, positionals);
-}
-
 
 #ifndef _WIN32
+#ifndef ECLIPSE_TESTING
 
 int main(int argc, char* argv[]) {
-    return Extract::Main(argc, argv);
+    Extract program;
+    return program.Main(argc, argv);
 }
 
+#endif
 #endif
