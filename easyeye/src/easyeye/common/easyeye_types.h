@@ -73,8 +73,15 @@ public:
     int center_x() const;
     int center_y() const;
     bool Equals(const EyelidsLocation& other) const;
+    bool EqualsApprox(const EyelidsLocation& other) const;
     static const double DEFAULT_MAX_ANGLE_DELTA;
     bool Equals(const EyelidsLocation& other, double max_angle_delta) const;
+    bool Equals(const EyelidsLocation& other, int ellipse_deltas[], double max_angle_delta) const;
+    bool Equals(const EyelidsLocation& other, int ellipse_delta, double max_angle_delta) const;
+    void Describe(std::ostream& out);
+    std::string ToString();
+private:
+    const static int APPROX_ELLIPSE_DELTA = 3;
 };
 
 }
