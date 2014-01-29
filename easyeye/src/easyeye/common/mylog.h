@@ -8,42 +8,76 @@
 #ifndef MYLOG_H
 #define	MYLOG_H
 
-#include <cstdlib>
+#include <cassert>
 #include <cstdio>
+#include <vector>
+#include <string>
 
 namespace mylog
 {
 
-const int ALL = 1000;
-const int TRACE = 900;
-const int DEBUG = 800;
-const int INFO = 500;
-const int WARN = 400;
-const int ERROR = 200;
-const int FATAL = 0;
-
-struct loglevel {
-	const char * levelName;
-	int value;
+enum Level {    
+    ALL = 1000,
+    TRACE = 900,
+    DEBUG = 800,
+    INFO = 500,
+    WARN = 400,
+    ERROR = 200,
+    FATAL = 0
 };
 
-typedef struct loglevel LogLevel;
+const Level LEVELS[] = {
+    ALL, TRACE, DEBUG, INFO, WARN, ERROR, FATAL
+};
 
-const int NUM_STD_LEVELS = 7;
-const int DEFAULT_LOG_LEVEL = INFO;
+const char* GetName(Level level);
 
-const int ERROR_LOG_IO = 250;
-const int ERROR_INVALID_LOG_STREAM = 251;
+class Logger
+{
+public:
+	Logger(const std::string& name);
+	void Log(Level msg_level, const char * fmt, ...);
+	Level set_level(Level log_level);
+	Level level();
+	bool IsLevelEnabled(Level log_level);
+	void set_output(FILE * ofile);
+    const std::string& name();
+private:
+    const std::string name_;
+	Level level_;
+	FILE* output_;
+};
 
-enum LOG_MODE { MYLOG_WRITE, MYLOG_APPEND };
+class LoggerSet
+{
+public:
+    LoggerSet();
+    ~LoggerSet();
+    Logger* Get(const std::string& name);
+private:
+    std::vector<Logger*> loggers;
+};
 
-extern int ParseLogLevel(const char * str);
-extern void Log(const int msg_level, const char * fmt, ...);
-extern int SetLogLevel(const int log_level);
-extern bool IsLevelEnabled(const int log_level);
-extern int UseStream(FILE * ofile);
-extern int OpenLogFile(const char * logfile_pathname, int log_mode);
-extern int CloseLogFile();
+class Logs {
+public:
+	static Logger& GetLogger();
+    static Logger& GetLogger(const std::string& name);
+    bool ParseLevel(const std::string& level_name, Level* level);
+	static void log_msg(Level msg_level, const char * fmt, ...);
+    static const char* LEVEL_NAME_ALL;
+    static const char* LEVEL_NAME_TRACE;
+    static const char* LEVEL_NAME_DEBUG;
+    static const char* LEVEL_NAME_INFO;
+    static const char* LEVEL_NAME_WARN;
+    static const char* LEVEL_NAME_ERROR;
+    static const char* LEVEL_NAME_FATAL;
+    static const Level DEFAULT_LOG_LEVEL = INFO;
+private:
+    static LoggerSet logger_set;
+    static bool IsGlobal(const std::string& name);
+	static Logger global_logger;
+    static const std::string kGlobalName;
+};
 
 } // end namespace mylog
 
