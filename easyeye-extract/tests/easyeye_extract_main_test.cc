@@ -24,9 +24,9 @@ void testExtractAndWriteUnwritable() {
     int rv = program.Main(argc, argv);
     std::cout << "main returned " << rv << std::endl;
     if (rv != easyeye::program::kErrorIO) {
-        std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWrite (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
+        std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWriteUnwritable (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
     } else {
-        std::cout << "eziextract_main test succeeded" << std::endl;
+        std::cout << "easyeye_extract_main test succeeded" << std::endl;
     }
 }
 
@@ -46,7 +46,7 @@ void testExtractAndWrite() {
     if (rv != 0 || !is_file) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWrite (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
     } else {
-        std::cout << "eziextract_main test succeeded" << std::endl;
+        std::cout << "easyeye_extract_main test succeeded" << std::endl;
     }
 }
 
@@ -64,7 +64,7 @@ void testExtractAndWriteNull() {
     if (rv != 0) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWriteNull (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
     } else {
-        std::cout << "eziextract_main test succeeded" << std::endl;
+        std::cout << "easyeye_extract_main test succeeded" << std::endl;
     }
 }
 
@@ -73,7 +73,7 @@ void testExtractAndDoNotWrite() {
     char* arg0 = (char*) "./easyeye-extract";
     char* arg1 = (char*) "../testdata/images/gallery_022.bmp";
     char* argv[2];
-    argv[0] = arg0;//"./eziextract";
+    argv[0] = arg0;//"./easyeye-extract";
     argv[1] = arg1;//"tests/images/011.bmp";
     int argc = 2;
     Extract program;
@@ -82,7 +82,7 @@ void testExtractAndDoNotWrite() {
     if (rv != 0) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndDoNotWrite (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
     } else {
-        std::cout << "eziextract_main test succeeded" << std::endl;
+        std::cout << "easyeye_extract_main test succeeded" << std::endl;
     }
 }
 

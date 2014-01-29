@@ -36,25 +36,39 @@ Extract::~Extract() {}
 
 bool Extract::IsPositionalsOk(const std::vector<std::string>& positionals)
 {
-    return positionals.size() == 1 || positionals.size() == 2;
+    size_t num_positionals = positionals.size();
+    bool ok = num_positionals == 1 || num_positionals == 2;
+    if (!ok) {
+        cerr << name << ": usage error: must provide 1 or 2 arguments" << endl;
+    }
+    return ok;
 }
 
 void Extract::PrintHelpHeader(std::ostream& out)
 {
-    out << "Segment iris images and encode features." << endl;
+    //out << "Segment iris images and encode features." << endl;
 }
 
 void Extract::PrintHelpFooter(std::ostream& out)
 {
+    out << endl;
     out << "Feature encoding is printed as json text." << endl;
+    out << endl;
+    out << "Report easyeye bugs on https://github.com/mike10004/easyeye issues page." << endl;
 }
 
 void Extract::PrintUsage(ostream& out)
 {
-    out << "Usage:" << endl;
-    out << "    " << name << " [options] IMAGEFILE [ENCODING]" << endl;
-    out << "Extracts iris features from an eye image and optionally writes the encoding"
-            << " in json format to file." << endl;
+    out << "Usage: " << name << " [options] IMAGEFILE [ENCODING]" << endl;
+    out << 
+"Segment eye image and optionally write encoded iris features to file. The eye" << endl <<
+"image is IMAGEFILE and the encoded features are written to ENCODING." << endl << endl <<
+"Mandatory arguments to long options are mandatory for short options too." << endl <<
+"  -h, --help             print help message and exit" << endl <<
+"  -v, --verbose          print verbose messages on standard error" << endl <<
+"  --version              print version and exit" << endl  << 
+"  -d, --diagnostics=DIR  write diagnostic images and data to DIR" << endl << 
+"  --csv=FILE             print segmentation summary to FILE" << endl;
 }
 
 void PrintCsvResult(ostream& out, const string& image_pathname, const Segmentation& seg)
@@ -72,10 +86,10 @@ void PrintCsvResult(ostream& out, const string& image_pathname, const Segmentati
 }
 
 Code Extract::Execute(const vector<string>& pathnames) {
-    ExtractOptions& options = static_cast<ExtractOptions&>(options_);
+    assert(pathnames.size() == 1 || pathnames.size() == 2);
     bool writeEncoding = pathnames.size() == 2;
-    const string& eyeImagePathname = pathnames[0];
-    Logs::GetLogger().set_level(options.verbose ? mylog::TRACE : mylog::INFO);
+    string eyeImagePathname = pathnames[0];
+    Logs::GetLogger().set_level(options_.verbose ? mylog::TRACE : mylog::INFO);
     cv::Mat eyeImage = cv::imread(eyeImagePathname, CV_LOAD_IMAGE_GRAYSCALE);
     if (eyeImage.data == NULL) {
         cerr << name << ": failed to load image from file " << eyeImagePathname << endl;
@@ -99,7 +113,8 @@ Code Extract::Execute(const vector<string>& pathnames) {
                 if (encoding.status == Result::SUCCESS) {
                     string json = serial::Serialize(encoding);
                     fout << json;
-                    rv = fout.good() ? program::kExitSuccess : program::kErrorIO;
+                    bool output_good = fout.good();
+                    rv = output_good ? program::kExitSuccess : program::kErrorIO;
                 } else {
                     cerr << name << ": encoding failed with error " << Result::DescribeStatus(encoding.status) << endl;
                     rv = program::kErrorOther;

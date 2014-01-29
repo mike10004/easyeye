@@ -27,6 +27,7 @@ namespace easyeye
         std::string help_text;
         std::string metavar;
         OptionSpec(const std::string& long_form_, const char short_form_, ArgSpec arg_spec_);
+        OptionSpec(const std::string& long_form_, const char short_form_);
         OptionSpec(const std::string& long_form_, ArgSpec arg_spec_);
         OptionSpec(const std::string& long_form_);
     };
@@ -54,13 +55,14 @@ public:
     static bool Eq(const std::string& reference, const std::string& query);
     void AddOption(OptionSpec& option_spec);
     void AddOption(const std::string& long_form_, const char short_form_, ArgSpec arg_spec_);
+    void AddOption(const std::string& long_form_, const char short_form_);
     void AddOption(const std::string& long_form_, ArgSpec arg_spec_);
     void AddOption(const std::string& long_form_);
     virtual void OptionParsed(const std::string& long_form, bool arg_present, const std::string& arg);
     virtual bool IsPositionalsOk(const std::vector<std::string>& positionals);
     virtual Code Execute(const std::vector<std::string>& positionals) = 0;
-    Options& options();
-    static const char* Describe(Code code);
+    const Options& options();
+    static const char* DescribeCode(int code);
     virtual void PrintHelp(std::ostream& out);
     virtual void PrintUsage(std::ostream& out);
     virtual void PrintVersion(std::ostream& out);
