@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/common/base64.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_config.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o \
+	${OBJECTDIR}/src/easyeye/common/easyeye_program.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_serial.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_types.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_utils.o \
@@ -113,6 +114,11 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o: src/easyeye/common/easyey
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o src/easyeye/common/easyeye_diagnostics.cc
+
+${OBJECTDIR}/src/easyeye/common/easyeye_program.o: src/easyeye/common/easyeye_program.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o: src/easyeye/common/easyeye_serial.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
@@ -206,47 +212,47 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o: src/easyeye/segment/easyeye_
 .build-tests-conf: .build-conf ${TESTFILES}
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/base64_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c 
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp 
 
 ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/BitPackingTest.o ${TESTDIR}/tests/bitpacking_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/CommonSerialTest.o ${TESTDIR}/tests/common_serial_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/DiagnosticsTest.o ${TESTDIR}/tests/diagnostics_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/EncodingTest.o ${TESTDIR}/tests/encoding_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/FindEyelidsTest.o ${TESTDIR}/tests/find_eyelids_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/ImagingTest.o ${TESTDIR}/tests/imaging_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/MatchingTest.o ${TESTDIR}/tests/matching_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/SegmentationSerializerTest.o ${TESTDIR}/tests/segment_serial_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c `cppunit-config --libs`   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/segmentation_correctness_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c 
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp 
 
 ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/testutils.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -ljson-c 
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp 
 
 
 ${TESTDIR}/tests/base64_test.o: tests/base64_test.cc 
@@ -400,6 +406,19 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o: ${OBJECTDIR}/src/e
 	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o src/easyeye/common/easyeye_diagnostics.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o: ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/common/easyeye_program.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o src/easyeye/common/easyeye_program.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_program.o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_serial_nomain.o: ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o src/easyeye/common/easyeye_serial.cc 

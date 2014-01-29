@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/common/base64.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_config.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o \
+	${OBJECTDIR}/src/easyeye/common/easyeye_program.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_serial.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_types.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_utils.o \
@@ -111,6 +112,11 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o: src/easyeye/common/easyey
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o src/easyeye/common/easyeye_diagnostics.cc
+
+${OBJECTDIR}/src/easyeye/common/easyeye_program.o: src/easyeye/common/easyeye_program.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o: src/easyeye/common/easyeye_serial.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
@@ -388,6 +394,19 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o: ${OBJECTDIR}/src/e
 	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o src/easyeye/common/easyeye_diagnostics.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o: ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/common/easyeye_program.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o src/easyeye/common/easyeye_program.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_program.o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_serial_nomain.o: ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o src/easyeye/common/easyeye_serial.cc 

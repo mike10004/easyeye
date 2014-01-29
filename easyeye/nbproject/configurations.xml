@@ -8,6 +8,7 @@
         <itemPath>src/easyeye/common/base64.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_config.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_diagnostics.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_program.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_serial.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_types.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_utils.h</itemPath>
@@ -41,6 +42,7 @@
         <itemPath>src/easyeye/common/base64.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_config.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_diagnostics.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_program.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_serial.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_types.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_utils.cc</itemPath>
@@ -209,7 +211,6 @@
             <linkerLibLibItem>opencv_imgproc</linkerLibLibItem>
             <linkerLibLibItem>opencv_objdetect</linkerLibLibItem>
             <linkerLibLibItem>jsoncpp</linkerLibLibItem>
-            <linkerLibLibItem>json-c</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </folder>
@@ -406,6 +407,16 @@
             flavor2="0">
       </item>
       <item path="src/easyeye/common/easyeye_diagnostics.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_program.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_program.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -855,6 +866,16 @@
             flavor2="0">
       </item>
       <item path="src/easyeye/common/easyeye_diagnostics.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_program.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_program.h"
             ex="false"
             tool="3"
             flavor2="0">
