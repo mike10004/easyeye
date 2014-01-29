@@ -1,5 +1,5 @@
 /* 
- * File:   ezicompare_main.cc
+ * File:   easyeye_compare_main.cc
  * Author: mchaberski
  *
  * Created on July 15, 2013, 4:15 PM
@@ -19,45 +19,65 @@
 #include <getopt.h>
 
 using namespace std;
-using namespace easyeye;
+using namespace easyeye::compare;
+using namespace easyeye::program;
 
-const char* Compare::kProgName = "easyeye-compare";
-
-Compare::Compare() : numErrors(0), numSuccesses(0)
+Compare::Compare() : Program("easyeye-compare", "0.1.0"), numErrors(0), numSuccesses(0)
 {
+}
+
+Compare::~Compare() {}
+
+void Compare::PrintHelpFooter(std::ostream& out) {
+    out <<
+            "The score indicates the strength of the match, where the lower the value, the" << endl << 
+            "greater the likelihood that the two encodings are encodings of the same iris." << endl << 
+            "The encodings must be in the format produced by easyeye-extract. Output is " << endl << 
+            "tab-separated columns: status code, score, probe pathname, gallery " << endl << 
+            "pathname. A nonzero status indicates an error in comparing encodings." << endl; 
+}
+
+void Compare::PrintHelpHeader(std::ostream& out)
+{
+}
+
+bool Compare::IsPositionalsOk(const std::vector<std::string>& positionals)
+{
+    bool ok = positionals.size() >= 2;
+    if (!ok) {
+        cerr << name << ": must specify at least 2 arguments" << endl;
+    }
+    return ok;
 }
 
 void Compare::PrintUsage(ostream& out)
 {
-        out << Compare::kProgName << ": usage error" << endl;
-        out << "Usage:" << endl;
-        out << "    " << Compare::kProgName << " PROBE GALLERY [GALLERY...]" << endl;
-        out << "Compares a probe iris encoding to one or more gallery iris " 
-                "encodings and prints the comparison score for each " 
-                "probe-gallery pair. "
-                "The score indicates the strength of the match, where the lower"
-                " the value, the greater the likelihood that the two encodings "
-                "are encodings of the same iris. The encodings must be in the "
-                "format produced by eziextract. Output is tab-separated columns"
-                ": status code, score, probe pathname, gallery pathname." 
-                << endl;
+out << "Usage: " << name << " [options] PROBE TARGET [TARGET...]" << endl;
+out << 
+        "Compare a probe iris encoding to one or more target iris encodings and print " << endl << 
+        "the comparison score for each probe-gallery pair. " << endl << endl <<
+"Options are as follows." << endl <<
+"  -h, --help             print help message and exit" << endl <<
+"  -v, --verbose          print verbose messages on standard error" << endl <<
+"  --version              print version and exit" << endl  << 
+"  -d, --diagnostics=DIR  write diagnostic images and data to DIR" << endl;
     
 }
 
-int Compare::ComputeScores(const string& probeEncodingPathname, const vector<string> &targetEncodingPathnames)
+Code Compare::ComputeScores(const string& probeEncodingPathname, const vector<string> &targetEncodingPathnames)
 {
     mProbeEncodingPathname.assign(probeEncodingPathname);
     string pathname = string(mProbeEncodingPathname);
     Encoding probeEncoding;
     LoadEncoding(pathname, probeEncoding);
     if (probeEncoding.status != Result::SUCCESS) {
-        cerr << kProgName << ": failed to load probe encoding from " << probeEncodingPathname << endl;
+        cerr << name << ": failed to load probe encoding from " << probeEncodingPathname << endl;
         numErrors++;
     } else {
         ComputeScores(probeEncoding, targetEncodingPathnames);
     }
     if (numSuccesses > 0) {
-        return kReturnAtLeastOneSuccess;
+        return kExitSuccess;
     } else {
         return kErrorOther;
     }
@@ -70,10 +90,10 @@ void Compare::LoadEncoding(const string &pathname, Encoding& encoding)
         bool ok = serial::Deserialize(json, encoding);
         if (!ok) {
             encoding.status = Result::FAILURE;
-            cerr << kProgName << ": failed to deserialize encoding in " << pathname << endl;
+            cerr << name << ": failed to deserialize encoding in " << pathname << endl;
         }
     } else {
-        cerr << kProgName << ": file not found: " << pathname << endl;
+        cerr << name << ": file not found: " << pathname << endl;
     }
 }
 
@@ -102,26 +122,18 @@ void Compare::ComputeScore(const Encoding& probeEncoding, const string &targetEn
     int statusCode;
     if (targetEncoding.status == Result::SUCCESS) {
         score = matcher.ComputeScore(probeEncoding, targetEncoding);
-        statusCode = kStatusScoreComputeSuccess;
+        statusCode = 0;
         numSuccesses++;
     } else {
-        statusCode = kStatusTargetLoadFailed;
+        statusCode = kErrorIO;
         numErrors++;
     }
     PrintScore(score, targetEncodingPathname, statusCode);
 }
 
-int Compare::Main(const int argc, char* argv[]) {
-    vector<string> args;
-    for (int i = 0; i < argc; i++) {
-        args.push_back(string(argv[i]));
-    }
-    return Main(args);
-}
-
-int Compare::Main(Compare::CompareOptions& options, const vector<string>& positionals)
+Code Compare::Execute(const vector<string>& positionals)
 {
-    int rv = 0;
+    Code rv = kExitSuccess;
     string probeEncodingPathname = positionals[0];
     vector<string> targetEncodingPathnames;
     const int indexOfFirstTargetEncoding = 1;
@@ -133,95 +145,11 @@ int Compare::Main(Compare::CompareOptions& options, const vector<string>& positi
     return rv;
 }
 
-int Compare::ParseArgs(const vector<string>& args, CompareOptions& options, vector<string>& positionals) 
-{
-    int c;
-    const int argc = args.size();
-    char** argv = new char*[argc];
-    for (size_t i = 0; i < args.size(); i++) {
-        argv[i] = (char*) args[i].c_str();
-    }
-    bool option_error = false;
-//    bool stop = false;
-    int version_flag = 0, help_flag = 0;
-    while (true) {
-        static struct option long_options[] = {
-               {"version", no_argument,       &version_flag, 1},
-               {"help",   no_argument,       &help_flag, 0},
-//               {"add",     no_argument,       0, 'a'},
-//               {"append",  no_argument,       0, 'b'},
-//               {"delete",  required_argument, 0, 'd'},
-//               {"create",  required_argument, 0, 'c'},
-//               {"file",    required_argument, 0, 'f'},
-               {0, 0, 0, 0}
-             };
-        /* getopt_long stores the option index here. */
-        int option_index = 0;
-
-        c = getopt_long (argc, argv, "abc:d:f:",
-                         long_options, &option_index);
-
-        /* Detect the end of the options. */
-        if (c == -1)
-          break;
-
-        switch (c) {
-            case 0:
-              if (long_options[option_index].flag != 0) break;
-            //            printf ("option %s", long_options[option_index].name);
-            //            if (optarg)
-            //              printf (" with arg %s", optarg);
-            //            printf ("\n");
-              break;
-            case 'a':
-              puts ("option -a\n");
-              break;
-            case '?':
-              /* getopt_long already printed an error message. */
-                option_error = true;
-              break;
-            default:
-                option_error = true;
-                break;
-        }
-    }
-    
-    options.version = version_flag != 0;
-    options.help = help_flag != 0;
-    
-    positionals.clear();
-    while (optind < argc) {
-        positionals.push_back(argv[optind++]);
-    }
-    
-    delete argv;
-
-    if (positionals.size() < 2) {
-        cerr << kProgName << ": at least 2 arguments required" << endl;
-    }
-    
-    if (option_error) {
-        return kErrorUsage;
-    }
-    return 0;
-}
-
-int Compare::Main(const vector<string>& args) 
-{
-    CompareOptions options;
-    vector<string> positionals;
-    int rv = ParseArgs(args, options, positionals);
-    if (rv != 0) {
-        PrintUsage(cerr);
-        return rv;
-    }
-    return Main(options, positionals);
-}
-
 #ifndef _WIN32
-
+#ifndef ECLIPSE_TESTING
 int main(int argc, char* argv[]) {
-    return Compare::Main(argc, argv);
+    Compare program;
+    return program.Main(argc, argv);
 }
-
+#endif
 #endif

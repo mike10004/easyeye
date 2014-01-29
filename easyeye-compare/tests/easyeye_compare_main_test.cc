@@ -18,10 +18,8 @@
 #include <easyeye/common/easyeye_types.h>
 #include <easyeye/common/easyeye_utils.h>
 
-using namespace easyeye;
+using namespace easyeye::compare;
 using namespace std;
-
-
 
 static const char* serialized_encodings[] = {
     "../testdata/encodings/gallery_132-encoding.json",
@@ -36,14 +34,14 @@ static const char* serialized_encodings[] = {
 };
 
 void testeasyeye_compare_main_multi() {
-//    mylog::SetLogLevel(mylog::ALL);
     vector<string> args;
     args.push_back("easyeye-compare");
     const int nencodings = 9;
     for (int i = 0; i < nencodings; i++) {
         args.push_back(serialized_encodings[i]);
     }
-    int rv = easyeye::Compare::Main(args);
+    Compare program;
+    int rv = program.Main(args);
     if (rv != 0) {
         std::cout << "%TEST_FAILED% time=0 testname=testeasyeye_compare_main_multi (easyeye_compare_main_Test) message=exit status " << rv << ' ' << easyeye::Result::DescribeStatus(rv) << endl;
     } else {
@@ -62,9 +60,10 @@ void testeasyeye_compare_main() {
     for (int i = 0; i < argc; i++) {
         std::cout << "    arg[" << i << "] = " << args[i] << std::endl;
     }
-    int rv = easyeye::Compare::Main(args);
+    Compare program;
+    int rv = program.Main(args);
     if (rv != 0) {
-        cout << "%TEST_FAILED% time=0 testname=testeasyeye_compare_main (easyeye_compare_main_Test) message=exit status " << rv << ' ' << easyeye::ProgramCode::DescribeCode(rv) << endl;
+        cout << "%TEST_FAILED% time=0 testname=testeasyeye_compare_main (easyeye_compare_main_Test) message=exit status " << rv << ' ' << easyeye::program::Program::DescribeCode(rv) << endl;
     } else {
         cout << "testeasyeye_compare_main completed successfully (exit status 0)" << std::endl;
     }

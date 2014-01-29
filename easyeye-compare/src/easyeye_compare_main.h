@@ -7,40 +7,23 @@
 #include <easyeye/encode/easyeye_encode.h>
 #include <easyeye/match/easyeye_match.h>
 #include <easyeye/common/easyeye_utils.h>
-
+#include <easyeye/common/easyeye_program.h>
 namespace easyeye
 {
+    namespace compare
+    {
 
-class Compare
+        class Compare : public easyeye::program::Program
 {
 public:
     Compare();
-    static const int kErrorUsage = ProgramCode::kErrorUsage;
-    static const int kErrorIO = ProgramCode::kErrorIO;
-    static const int kErrorOther = ProgramCode::kErrorOther;
-    static const char* kProgName;
-    static const int kStatusTargetLoadFailed = 1;
-    static const int kStatusScoreComputeSuccess = 0;
-    static const int kReturnAtLeastOneSuccess = 0;
-    static const int kReturnSomeErrors = 5;
-
-    int ComputeScores(const std::string& probeEncodingPathname, const std::vector<std::string> &targetEncodingPathnames);
-    
-    class CompareOptions 
-    {
-    public:
-        bool help;
-        bool version;
-        CompareOptions() : help(false), version(false) {}
-    };
-
-    static void PrintUsage(std::ostream& out);
-    static int Main(const int argc, char* argv[]);
-    static int Main(const std::vector<std::string>& args);
-    static int ParseArgs(const std::vector<std::string>& args, CompareOptions& options, std::vector<std::string>& positionals);
-    static int Main(CompareOptions& options, const std::vector<std::string>& positionals);
-    static void PrintHelp(std::ostream& out);
-    static void PrintVersion(std::ostream& out);
+    ~Compare();
+    easyeye::program::Code ComputeScores(const std::string& probeEncodingPathname, const std::vector<std::string> &targetEncodingPathnames);
+    void PrintUsage(std::ostream& out);
+    void PrintHelpHeader(std::ostream& out);
+    void PrintHelpFooter(std::ostream& out);
+    bool IsPositionalsOk(const std::vector<std::string>& positionals);
+    easyeye::program::Code Execute(const std::vector<std::string>& positionals);
     
 private:
     int numSuccesses;
@@ -54,7 +37,8 @@ private:
 };
 
 
-
-} // end namespace Ezi
+    }// end namespace compare
+} // end namespace easyeye
 
 #endif
+

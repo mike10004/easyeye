@@ -42,7 +42,8 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
-	${TESTDIR}/TestFiles/f3
+	${TESTDIR}/TestFiles/f3 \
+	${TESTDIR}/TestFiles/f1
 
 # C Compiler Flags
 CFLAGS=`cppunit-config --cflags` 
@@ -90,11 +91,21 @@ ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/easyeye_compare_main_test.o ${OBJECTFI
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/options_test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
+
 
 ${TESTDIR}/tests/easyeye_compare_main_test.o: tests/easyeye_compare_main_test.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../easyeye/src -I../optimasek/include -Isrc -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/easyeye_compare_main_test.o tests/easyeye_compare_main_test.cc
+
+
+${TESTDIR}/tests/options_test.o: tests/options_test.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../easyeye/src -I../optimasek/include -Isrc -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/options_test.o tests/options_test.cc
 
 
 ${OBJECTDIR}/src/easyeye_compare_main_nomain.o: ${OBJECTDIR}/src/easyeye_compare_main.o src/easyeye_compare_main.cc 
@@ -115,6 +126,7 @@ ${OBJECTDIR}/src/easyeye_compare_main_nomain.o: ${OBJECTDIR}/src/easyeye_compare
 	@if [ "${TEST}" = "" ]; \
 	then  \
 	    ${TESTDIR}/TestFiles/f3 || true; \
+	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
 	    ./${TEST} || true; \
 	fi
