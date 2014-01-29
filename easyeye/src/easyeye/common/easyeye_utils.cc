@@ -4,6 +4,7 @@
  * (c) 2013 IBG, A Novetta Solutions Company
  */
 
+#include <algorithm>
 #include <fstream>
 #include <string>
 #include <errno.h>
@@ -13,13 +14,14 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
+#include <sstream>
 
 #ifdef EZI_ISWINDOWS
 #include <Windows.h>
 #endif
 
-#include <sstream>
 
+using mylog::Logs;
 using namespace std;
 using namespace easyeye;
 using cv::Point2i;
@@ -73,7 +75,7 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
     if( (*errorCode) == 0 ) {
         return ( s.st_mode & queryMode ) != 0;
     } else {
-        mylog::Log(mylog::DEBUG, "Utils::pathname_stat_has_mode stat call failed with %d\n", *errorCode);
+        Logs::GetLogger().Log(mylog::DEBUG, "Utils::pathname_stat_has_mode stat call failed with %d\n", *errorCode);
         return false;
     }    
 }
@@ -97,7 +99,7 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
       if (p.empty() || (!is_directory(p, errorCode)))
       {
         (*errorCode) = ENOTDIR;
-        mylog::Log(mylog::ERROR, "Utils::temp_directory_path_unix returned bad temp dir path\n");
+        Logs::GetLogger().Log(mylog::ERROR, "Utils::temp_directory_path_unix returned bad temp dir path\n");
       } else {
           (*errorCode) = 0;
       }
@@ -125,7 +127,7 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
    //   if (!is_directory(p, *ec))
    //   {
    //     ::SetLastError(ENOTDIR);
-   //     mylog::Log(mylog::ERROR, "Utils::temp_directory_path_windows returned bad temp dir path");
+   //     Logs::GetLogger().Log(mylog::ERROR, "Utils::temp_directory_path_windows returned bad temp dir path");
    //     return path();
    //   }
    //   return p;
@@ -138,128 +140,6 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
 #   endif
   }
   
-ProgramCode::ProgramCode() {}
-
-const char* ProgramCode::DescribeCode(const int exitCode)
-{
-    switch(exitCode)
-    {
-        case kErrorIO: return "kErrorIO";
-        case kErrorOther: return "kErrorOther";
-        case kErrorUsage: return "kErrorUsage";
-        case kExitSuccess: return "Success";
-        default: return "Unrecognized";
-    }
-            
-}
-
-//void Contours::cvCvtSeqToArray(vector<Point>& contour, vector<Point2i>& arrPoint)
-//{
-//    arrPoint.clear();
-//    for (vector<Point>::iterator it = contour.begin(); it != contour.end(); ++it) {
-//        arrPoint.push_back(*it);
-//    }
-//}
-
-unsigned char BitPacking::SetBit( unsigned char ch, int i ) 
-{
-  unsigned char mask = 1 << i ;  // we could cast to unsigned char, just to be safe
-  return mask | ch ;  // using bitwise OR
-}
-
-
-
-/**
- * Converts a source array of integers, each of which represents a bit and is the 
- * value 0 or 1, into an array of bytes, each of which represents 8 bits from 
- * the source integer array.
- * @param src
- * @param len
- * @param dst
- * @return 
- */
-void BitPacking::Pack(int* src, const size_t len, unsigned char* dst)
-{
-//    static int bits[] = {
-    int n = 0;
-    if ((len % 8) != 0) {
-        mylog::Log(mylog::ERROR, "input array length %d is not a multiple of 8\n", len);
-    }
-    unsigned char b;
-    int srcval;
-    for (int i = 0; i < len/ 8; i++) {
-        b = 0;
-        for (int j = 0; j < 8; j++) {
-            srcval = src[i * 8 + j];
-            if (srcval != 0) {
-                b = SetBit(b, j);
-            }
-        }
-        dst[i] = b;
-        n += 1;
-    }
-}
-
-void BitPacking::Unpack(const vector<unsigned char>& src, int* dst)
-{
-    unsigned char b;
-    int val;
-    int n = 0;
-    const size_t len = src.size();
-    for (size_t i = 0; i < len; i++) {
-        b = src[i];
-        for (int j = 0; j < 8; j++) {
-            if ((b & (1 << j)) != 0) val = 1;
-            else val = 0;
-            dst[i * 8 + j] = val;
-            n += 1;
-        }
-    }
-}
-
-void BitPacking::Unpack(unsigned char const* src, const size_t len, int* dst)
-{
-    unsigned char b;
-    int val;
-    int n = 0;
-    for (size_t i = 0; i < len; i++) {
-        b = src[i];
-        for (int j = 0; j < 8; j++) {
-            if ((b & (1 << j)) != 0) val = 1;
-            else val = 0;
-            dst[i * 8 + j] = val;
-            n += 1;
-        }
-    }
-}
-
-/**
- * 
- * @param src
- * @param len
- * @param dst array of length at least len * 8
- * @return 
- */
-//void BitPacking::Unpack(unsigned char const* src, const size_t len, int* dst)
-//{
-//    unsigned char b;
-//    int val;
-//    int n = 0;
-//    for (size_t i = 0; i < len; i++) {
-//        b = src[i];
-//        for (int j = 0; j < 8; j++) {
-//            if ((b & (1 << j)) != 0) val = 1;
-//            else val = 0;
-//            dst[i * 8 + j] = val;
-//            n += 1;
-//        }
-//    }
-//}
-
-static size_t min(size_t a, size_t b) {
-    return (a < b) ? a : b;
-}
-
 string Vectors::ToString(const vector<unsigned char>& bytes, size_t preview_len)
 {
     std::ostringstream ss;
@@ -370,4 +250,11 @@ string Files::Read(const std::string& pathname)
         in.close();
     }
     return ss.str();
+}
+
+void Vectors::AddAll(char** src_array, const size_t array_len, vector<string>& dst)
+{
+    for (size_t i = 0; i < array_len; i++) {
+        dst.push_back(src_array[i]);
+    }
 }
