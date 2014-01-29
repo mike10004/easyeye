@@ -13,8 +13,7 @@
 class FindEyelidsTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(FindEyelidsTest);
 
-    CPPUNIT_TEST(testMethod);
-    CPPUNIT_TEST(testFailedMethod);
+    CPPUNIT_TEST(testDetectionCorrectness);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -25,8 +24,7 @@ public:
     void tearDown();
 
 private:
-    void testMethod();
-    void testFailedMethod();
+    void testDetectionCorrectness();
 };
 
 #endif	/* FINDEYELIDSTEST_H */
