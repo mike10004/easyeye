@@ -16,6 +16,7 @@
 #include "easyeye_encode.h"
 #include "../common/easyeye_diagnostics.h"
 
+using mylog::Logs;
 using namespace easyeye;
 
 EncoderConfig::EncoderConfig() : Config(), 
@@ -48,7 +49,7 @@ void Encoder::EncodeIris(Masek::filter* polarArray, Masek::IMAGE* noiseArray, En
     int* irisTemplate = result.irisTemplate;
     int* irisMask = result.irisMask;
     if (irisTemplate == NULL || irisMask == NULL) {
-        mylog::Log(mylog::ERROR, "Encoder::EncodeIris invalid input; result arrays have not been instantiated\n");
+        Logs::GetLogger().Log(mylog::ERROR, "Encoder::EncodeIris invalid input; result arrays have not been instantiated\n");
         result.status = Result::FAILURE;
         return;
     }

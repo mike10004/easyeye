@@ -7,6 +7,7 @@
 
 using namespace easyeye;
 using cv::Mat;
+using mylog::Logs;
 
 FindIrisCircle::FindIrisCircle(IrisFinderConfig config)
     :config_(config)
@@ -22,7 +23,7 @@ FindIrisCircle::~FindIrisCircle()
 IntCircle FindIrisCircle::doDetect(Mat& gray_image, int rPupil)
 {
     int uIrisRadius = config_.max_radius();//limitRadius;
-	mylog::Log(mylog::TRACE, "FindIrisCircle::doDetect %dx%d rPupil=%d uIrisRadius=%d\n", rPupil, uIrisRadius);
+	Logs::GetLogger().Log(mylog::TRACE, "FindIrisCircle::doDetect %dx%d rPupil=%d uIrisRadius=%d\n", rPupil, uIrisRadius);
     IntCircle destVal(0, 0, 0);
 //	for (int i = 0; i < DEST_VAL_LEN; i++) destVal[i] = 0;
 	// Scaling factor to speed up the Hough transform
@@ -59,7 +60,7 @@ IntCircle FindIrisCircle::doDetect(Mat& gray_image, int rPupil)
 	// Development purposes
 	if(lIrisRadius > uIrisRadius)
 	{
-		mylog::Log(mylog::DEBUG, "FindIrisCircle::doDetect error lIrisRadius > uIrisRadius: %d\n", lIrisRadius);
+		Logs::GetLogger().Log(mylog::DEBUG, "FindIrisCircle::doDetect error lIrisRadius > uIrisRadius: %d\n", lIrisRadius);
 		lIrisRadius = uIrisRadius;//then store the max radius
 	}
 
@@ -86,15 +87,15 @@ IntCircle FindIrisCircle::doDetect(Mat& gray_image, int rPupil)
 	
 	// \todo Is this debugging information really necessary?
 	if(destVal.center.x < 1 || destVal.center.y < 1) {
-		mylog::Log(mylog::DEBUG, "FindIrisCircle::doDetect failed to detect iris center coordinates; got (%d, %d)\n", destVal.center.x, destVal.center.y);
+		Logs::GetLogger().Log(mylog::DEBUG, "FindIrisCircle::doDetect failed to detect iris center coordinates; got (%d, %d)\n", destVal.center.x, destVal.center.y);
 		if (destVal.center.x < 1) destVal.center.x = gray_image.cols / 2;
 		if (destVal.center.y < 1) destVal.center.y = gray_image.rows / 2;
 	}
 	if(destVal.radius < 1 || destVal.radius > uIrisRadius) {
-		mylog::Log(mylog::DEBUG, "FindIrisCircle::doDetect failed to detect iris radius\n");
+		Logs::GetLogger().Log(mylog::DEBUG, "FindIrisCircle::doDetect failed to detect iris radius\n");
 		destVal.radius = uIrisRadius;
 	}
-	mylog::Log(mylog::DEBUG, "FindIrisCircle::doDetect x=%d y=%d r=%d\n", destVal.center.x, destVal.center.y, destVal.radius);
+	Logs::GetLogger().Log(mylog::DEBUG, "FindIrisCircle::doDetect x=%d y=%d r=%d\n", destVal.center.x, destVal.center.y, destVal.radius);
     return destVal;
 }
 
@@ -118,7 +119,7 @@ cv::Point2i FindIrisCircle::getOriginPoints(const cv::Point2i xyPupil, const cv:
     cv::Point2i xyIrisOut;
 	xyIrisOut.x = xyPupil.x + diffX;
 	xyIrisOut.y = xyPupil.y + diffY;
-	mylog::Log(mylog::TRACE, "FindIrisCircle::getOriginPoints "
+	Logs::GetLogger().Log(mylog::TRACE, "FindIrisCircle::getOriginPoints "
 			"pupil (%d, %d) inIris (%d, %d) setPt (%d, %d) "
 			"val = %d, dataType = %d, outIris (%d, %d)\n",
 			xyPupil.x, xyPupil.y, oldIrisX, oldIrisY, setPt.x, setPt.y,

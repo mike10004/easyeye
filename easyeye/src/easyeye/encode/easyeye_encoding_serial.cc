@@ -11,6 +11,7 @@
 #include "../common/base64.h"
 #include "easyeye_encode.h"
 
+using mylog::Logs;
 using namespace std;
 using namespace easyeye;
 
@@ -19,7 +20,7 @@ static string ToPackedBase64(int* src_values, size_t num_values)
     size_t num_bytes = num_values / 8;
     unsigned char* bytes = new unsigned char[num_bytes];
     if (bytes == NULL) {
-        mylog::Log(mylog::ERROR, "Encoding::Serialize out of memory\n");
+        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Serialize out of memory\n");
         return string("");
     }
     BitPacking::Pack(src_values, num_values, bytes);
@@ -41,15 +42,15 @@ static bool FromPackedBase64(const string& encoded_values_str, int* dst, size_t 
     vector<unsigned char> byte_vector;
     bool valid_encoding = codec.Decode(encoded_values_str, byte_vector);
     if (!valid_encoding) {
-        mylog::Log(mylog::ERROR, "Encoding::UnpackBase64 invalid base-64 encoding \n");
+        Logs::GetLogger().Log(mylog::ERROR, "Encoding::UnpackBase64 invalid base-64 encoding \n");
         return false;
     }
     if (byte_vector.size() != expected_num_bytes) {
-        mylog::Log(mylog::ERROR, "Encoding::Deserialize wrong number of bytes decoded\n");
+        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize wrong number of bytes decoded\n");
         return false;
     }
     BitPacking::Unpack(byte_vector, dst);
-    mylog::Log(mylog::TRACE, "Encoding::FromPackedBase64 %s\n", Arrays::ToString(dst, num_dst_values, 64).c_str());
+    Logs::GetLogger().Log(mylog::TRACE, "Encoding::FromPackedBase64 %s\n", Arrays::ToString(dst, num_dst_values, 64).c_str());
     return true;
 }
 //
@@ -59,20 +60,20 @@ static bool FromPackedBase64(const string& encoded_values_str, int* dst, size_t 
 //    status = Result::FAILURE;
 //    if (irisTemplate != NULL || irisMask != NULL || width_ != 0 || height_ != 0) 
 //    {
-//        mylog::Log(mylog::ERROR, "Encoding::Deserialize this encoding object has already been deserialized/populated\n");
+//        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize this encoding object has already been deserialized/populated\n");
 //        return;
 //    }
 //        
 //    json_object *obj = json_tokener_parse(buffer);
 //    enum json_type type = json_object_get_type(obj);
 //    if (type != json_type_object) {
-//        mylog::Log(mylog::ERROR, "Encoding::Deserialize invalid json object type %s\n", json_type_to_name(type));
+//        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize invalid json object type %s\n", json_type_to_name(type));
 //        json_object_put(obj);
 //        return;
 //    }
 //    json_object *arrayEncodingObj = json_object_object_get(obj, key_arrayEncoding);
 //    if (strcmp(json_object_get_string(arrayEncodingObj), value_arrayEncoding_Base64) != 0) {
-//        mylog::Log(mylog::ERROR, "Encoding::Deserialize unsupported data encoding: %s\n", json_object_get_string(arrayEncodingObj));
+//        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize unsupported data encoding: %s\n", json_object_get_string(arrayEncodingObj));
 //        json_object_put(obj);
 //        return;
 //    }
@@ -81,7 +82,7 @@ static bool FromPackedBase64(const string& encoded_values_str, int* dst, size_t 
 //    width_ = json_object_get_int(widthObj);
 //    height_ = json_object_get_int(heightObj);
 //    if (!IsValidDims(width_, height_)) {
-//        mylog::Log(mylog::ERROR, "Encoding::Deserialize invalid dimensions specified by serialized encoding %d x %d\n", width_, height_);
+//        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize invalid dimensions specified by serialized encoding %d x %d\n", width_, height_);
 //        json_object_put(obj);
 //        return;
 //    }
@@ -94,7 +95,7 @@ static bool FromPackedBase64(const string& encoded_values_str, int* dst, size_t 
 //    }
 //    irisMask = (int*) malloc(sizeof(int) * width_ * height_);
 //    if (irisTemplate == NULL || irisMask == NULL) {
-//        mylog::Log(mylog::ERROR, "Encoding::Deserialize out of memory");
+//        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize out of memory");
 //        if (irisTemplate != NULL) free(irisTemplate);
 //        if (irisMask != NULL) free(irisMask);
 //        json_object_put(obj);
@@ -122,10 +123,10 @@ static bool FromPackedBase64(const string& encoded_values_str, int* dst, size_t 
 //    in.read(buffer, numToRead);
 //    int numRead = strlen(buffer);
 //    if (numRead < 1) {
-//        mylog::Log(mylog::ERROR, "Encoding::Deserialize nothing read from input stream\n");
+//        Logs::GetLogger().Log(mylog::ERROR, "Encoding::Deserialize nothing read from input stream\n");
 //        return;
 //    } 
-//    mylog::Log(mylog::TRACE, "Encoding::Deserialize read %d bytes from input\n", numRead);
+//    Logs::GetLogger().Log(mylog::TRACE, "Encoding::Deserialize read %d bytes from input\n", numRead);
 //    Deserialize(std::string(buffer));
 //}
 

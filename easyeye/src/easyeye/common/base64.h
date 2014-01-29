@@ -1,5 +1,5 @@
 /* 
-   base64.cpp and base64.h
+   base64.cc and base64.h
 
    Copyright (C) 2004-2008 René Nyffenegger
 
@@ -31,24 +31,24 @@
 
 #include <string>
 #include <vector>
+#include <cctype>
 
 namespace easyeye
 {
+    class Base64
+    {
+    public:   
+        static std::string Encode(unsigned char const* , unsigned int len);
+        static bool Decode(std::string const& s, std::vector<unsigned char>& dst);
+        static std::string DecodeToString(std::string const& s);
+        static int ToBytes(std::string const& src, unsigned char* dst);
+    private:
+        static const std::string base64_chars;
+        static inline bool is_base64(unsigned char c) {
+            return (std::isalnum(c) || (c == '+') || (c == '/'));
+        }
 
-class Base64
-{
-public:   
-    static std::string Encode(unsigned char const* , unsigned int len);
-    static bool Decode(std::string const& s, std::vector<unsigned char>& dst);
-    static std::string DecodeToString(std::string const& s);
-    static int ToBytes(std::string const& src, unsigned char* dst);
-private:
-    static const std::string base64_chars;
-    static inline bool is_base64(unsigned char c) {
-        return (isalnum(c) || (c == '+') || (c == '/'));
-    }
-
-};
+    };
 
 }
 #endif	/* BASE64_H */

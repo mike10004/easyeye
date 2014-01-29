@@ -21,6 +21,8 @@
 #include <json/json_object.h>
 #include <json/json_tokener.h>
 
+using mylog::Logs;
+using mylog::TRACE;
 using namespace std;
 using namespace easyeye;
 using namespace cv;
@@ -59,7 +61,7 @@ void fill_array(int array[], const int value, const int start, const int len)
 void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 {
     if (!Imaging::IsGray(eyeImg)) {
-        mylog::Log(mylog::ERROR, "Segmenter::SegmentEyeImage input image must be grayscale, not type %d", eyeImg.type()); 
+        Logs::GetLogger().Log(mylog::ERROR, "Segmenter::SegmentEyeImage input image must be grayscale, not type %d", eyeImg.type()); 
         seg.status = Result::FAILURE;
         return;
     }
@@ -72,7 +74,7 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
     }
     if (config_.pupil_finder_config.nScale != CircleFinderConfig::NSCALE_AUTO
             || config_.iris_finder_config.nScale != CircleFinderConfig::NSCALE_AUTO) {
-        mylog::Log(mylog::ERROR, "Segmenter::SegmentEyeImage configuration " 
+        Logs::GetLogger().Log(mylog::ERROR, "Segmenter::SegmentEyeImage configuration " 
                 "with non-auto nscale for circle finders is not yet supported");
         seg.status = Result::FAILURE;
         return;
@@ -117,9 +119,6 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
     diagnostician()->DumpSegOutput(seg.boundary_pair, seg.eyelids_location, seg.extrema_noise);
 	seg.status = Result::SUCCESS;
 }
-
-using mylog::TRACE;
-using mylog::Log;
 
 SegmenterConfig::SegmenterConfig()
       : Config(), 

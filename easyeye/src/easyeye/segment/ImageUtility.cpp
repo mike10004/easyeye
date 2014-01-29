@@ -2,6 +2,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "../common/mylog.h"
+using mylog::Logs;
 
 using cv::Size;
 using cv::Mat;
@@ -106,7 +107,7 @@ Masek::IMAGE* ImageUtility:: getROIImage_C(Masek::IMAGE* eyeImg, int startX, int
 ImageUtility::SETVALUE ImageUtility::setImage(cv::Mat& eye_img, CvPoint center,
 		int cr, int xLimit, int yLimit)
 {
-	mylog::Log(mylog::TRACE, "ImageUtility::setImage %dx%d center=(%d,%d) cr=%d, xLimit=%d, yLimit=%d\n",
+	Logs::GetLogger().Log(mylog::TRACE, "ImageUtility::setImage %dx%d center=(%d,%d) cr=%d, xLimit=%d, yLimit=%d\n",
 			eye_img.cols, eye_img.rows, center.x, center.y, cr, xLimit, yLimit);
 	SETVALUE setVal;
 
@@ -162,12 +163,12 @@ ImageUtility::SETVALUE ImageUtility::setImage(cv::Mat& eye_img, CvPoint center,
 
 		if(setVal.p.x < 1 || setVal.p.y < 1)
 		{
-			mylog::Log(mylog::ERROR, "ImageUtility::setImage Failed to load ROI for new circle\n");
+			Logs::GetLogger().Log(mylog::ERROR, "ImageUtility::setImage Failed to load ROI for new circle\n");
 		}
 	} else {
-		mylog::Log(mylog::ERROR, "ImageUtility::setImage did not attempt to load ROI for new circle\n");
+		Logs::GetLogger().Log(mylog::ERROR, "ImageUtility::setImage did not attempt to load ROI for new circle\n");
 	}
-	mylog::Log(mylog::TRACE, "ImageUtility::setImage setVal.rect = %dx%d+%d+%d, setVal.p = %d,%d\n",
+	Logs::GetLogger().Log(mylog::TRACE, "ImageUtility::setImage setVal.rect = %dx%d+%d+%d, setVal.p = %d,%d\n",
 				setVal.rect.width, setVal.rect.height, setVal.rect.x, setVal.rect.y,
 				setVal.p.x, setVal.p.y);
 	return setVal;

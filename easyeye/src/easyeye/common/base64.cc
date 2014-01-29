@@ -1,6 +1,5 @@
-
 /*
-   base64.cpp and base64.h
+   base64.cc and base64.h
 
    Copyright (C) 2004-2008 René Nyffenegger
 
@@ -24,13 +23,10 @@
 
    René Nyffenegger rene.nyffenegger@adp-gmbh.ch
 
-*/
-
-/*
- * http://www.adp-gmbh.ch/cpp/common/base64.html
+   http://www.adp-gmbh.ch/cpp/common/base64.html
  */
+
 #include <algorithm>
-#include "base64.h"
 #include <string>
 #include "easyeye_utils.h"
 #include "mylog.h"
@@ -39,7 +35,9 @@
 #include <vector>
 #include <cstdlib>
 #include "mylog.h"
+#include "base64.h"
 
+using mylog::Logs;
 using namespace std;
 using namespace easyeye;
 
@@ -54,7 +52,7 @@ const std::string Base64::base64_chars =
 //}
 
 std::string Base64::Encode(unsigned char const* bytes_to_encode, unsigned int in_len) {
-    mylog::Log(mylog::TRACE, "Base64::Encode %s\n", Arrays::ToString(bytes_to_encode, in_len, 64).c_str());
+    Logs::GetLogger().Log(mylog::TRACE, "Base64::Encode %s\n", Arrays::ToString(bytes_to_encode, in_len, 64).c_str());
   std::string ret;
   int i = 0;
   int j = 0;
@@ -92,14 +90,14 @@ std::string Base64::Encode(unsigned char const* bytes_to_encode, unsigned int in
       ret += '=';
 
   }
-  mylog::Log(mylog::TRACE, "Base64::Encode %s...\n", ret.substr(0, min((size_t)64, ret.length())).c_str());
+  Logs::GetLogger().Log(mylog::TRACE, "Base64::Encode %s...\n", ret.substr(0, min((size_t)64, ret.length())).c_str());
   return ret;
 
 }
 
 bool Base64::Decode(std::string const& encoded_string, vector<unsigned char>& dst)
 {
-    mylog::Log(mylog::TRACE, "Base64::Decode %s...\n", encoded_string.substr(0, min((size_t)64, encoded_string.length())).c_str());
+    Logs::GetLogger().Log(mylog::TRACE, "Base64::Decode %s...\n", encoded_string.substr(0, min((size_t)64, encoded_string.length())).c_str());
   int in_len = encoded_string.size();
   int i = 0;
   int j = 0;
@@ -144,7 +142,7 @@ bool Base64::Decode(std::string const& encoded_string, vector<unsigned char>& ds
         dst.push_back(char_array_3[j]);
     }
   }
-  mylog::Log(mylog::TRACE, "Base64::Decode %s\n", Vectors::ToString(dst, 64).c_str());
+  Logs::GetLogger().Log(mylog::TRACE, "Base64::Decode %s\n", Vectors::ToString(dst, 64).c_str());
   
   return all_valid_chars;
 }
@@ -191,18 +189,3 @@ std::string Base64::DecodeToString(std::string const& encoded_string)
   return ret;
 }
 
-
-//int Base64::ToBytes(std::string const& src, unsigned char* dst)
-//{
-//    unsigned char ch;
-//    int n = 0;
-//    const int len = src.length();
-//    const char* data = src.data();
-//    for (int i = 0; i < len; i++) {
-//        ch = data[i];
-//        dst[i] = ch;
-//        n += 1;
-//    }
-//    return n;
-//}
-//

@@ -7,6 +7,7 @@
 #include <portability.h>
 
 using namespace easyeye;
+using mylog::Logs;
 
 
 
@@ -42,7 +43,7 @@ bool HDCalculator::initializeTemplates(const Encoding& classTemplate1,
 	if ( (t_width != classTemplate2.angular_resolution() ) || 
 		 (t_height != classTemplate2.radial_resolution() ) ) 
 	{
-		mylog::Log(mylog::ERROR, "HDCalculator::initializeTemplate encodings are incongruent\n");
+		Logs::GetLogger().Log(mylog::ERROR, "HDCalculator::initializeTemplate encodings are incongruent\n");
 		return false;
 	}
 	

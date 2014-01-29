@@ -9,6 +9,7 @@
 #include "easyeye_imaging.h"
 #include <algorithm>
 
+using mylog::Logs;
 using namespace cv;
 using namespace std;
 using namespace easyeye;
@@ -24,7 +25,7 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
     int xPupil = bp.pupilX, yPupil = bp.pupilY, rPupil = bp.pupilR;
     int yIris = bp.irisY, xIris = bp.irisX, rIris = bp.irisR;
     const IrisImageType dataType = config_.iris_image_type;
-	mylog::Log(mylog::TRACE, "FindEyelidMix::doFindPoints image %d x %d, pupil (%d, %d) r = %d, iris (%d, %d) r = %d, dataType = %d\n",
+	Logs::GetLogger().Log(mylog::TRACE, "FindEyelidMix::doFindPoints image %d x %d, pupil (%d, %d) r = %d, iris (%d, %d) r = %d, dataType = %d\n",
 			image.cols, image.rows, xPupil, yPupil, rPupil, xIris, yIris, rIris, dataType);
 	
 	//Convert IplImage to IMAGE type
@@ -284,7 +285,7 @@ cv::Point2i FindEyelidMix::findContourPoint(Mat& grayMatImg, int threshold, int 
 	{
 		xyValue.y = cvRound(grayMatImg.rows * 0.6);
 //		cout << "Top or Bottom ZERO Value" << endl;
-        mylog::Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Top or Bottom ZERO Value\n");
+        Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Top or Bottom ZERO Value\n");
 	}
   	
 	if(xyValue.x < 2 || xyValue.x > grayMatImg.cols - 1)
@@ -293,13 +294,13 @@ cv::Point2i FindEyelidMix::findContourPoint(Mat& grayMatImg, int threshold, int 
 		{
 			xyValue.x = 1;
 //			cout << "Left ZERO Value" << endl;
-            mylog::Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Left ZERO Value\n");
+            Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Left ZERO Value\n");
 		}
 		if(locate == 2)
 		{			
 			xyValue.x = grayMatImg.cols - 1;
 //			cout << "Right ZERO Value" << endl;
-            mylog::Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Right ZERO Value\n");
+            Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Right ZERO Value\n");
 		}
 	}
 	return xyValue;	
@@ -363,7 +364,7 @@ cv::Mat FindEyelidMix::CreateNoiseImage(cv::Mat& image, const EyelidsLocation& e
     const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
     IplImage iplImg = (IplImage) image;
 	IplImage* noiseImg = getNoiseImage(&iplImg, eyelids_location); 
-	mylog::Log(mylog::DEBUG, "FindEyelidMix::doFindPoints ellipse = [%d %d %d %d %d], angle = %.4f\n",
+	Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::doFindPoints ellipse = [%d %d %d %d %d], angle = %.4f\n",
 			eyelids_location.ellipse_vals[0], eyelids_location.ellipse_vals[1], eyelids_location.ellipse_vals[2], eyelids_location.ellipse_vals[3], eyelids_location.ellipse_vals[4], eyelids_location.angle);
     Mat noiseImgMat = cvarrToMat(noiseImg, true);
     cvReleaseImage(&noiseImg);

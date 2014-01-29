@@ -20,6 +20,7 @@ using cv::Point2i;
 using cv::Point2f;
 using cv::Mat;
 using namespace easyeye;
+using mylog::Logs;
 //#define RATIO_R	13
 
 FindPupilCircleNew::FindPupilCircleNew(PupilFinderConfig config) : config_(config)
@@ -40,13 +41,13 @@ static bool IsValidPupil(const IntCircle& pupil) {
 IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
 {	
     if (!Imaging::IsGray(eye_image)) {
-        mylog::Log(mylog::WARN, "FindPupilCircleNew::doDetect image is not " 
+        Logs::GetLogger().Log(mylog::WARN, "FindPupilCircleNew::doDetect image is not " 
                 "grayscale; unpredictable behavior will ensue...\n");
     }
     const int limitRadius = config_.max_radius();
     const int nScale = config_.nScale;
     const IrisImageType dataType = config_.iris_image_type;
-	mylog::Log(mylog::TRACE, "FindPupilCircleNew::doDetect: "
+	Logs::GetLogger().Log(mylog::TRACE, "FindPupilCircleNew::doDetect: "
 			"rLimit=%d nScale=%d dataType=%d\n",
 			limitRadius, nScale, dataType);
 	// Make a copy of the given image
@@ -84,7 +85,7 @@ IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
 	// Get the threshold for detecting the pupil
 	int threshold = getThreshold(eye_image, (int)minValue);
 
-	mylog::Log(mylog::TRACE, "FindPupilCircleNew::doDetect size=%d, minValue=%.1f maxValue=%.1f threshold=%d\n",
+	Logs::GetLogger().Log(mylog::TRACE, "FindPupilCircleNew::doDetect size=%d, minValue=%.1f maxValue=%.1f threshold=%d\n",
 				size, minValue, maxValue, threshold);
 	//Originally, we used 1 for m value.
 	//If you increas m value, it would be faster, however, the results would be slightly worst.
@@ -119,22 +120,22 @@ IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
 
 	// If both attempts failed=> need to be reimplemented
 	if(dstVal.radius < 1) {
-		mylog::Log(mylog::DEBUG, "FindPupilCircleNew::doDetect Failed to load the pupil circle; using defaults\n");
+		Logs::GetLogger().Log(mylog::DEBUG, "FindPupilCircleNew::doDetect Failed to load the pupil circle; using defaults\n");
         dstVal.CopyFrom(candidate);
 		if(candidate.radius < 1 || candidate.radius > limitRadius) {
 		  dstVal.radius = limitRadius / 2;      
 		}
 		if(dstVal.center.x < 1) {
-			mylog::Log(mylog::DEBUG, "FindPupilCircleNew::doDetect Failed to load the pupil's X center position; just guessing instead\n");
+			Logs::GetLogger().Log(mylog::DEBUG, "FindPupilCircleNew::doDetect Failed to load the pupil's X center position; just guessing instead\n");
 			dstVal.center.x = eye_image.cols / 2;
 		}
 		if(dstVal.center.y < 1) {
-			mylog::Log(mylog::DEBUG, "FindPupilCircleNew::doDetect Failed to load the pupil's Y center position; just guessing instead\n");
+			Logs::GetLogger().Log(mylog::DEBUG, "FindPupilCircleNew::doDetect Failed to load the pupil's Y center position; just guessing instead\n");
 			dstVal.center.y = eye_image.rows / 2;
 		}
 	}
 	
-	mylog::Log(mylog::DEBUG, "FindPupilCircleNew::doDetect: x=%d y=%d r=%d (%d %d %d)\n",
+	Logs::GetLogger().Log(mylog::DEBUG, "FindPupilCircleNew::doDetect: x=%d y=%d r=%d (%d %d %d)\n",
 			dstVal.center.x, dstVal.center.y, dstVal.radius, 
 			candidate.center.x, candidate.center.y, candidate.radius);
     return dstVal;
@@ -215,7 +216,7 @@ void FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contour
             center.y = (int)box.center.y;			
             int height = (int)box.size.height;
             int width = (int)box.size.width;
-            mylog::Log(mylog::TRACE, "FindPupilCircleNew::getPupilPosition fit ellipse from %lu points: %.0fx%.0f with center (%.0f, %0.f) and angle %.0f degrees\n", 
+            Logs::GetLogger().Log(mylog::TRACE, "FindPupilCircleNew::getPupilPosition fit ellipse from %lu points: %.0fx%.0f with center (%.0f, %0.f) and angle %.0f degrees\n", 
                     contour.size(), box.size.width, box.size.height, box.center.x, box.center.y, box.angle);
             /// @todo We assume that the pupil is the perfect circle
             radius = getRadius(width, height, size);
@@ -226,7 +227,7 @@ void FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contour
             // Stop and draw the biggest circle		
             if(0 < radius && radius < limitRadius) {
                 primary.CopyFrom(candidate);
-                mylog::Log(mylog::TRACE, "FindPupilCircleNew::getPupilPosition VALID (%d, %d) r=%d\n", primary.center.x, primary.center.y, primary.radius);
+                Logs::GetLogger().Log(mylog::TRACE, "FindPupilCircleNew::getPupilPosition VALID (%d, %d) r=%d\n", primary.center.x, primary.center.y, primary.radius);
                 break;
             }
 		}		

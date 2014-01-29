@@ -32,6 +32,7 @@
 
 using namespace easyeye;
 using namespace std;
+using mylog::Logs;
 
 //const char * Encoding::key_width = "width";
 //const char * Encoding::key_height = "height";
@@ -119,7 +120,7 @@ char getTemplateOrMaskChar(const int value, bool *printedError) {
             return '1';
         default:
             if (!(*printedError)) {
-                mylog::Log(mylog::WARN, "invalid template/mask value %d; probably wasn't initialized\n", value);
+                Logs::GetLogger().Log(mylog::WARN, "invalid template/mask value %d; probably wasn't initialized\n", value);
                 *printedError = true;
             }
             return '0';
