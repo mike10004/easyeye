@@ -103,18 +103,21 @@ void Program::ParseArgs(const std::vector<std::string>& args, std::vector<std::s
     while (true && options_.action == CONTINUE) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
-        int getopt_optind = optind;
         c = getopt_long (argc, argv, optstr.c_str(), long_options, &option_index);
         if (c == -1) break; /* Detect the end of the options. */
         string option_arg;
         bool has_option_arg = false;
         string long_form;
         if (c == 0 || isalnum(c)) {
+            if (c == 0) {
+                long_form.assign(long_options[option_index].name);
+            } else {
+                long_form.assign(FindSpec(c).long_form);
+            }
             has_option_arg = optarg != NULL;
             if (has_option_arg) {
                 option_arg.assign(optarg);
             }
-            long_form.assign(long_options[option_index].name);
             if (Eq("help", long_form)) {
                 options_.action = HELP;
             } else if (Eq("verbose", long_form)) {
@@ -266,4 +269,17 @@ void Program::PrintUsage(std::ostream& out)
 const char* Program::name_str() 
 {
     return name.c_str();
+}
+
+const OptionSpec Program::null_option_spec_("", 0, NONE);
+
+const OptionSpec& Program::FindSpec(char short_form) const
+{
+    for (int i = 0; i < option_specs_.size(); i++) {
+        if (short_form == option_specs_[i].short_form) {
+            return option_specs_[i];
+        }
+    }
+    mylog::Logs::GetLogger().Log(mylog::WARN, "Program::FindSpec no option spec found for \'%c\'\n", short_form);
+    return null_option_spec_;
 }

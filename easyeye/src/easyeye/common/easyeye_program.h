@@ -69,6 +69,7 @@ public:
     virtual void PrintHelpHeader(std::ostream& out);
     virtual void PrintHelpFooter(std::ostream& out);
     const char* name_str();
+    const OptionSpec& FindSpec(char short_form) const;
 protected:
     Options options_;
     const std::string name;
@@ -76,6 +77,7 @@ protected:
 private:
     std::vector<OptionSpec> option_specs_;
     void ParseArgs(const std::vector<std::string>& args, std::vector<std::string>& positionals);
+    const static OptionSpec null_option_spec_;
 };
     } // ns program
 } // ns easyeye
