@@ -13,10 +13,12 @@
 namespace easyeye
 {
 
-
 class Matcher
 {
 public:
+    enum Flag {
+        CLEAN = 0, DIRTY = 100, INCONGRUENT = 200, 
+    };
 	enum MatchingMode {
 		SHIFT_VERT_ONLY,
 		SHIFT_HORIZ_ONLY,
@@ -26,7 +28,7 @@ public:
 	Matcher();
     Matcher(MatchingMode matchingMode);
 
-	double ComputeScore(const Encoding& pEncoding, const Encoding& tEncoding) const;
+	double ComputeScore(const Encoding& pEncoding, const Encoding& tEncoding, Flag *flag) const;
 	const MatchingMode mode;
 	const int hdScales;
 	const static enum MatchingMode DEFAULT_MODE = SHIFT_BOTH_OR;

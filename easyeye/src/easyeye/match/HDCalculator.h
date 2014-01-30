@@ -27,6 +27,7 @@
 #define _HD_CALCULATOR_H_
 
 #include "../encode/easyeye_encode.h"
+#include "easyeye_match.h"
 
 namespace easyeye
 {
@@ -39,9 +40,9 @@ namespace easyeye
 class HDCalculator
 {
  public:
-	HDCalculator();
+	HDCalculator(const Encoding& e1, const Encoding& e2);
 	virtual ~HDCalculator();
-
+    Matcher::Flag flag() const;
     static const double HD_NAN;
     
 	/**
@@ -54,9 +55,7 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD Minimum
 	*/
-	double computeHDX(const Encoding&,
-					  const Encoding&,
-					  int);
+	double computeHDX(int nscales);
 	/**
 	* Calculate HD in shifting towards the up and down
 	* and return minimum HD value.
@@ -67,9 +66,7 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD Minimum
 	*/
-	double computeHDY(const Encoding&,
-					   const Encoding&,
-					   int); 
+	double computeHDY(int nscales); 
 
 	/**
 	* Calculate HD in shifting towards left/right or up/down
@@ -81,9 +78,7 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD minimum
 	*/
-	double computeHDXorY(const Encoding&,
-					   const Encoding&,
-					   int); 
+	double computeHDXorY(int nscales); 
 
 	/**
 	* Calculate HD in shifting towards left/right and up/down
@@ -95,82 +90,19 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD minimum
 	*/
-	double computeHDXandY(const Encoding&,
-						   const Encoding&,
-						   int); 
+	double computeHDXandY(int nscales); 
 	
  private:
-
-	int width;
-	int height;
+    Matcher::Flag flag_;
 	int maxShiftX;
 	int maxShiftY;
   
-	int *template1s;
-	int *mask1s;
-	int *template2s;
-	int *mask2s;
+    const Encoding& e1_;
+    const Encoding& e2_;
+    const int width_, height_;
+    Encoding shifted_e2_;
 
-	int *mask;
-	int *C;
-
-	/**
-	* Initialize the given templates.
-	*
-	* @param classTemplate1 Input target template
-	* @param classTemplate2 Input query template
-	*/
-	bool initializeTemplates(const Encoding&,
-						       const Encoding&);
-
-	/**
-	* Calculates HD.
-	*
-	* @param tTemplate Input target template
-	* @param tMask Input target mask incorperating with noise
-	* @param qTemplate Input query template
-	* @param qMask Input query mask incorperating with noise
-	* @param newTemplate Input new template
-	* @param newMask Input new mask incorperating with noise
-	* @return HD minimum
-	*/
-
-    double calcHD(int* tTemplate, int* tMask, int* qTemplate, int* qMask, 
-				int* newTemplate, int* newMask);
-
-   /**
-	* Shifts the iris patterns bitwise.
-	* In order to provide the best match each shift is by two bits 
-	* to the left and to the right.
-	*
-	* @param templates Input template
-	* @param width Input width
-	* @param height Input height
-	* @param noshifts >0: Number of shifts to the right
-	* 				  <0: Number of shifts to the left
-	* @param nscales  Number of filters used for encoding, needed to
-    *                 determine how many bits should be moved when shifting
-	* @param templatenew Used to return the shifted template
-	*/
-	void X_Shiftbits(int *templates, int width, int height, 
-					int noshifts, int nscales, int *templatenew); 
-	
-	/**
-	* Shifts the iris patterns bitwise.
-	* In order to provide the best match each shift is one bit up and down.
-	*
-	* @param templates Input template
-	* @param width Input width
-	* @param height Input height
-	* @param noshifts Number of shifts to the down, a negative
-	*                 value in shifting to the up.
-	* @param nscales  Number of filters used for encoding, needed to
-    *                 determine how many bits should be moved when shifting
-	* @param templatenew Used to return the shifted template
-	*/
-	void Y_Shiftbits(int *templates, int width, int height, 
-					int noshifts,int nscales, int *templatenew);
-	
+    static double calcHD(const Encoding& e1, const Encoding& e2, int* num_diff, int* num_unmasked, int* same_ones, int* same_zeros);
 }; // HDCalculator
 
 }

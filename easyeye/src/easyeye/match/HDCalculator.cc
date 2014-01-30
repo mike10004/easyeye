@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "HDCalculator.h"
 #include <iostream>
 #include <cstring>
@@ -9,101 +10,68 @@
 using namespace easyeye;
 using mylog::Logs;
 
-
-
-HDCalculator::HDCalculator()
-	: C(NULL), mask2s(NULL), mask1s(NULL),
-	  template1s(NULL), template2s(NULL), mask(NULL)
+HDCalculator::HDCalculator(const Encoding& e1, const Encoding& e2) 
+    : e1_(e1), e2_(e2), width_(e1.width()), height_(e1.height()), 
+        shifted_e2_(), maxShiftX(10), maxShiftY(3)
 {
-	width = 0;
-	height = 0;
-	maxShiftX = 10;
-	maxShiftY = 3;
+    shifted_e2_.CopyFrom(e2.width(), e2.height(), e2.nscales(), e2.irisTemplate, e2.irisMask);
+    if (!e1_.IsCongruent(e2_)) {
+        flag_ = Matcher::INCONGRUENT;
+    } else {
+        flag_ = Matcher::CLEAN;
+    }
 }
+
+Matcher::Flag HDCalculator::flag() const 
+{
+    return flag_;
+}
+
 HDCalculator::~HDCalculator()
 {
-	delete[] template1s;
-	delete[] mask1s;
-	delete[] mask;
-	delete[] C;
 }
 
-double returnNaN() {
-    return std::numeric_limits<double>::quiet_NaN();
-}
+//double returnNaN() {
+//    return 
+//}
 
-const double HDCalculator::HD_NAN = returnNaN();//quietnan;//sqrt(0);//nan(NULL);
+const double HDCalculator::HD_NAN = std::numeric_limits<double>::quiet_NaN();//;//returnNaN();//quietnan;//sqrt(0);//nan(NULL);
 
-bool HDCalculator::initializeTemplates(const Encoding& classTemplate1,
-						       const Encoding& classTemplate2)
+double HDCalculator::calcHD(const Encoding& e1, const Encoding& e2, int* num_diff, int* num_unmasked, int* same_ones, int* same_zeros)
 {
-	int t_width = classTemplate1.angular_resolution();
-	int t_height = classTemplate1.radial_resolution();
-
-	if ( (t_width != classTemplate2.angular_resolution() ) || 
-		 (t_height != classTemplate2.radial_resolution() ) ) 
-	{
-		Logs::GetLogger().Log(mylog::ERROR, "HDCalculator::initializeTemplate encodings are incongruent\n");
-		return false;
-	}
-	
-	if (width*height == 0) 
-	{
-		template1s = new int[t_width*t_height];
-		mask1s = new int[t_width*t_height];		
-		mask = new int[t_width*t_height];
-		C = new int[t_width*t_height];
-	}
-	else
-	{
-		delete[] template1s;
-		template1s = new int[t_width*t_height];
-
-		delete[] mask1s;
-		mask1s = new int[t_width*t_height];
-
-		delete[] mask;
-		mask = new int[t_width*t_height];
-
-		delete[] C;
-		C = new int[t_width*t_height];
-	}
-
-	width = t_width;
-	height = t_height;
-    return true;
-}
-
-double HDCalculator::calcHD(int* tTemplate, int* tMask, int* qTemplate, int* qMask,
-									   int* newTemplate, int* newMask)
-{
-	int nummaskbits = 0;
-	int bitsdiff = 0; 
-	int totalbits = 0;
-	double hd1; 
-
-    for (int i = 0; i < width * height; i++) 
-	{
-      mask[i] = newMask[i] | qMask[i];
-      if (mask[i] == 1)
-		nummaskbits++;	
-
-	  C[i] = newTemplate[i] ^ qTemplate[i];
-      C[i] = C[i] & (1-mask[i]);
-      if (C[i] == 1)
-		bitsdiff++;	  
+	int num_unmasked_bits = 0;
+	int num_bits_diff = 0; 
+    int num_same_ones = 0, num_same_zeros = 0;
+    const int width = e1.width(), height = e1.height();
+    for (int i = 0; i < width * height; i++) {
+        bool masked = e1.irisMask[i] == 1 || e2.irisMask[i] == 1;
+        if (masked) {
+            continue;
+        }
+        num_unmasked_bits++;
+        if (e1.irisTemplate[i] != e2.irisTemplate[i]) {
+            num_bits_diff++;
+        } else {
+            if (e1.irisTemplate[i] == 0) {
+                num_same_ones++;
+            } else {
+                num_same_zeros++;
+            }
+        }
     }
-
-    totalbits = width * height - nummaskbits;    
-	
-	
-    if (totalbits == 0)        
-      hd1 = -1;    
-    else		        
-      hd1 = (double)bitsdiff / totalbits;
-	
-	return hd1;
+    double hd;
+    if (num_unmasked_bits == 0) {
+        hd = HD_NAN;
+    } else {
+        hd = (double)num_bits_diff / (double)num_unmasked_bits;
+    }
+    *num_diff = num_bits_diff;
+    *num_unmasked = num_unmasked_bits;
+    *same_ones = num_same_ones;
+    *same_zeros = num_same_zeros;
+    return hd;
 }
+
 class ShiftBits 
 {
 public:
@@ -183,136 +151,77 @@ static void Y_Shiftbits(int *templates, int width, int height, int noshifts,int 
 
 };
 
-double HDCalculator::computeHDX(const Encoding& classTemplate1,
-						       const Encoding& classTemplate2,
-						       int scales) 
+double HDCalculator::computeHDX(int scales) 
 {
-	if (!initializeTemplates(classTemplate1, classTemplate2)) {
-        return HD_NAN;
-    }
-    
-
-	int *template1 = classTemplate1.iris_template_ptr();
-	int *template2 = classTemplate2.iris_template_ptr();
-	int *mask1 = classTemplate1.iris_mask_ptr();
-	int *mask2 = classTemplate2.iris_mask_ptr();
-
-	double hd = -1;
-
-	for (int shifts = -maxShiftX; shifts <= maxShiftX; shifts++)
-	{    
-		ShiftBits::X_Shiftbits(template1, width, height, shifts, scales, template1s);
-		ShiftBits::X_Shiftbits(mask1, width, height, shifts, scales, mask1s);
-
-		double hd1 = calcHD(template1, mask1, template2, mask2, template1s, mask1s);
-
-		if(hd1 == -1)
-			hd = -1;
-		else if(hd1 < hd || hd == -1) 
-			hd = hd1;
+    double min_score = std::numeric_limits<double>::max();
+	for (int shifts = -maxShiftX; shifts <= maxShiftX; shifts++) {    
+		ShiftBits::X_Shiftbits(e2_.irisTemplate, width_, height_, shifts, scales, shifted_e2_.irisTemplate);
+		ShiftBits::X_Shiftbits(e2_.irisMask, width_, height_, shifts, scales, shifted_e2_.irisMask);
+        int diff, unmasked, ones, zeros;
+		double hd1 = calcHD(e1_, shifted_e2_, &diff, &unmasked, &ones, &zeros);
+		if (hd1 < min_score) {
+            min_score = hd1;
+        }
+        if (diff == 0 && unmasked != 0) {
+            mylog::Logs::GetLogger().Log(mylog::DEBUG, "at shift %d, num diff = 0; %d unmasked bits; of same unmasked bits, %d ones and %d zeros\n", shifts, unmasked, ones, zeros);
+            break;
+        }
 	}
-
-	return hd;
+	return min_score;
 
 }
 
 
-double HDCalculator::computeHDY(const Encoding& classTemplate1,
-						       const Encoding& classTemplate2,
-						       int scales) 
+double HDCalculator::computeHDY(int scales) 
 {
-	if (!initializeTemplates(classTemplate1, classTemplate2)) {
-        return HD_NAN;
-    }
-
-	int *template1 = classTemplate1.iris_template_ptr();
-	int *template2 = classTemplate2.iris_template_ptr();
-	int *mask1 = classTemplate1.iris_mask_ptr();
-	int *mask2 = classTemplate2.iris_mask_ptr();
-
-	double hd = -1;
-	int index = 1;
-
+	double hd = std::numeric_limits<double>::max();
 	for (int shifts = -maxShiftY; shifts <= maxShiftY; shifts++)
 	{    
-		ShiftBits::Y_Shiftbits(template1, width, height, shifts, scales, template1s);
-		ShiftBits::Y_Shiftbits(mask1, width, height, shifts, scales, mask1s);
-
-		double hd1 = calcHD(template1, mask1, template2, mask2, template1s, mask1s);
-
-		if(hd1 == -1)
-			hd = -1;
-		else if(hd1 < hd || hd == -1) 
+		ShiftBits::Y_Shiftbits(e2_.irisTemplate, width_, height_, shifts, scales, shifted_e2_.irisTemplate);
+		ShiftBits::Y_Shiftbits(e2_.irisMask, width_, height_, shifts, scales, shifted_e2_.irisMask);
+        int diff, unmasked, ones, zeros;
+		double hd1 = calcHD(e1_, shifted_e2_, &diff, &unmasked, &ones, &zeros);
+        if (hd1 < hd) {
 			hd = hd1;
+        }
+        if (diff == 0 && unmasked != 0) {
+            mylog::Logs::GetLogger().Log(mylog::DEBUG, "at shift %d, num diff = 0; %d unmasked bits; of same unmasked bits, %d ones and %d zeros\n", shifts, unmasked, ones, zeros);
+            break;
+        }
 	}
-	
 	return hd;
 }
 
-double HDCalculator::computeHDXorY(const Encoding& classTemplate1,
-						       const Encoding& classTemplate2,
-						       int scales) 
+double HDCalculator::computeHDXorY(int scales) 
 {
-	double xHD = computeHDX(classTemplate1, classTemplate2, scales);
+	double xHD = computeHDX(scales);
     if (portability::Math::IsNaN(xHD)) {
         return HD_NAN;
     }
-	double yHD = computeHDY(classTemplate1, classTemplate2, scales);
+	double yHD = computeHDY(scales);
     if (portability::Math::IsNaN(yHD)) {
         return HD_NAN;
     }
-	double hd;
-	if(xHD < yHD)
-		hd = xHD;
-	else
-		hd = yHD;
-
-
+	double hd = std::min(xHD, yHD);
 	return hd;
 }
 
-double HDCalculator::computeHDXandY(const Encoding& classTemplate1,
-						       const Encoding& classTemplate2,
-						       int scales) 
+double HDCalculator::computeHDXandY(int scales) 
 {
-	
-	if (!initializeTemplates(classTemplate1, classTemplate2)) {
-        return HD_NAN;
-    }
-	template2s = new int[width*height];
-	mask2s = new int[width*height];
-
-	int *template1 = classTemplate1.iris_template_ptr();
-	int *template2 = classTemplate2.iris_template_ptr();
-	int *mask1 = classTemplate1.iris_mask_ptr();
-	int *mask2 = classTemplate2.iris_mask_ptr();
-
-	double hd = -1;
-	int index = 1;
-
-	for (int shifts1 = -maxShiftY; shifts1 <= maxShiftY; shifts1++)
-	{ 	 
-		ShiftBits::Y_Shiftbits(template1, width, height, shifts1, scales, template1s);
-		ShiftBits::Y_Shiftbits(mask1, width, height, shifts1, scales, mask1s);
-		
-		for (int shifts2 = -maxShiftX; shifts2 <= maxShiftX; shifts2++)
-		{
-			ShiftBits::X_Shiftbits(template1s, width, height, shifts2, scales, template2s);
-			ShiftBits::X_Shiftbits(mask1s, width, height, shifts2, scales, mask2s);
-			
-			double hd1 = calcHD(template1, mask1, template2, mask2, template2s, mask2s);
-
-			if(hd1 == -1)
-				hd = -1;
-			else if(hd1 < hd || hd == -1) 
-				hd = hd1;
-
+    double min_hd = std::numeric_limits<double>::max();
+	for (int shifts1 = -maxShiftY; shifts1 <= maxShiftY; shifts1++) { 	 
+		ShiftBits::Y_Shiftbits(e2_.irisTemplate, width_, height_, shifts1, scales, shifted_e2_.irisTemplate);
+		ShiftBits::Y_Shiftbits(e2_.irisMask, width_, height_, shifts1, scales, shifted_e2_.irisMask);
+		for (int shifts2 = -maxShiftX; shifts2 <= maxShiftX; shifts2++) {
+            ShiftBits::X_Shiftbits(e2_.irisTemplate, width_, height_, shifts2, scales, shifted_e2_.irisTemplate);
+            ShiftBits::X_Shiftbits(e2_.irisMask, width_, height_, shifts2, scales, shifted_e2_.irisMask);
+            int diff, unmasked, ones, zeros;
+            double hd1 = calcHD(e1_, shifted_e2_, &diff, &unmasked, &ones, &zeros);
+            if (hd1 < min_hd) {
+                min_hd = hd1;
+            }
 		}
 	}
-
-	delete[] template2s;
-	delete[] mask2s;
-
-	return hd;
+    return min_hd;
 }
 

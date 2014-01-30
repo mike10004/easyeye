@@ -20,19 +20,32 @@ Matcher::Matcher(MatchingMode matchingMode) : mode(matchingMode), hdScales(1)
 {
 }
 
-double Matcher::ComputeScore(const Encoding& pEncoding, const Encoding& tEncoding) const
+double Matcher::ComputeScore(const Encoding& pEncoding, const Encoding& tEncoding, Flag *flag) const
 {
-	HDCalculator hd;
+	HDCalculator hd(pEncoding, tEncoding);
+    if (hd.flag() != Matcher::CLEAN) {
+        if (flag != NULL) *flag = hd.flag();
+        return HDCalculator::HD_NAN;
+    }
+    double score;
 	switch (mode) {
 	case SHIFT_VERT_ONLY:
-		return hd.computeHDY(pEncoding, tEncoding, hdScales);
+		score = hd.computeHDY(hdScales);
+        break;
 	case SHIFT_HORIZ_ONLY:
-		return hd.computeHDX(pEncoding, tEncoding, hdScales);
+		score = hd.computeHDX(hdScales);
+        break;
 	case SHIFT_BOTH_OR:
-		return hd.computeHDXorY(pEncoding, tEncoding, hdScales);
+		score = hd.computeHDXorY(hdScales);
+        break;
 	case SHIFT_BOTH_AND:
 	default:
-		return hd.computeHDXandY(pEncoding, tEncoding, hdScales);
+		score = hd.computeHDXandY(hdScales);
+        break;
 	}
+    if (flag != NULL) {
+        *flag = hd.flag();
+    }
+    return score;
 }
 
