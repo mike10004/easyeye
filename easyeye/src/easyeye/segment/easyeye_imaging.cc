@@ -100,7 +100,31 @@ Mat Imaging::GetROI(Mat& src, int startX, int width, int startY, int height)
     return roi;
 }
 
-bool Imaging::IsGray(Mat& image)
+static int clamp(int value, int min_inclusive, int max_inclusive)
+{
+	if(value < min_inclusive)
+		value = min_inclusive;
+	if(value > max_inclusive)
+		value = max_inclusive;	
+	return value;
+}
+
+
+void Imaging::myRect(const cv::Mat& image, int x, int y, int radius, int* destVal)
+{  
+	int startX, endX, startY, endY;
+	startX = x-radius;// X starting point
+	endX = x+radius;// X end point	
+    startY = y-radius;// Y starting point
+	endY = y+radius;// Y end point
+	
+	destVal[0] = clamp(startX, 1, image.cols);
+	destVal[1] = clamp(endX, 1, image.cols);	
+	destVal[2] = clamp(startY, 1, image.rows);
+	destVal[3] = clamp(endY, 1, image.rows);
+}
+
+bool Imaging::IsGray(const Mat& image) 
 {
     return image.type() == CV_8UC1;
 }

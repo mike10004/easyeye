@@ -59,7 +59,8 @@ public:
 	*/
     void doFindPoints(cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location);
     static cv::Mat CreateNoiseImage(cv::Mat& image, const EyelidsLocation& eyelids_location);
-	const static int ANGLE_DEST_VAL_LEN = 1;
+    static void DrawEyelidEllipse(cv::Mat& eye_image, const EyelidsLocation& eyelids_location, const cv::Scalar color);
+    const static int ANGLE_DEST_VAL_LEN = 1;
 	/// FUTURE WORK.
 	//Masek::IMAGE* removeReflections(IplImage* eyeImg, IplImage* noiseImg, int eyelashThres, int reflectThres);
 
@@ -121,7 +122,7 @@ private:
 	*               - \c Min (Original value, New value)
 	* @return Top and bottom eyelid's Y value
 	*/
-	int getEyelidPoint(Masek::IMAGE* image, int yla, int val, int icl, Extremum extremum);
+	int getEyelidPoint(const cv::Mat& image, int yla, int val, int icl, Extremum extremum);
 	/**
 	* Square root
 	*
@@ -142,8 +143,8 @@ private:
 	* @param angle Ellipse's orientation
 	* @retrun Image with noise mark
 	*/
-	static IplImage* getNoiseImage(IplImage* img, const EyelidsLocation& eyelids_location);
-
+	static cv::Mat getNoiseImage(const cv::Mat& eye_image, const EyelidsLocation& eyelids_location);
+    
 };
 
 }

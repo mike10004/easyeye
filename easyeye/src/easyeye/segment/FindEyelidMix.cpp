@@ -28,14 +28,11 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
 	Logs::GetLogger().Log(mylog::TRACE, "FindEyelidMix::doFindPoints image %d x %d, pupil (%d, %d) r = %d, iris (%d, %d) r = %d, dataType = %d\n",
 			image.cols, image.rows, xPupil, yPupil, rPupil, xIris, yIris, rIris, dataType);
 	
-	//Convert IplImage to IMAGE type
-	Masek::IMAGE* eyeImage = Imaging::CopyToMasek(image);//ImageUtility::convertIplToImage(iplImg);	
-	
 	// The ROI will be saved in this variable
 	int destVal[4];	
 
 	// ROI to search for the eyelid
-	ImageUtility::myRect_C(eyeImage, xIris, yIris, rIris, destVal);
+    Imaging::myRect(image, xIris, yIris, rIris, destVal);
 	int icl, icu, irl, iru;
 	icl = destVal[0]; // X starting point
 	icu = destVal[1]; // X ending point
@@ -46,9 +43,9 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
 	// Detect the top and bottom eyelid points
 	int topHeight = ImageUtility::getValue(yPupil-irl, irl+yPupil);	
 	int bottomHeight = ImageUtility::getValue(iru-(yPupil+rPupil), iru);	
-	int centerX = ImageUtility::getValue(icl + (icu-icl)/2, eyeImage->hsize[1]);
-	Masek::IMAGE* topEyelid = ImageUtility::getROIImage_C(eyeImage, icl, icu-icl, irl, topHeight);	
-	Masek::IMAGE* bottomEyelid = ImageUtility::getROIImage_C(eyeImage, icl, icu-icl,
+	int centerX = ImageUtility::getValue(icl + (icu-icl)/2, image.cols);//eyeImage->hsize[1]);
+    Mat top_eyelid = Imaging::GetROI(image, icl, icu-icl, irl, topHeight);
+    Mat bottom_eyelid = Imaging::GetROI(image, icl, icu-icl,
 			(int)(yPupil+rPupil+(bottomHeight*0.3)), (int)(bottomHeight*0.7));
 
 	CvPoint topPoint, bottomPoint;	
@@ -56,8 +53,8 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
 	bottomPoint.x = centerX;
 
 	// Calulate Y using Hough Transform
-	topPoint.y = getEyelidPoint(topEyelid, -1, irl+1, icl, MAX);
-	bottomPoint.y = getEyelidPoint(bottomEyelid, iru, iru-bottomEyelid->hsize[0]-1, icl, MIN);
+	topPoint.y = getEyelidPoint(top_eyelid, -1, irl+1, icl, MAX);
+	bottomPoint.y = getEyelidPoint(bottom_eyelid, iru, iru-bottom_eyelid.rows-1, icl, MIN);
 	
     // Debugging
 	if(topPoint.y < irl || topPoint.y > yPupil-1)
@@ -65,12 +62,6 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
 	if(bottomPoint.y > iru)
 		bottomPoint.y = iru; 
 
-	// Release IMAGES
-	free(topEyelid->data);
-	free(topEyelid);
-	free(bottomEyelid->data);
-	free(bottomEyelid);
-	
 	// Detect left and right corner points
 	int adj = rIris/4;
 	int corRadius_X = cvRound(rIris*1.8)/2;
@@ -107,9 +98,6 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
 	cv::Point2i leftPoint = getCornerPoint(xyLeft, leftStartX, leftStartY, leftEndY, dataType);
 	cv::Point2i rightPoint= getCornerPoint(xyRight, rightStartX, rightStartY, rightEndY, dataType);
 	
-	free(eyeImage->data);
-	free(eyeImage);
-  
 	// Get the coordinates in the original image
 	int xx1, yy1, xx2, yy2;
 	xx1 = abs(rightPoint.x - leftPoint.x);
@@ -145,9 +133,10 @@ void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, Eyelids
 }
 
 // Find the top and bottom eyelid points
-int FindEyelidMix::getEyelidPoint(Masek::IMAGE* image, int yla, int val, 
+int FindEyelidMix::getEyelidPoint(const Mat& image, int yla, int val, 
 								int icl, Extremum extremum)
 {
+    int hsize0 = image.rows, hsize1 = image.cols;
     int lineCount;
     double *lines;
     int *xl, *yl;
@@ -157,19 +146,19 @@ int FindEyelidMix::getEyelidPoint(Masek::IMAGE* image, int yla, int val,
     destVal = yla;
 
     // Find the top eyelid
-    if (image->hsize[0]>0 && image->hsize[1]>0)		
-	    lineCount = masek.findline(image, &lines);	
+    if (hsize0>0 && hsize1>0)		
+	    lineCount = masek.findline(image.data, image.rows, image.cols, &lines);	
     else 
 	    lineCount = 0;
 
     if (lineCount > 0)
     {
-	    xl = (int*)malloc(sizeof(int)*image->hsize[1]);
-	    yl = (int*)malloc(sizeof(int)*image->hsize[1]);
+	    xl = (int*)malloc(sizeof(int)*hsize1);
+	    yl = (int*)malloc(sizeof(int)*hsize1);
 
-	    masek.linescoords(lines, image->hsize[0], image->hsize[1], xl, yl);
+	    masek.linescoords(lines, hsize0, hsize1, xl, yl);
 
-	    for (int i = 0; i<image->hsize[1]; i++)
+	    for (int i = 0; i<hsize1; i++)
 	    {			
 		    yl[i] = yl[i]+val;			
 		    xl[i] = xl[i]+icl-1;
@@ -309,45 +298,58 @@ cv::Point2i FindEyelidMix::findContourPoint(Mat& grayMatImg, int threshold, int 
 
 
 // Image without noise
-IplImage* FindEyelidMix::getNoiseImage(IplImage* img, const EyelidsLocation& eyelids_location)
+Mat FindEyelidMix::getNoiseImage(const Mat& eye_image, const EyelidsLocation& eyelids_location)
 {
       const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
       int width = eyelids_location.ellipse_vals[2], 
               topHeight = eyelids_location.ellipse_vals[3], 
               bottomHeight = eyelids_location.ellipse_vals[4];
       double angle = eyelids_location.angle;
+      int rows = eye_image.rows, cols = eye_image.cols;
 	  // Create the mask for normalization
-	  IplImage* maskImg = NULL;
-	  maskImg = cvCreateImage(cvSize(img->width, img->height), 8, 1);
-	  for(int j = 0; j < maskImg->height; j++) {
-		  for(int i = 0; i < maskImg->width; i++) {
-			  maskImg->imageData[i + j * maskImg->widthStep] = (char) 1;
-		  }
-	  }
+//	  IplImage* maskImg = NULL;
+//	  maskImg = cvCreateImage(cvSize(img->width, img->height), 8, 1);
+//	  for(int j = 0; j < maskImg->height; j++) {
+//		  for(int i = 0; i < maskImg->width; i++) {
+//			  maskImg->imageData[i + j * maskImg->widthStep] = (char) 1;
+//		  }
+//	  }
 	  /* Draw the elliptical arcs representing the eyelids into the mask image with value 0 */
-	  cvEllipse(maskImg, center,cvSize(width, topHeight), angle, 0, 180,
-			  CV_RGB(0,0,0), CV_FILLED, CV_AA, 0);
-	  cvEllipse(maskImg, center,cvSize(width, bottomHeight), angle, 180, 360,
-			  CV_RGB(0,0,0), CV_FILLED, CV_AA, 0);
+      Scalar ellipse_color = CV_RGB(0, 0, 0);
+      Size top_size(width, topHeight);
+      Size bottom_size(width, bottomHeight);
+      Mat mask_image(eye_image.rows, eye_image.cols, CV_8UC1, CV_RGB(255, 255, 255));
+      cv::ellipse(mask_image, center, top_size, angle, 0, 180, ellipse_color, CV_FILLED, CV_AA, 0);
+      cv::ellipse(mask_image, center, bottom_size, angle, 180, 360, ellipse_color, CV_FILLED, CV_AA, 0);
   	
-	  // Take care of alignment
-	  IplImage* noiseImg = NULL;
-	  noiseImg = cvCreateImage(cvSize(maskImg->width, maskImg->height), 8, 1);
-	  int index;
-	  for(int j = 0; j < maskImg->height; j++) {
-		  for(int i = 0; i < maskImg->width; i++) {
-			  index = i+j*noiseImg->widthStep;
-			  if(maskImg->imageData[index] == 0) {
-				  noiseImg->imageData[index] = img->imageData[i+j*img->widthStep];
-			  } else {
-				  noiseImg->imageData[index] = (char)sqrt((double) -1);
+	  // Paint negative of mask onto eye image
+      Mat noise_image = eye_image.clone();//(rows, cols, CV_8UC1);
+	  for(int j = 0; j < rows; j++) {
+          Mat mask_row = mask_image.row(j);
+          Mat noise_image_row = noise_image.row(j);
+		  for(int i = 0; i < cols; i++) {
+			  if(mask_row.at<uchar>(i) != 0) {
+                  noise_image_row.at<uchar>(i) = 0;
 			  }
 		  }
 	  }
-    cvReleaseImage(&maskImg);
-    return noiseImg;
+      return noise_image;
 }
 
+void FindEyelidMix::DrawEyelidEllipse(cv::Mat& eye_image, const EyelidsLocation& eyelids_location, const Scalar color)
+{
+      const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
+      int width = eyelids_location.ellipse_vals[2], 
+              topHeight = eyelids_location.ellipse_vals[3], 
+              bottomHeight = eyelids_location.ellipse_vals[4];
+      double angle = eyelids_location.angle;
+      int rows = eye_image.rows, cols = eye_image.cols;
+      int thickness = 3;
+      Size top_size(width, topHeight);
+      Size bottom_size(width, bottomHeight);
+      cv::ellipse(eye_image, center, top_size, angle, 0, 180, color, thickness, CV_AA, 0);
+      cv::ellipse(eye_image, center, bottom_size, angle, 180, 360, color, thickness, CV_AA, 0);
+}
 
 cv::Mat FindEyelidMix::CreateNoiseImage(cv::Mat& image, const EyelidsLocation& eyelids_location)
 {
@@ -361,13 +363,9 @@ cv::Mat FindEyelidMix::CreateNoiseImage(cv::Mat& image, const EyelidsLocation& e
 
 	//2. Without rotating image => rotate image after segmenting the iris region
 	//Mark noise parts in image
-    const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
-    IplImage iplImg = (IplImage) image;
-	IplImage* noiseImg = getNoiseImage(&iplImg, eyelids_location); 
+    Mat noise_image = getNoiseImage(image, eyelids_location);
 	Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::doFindPoints ellipse = [%d %d %d %d %d], angle = %.4f\n",
 			eyelids_location.ellipse_vals[0], eyelids_location.ellipse_vals[1], eyelids_location.ellipse_vals[2], eyelids_location.ellipse_vals[3], eyelids_location.ellipse_vals[4], eyelids_location.angle);
-    Mat noiseImgMat = cvarrToMat(noiseImg, true);
-    cvReleaseImage(&noiseImg);
-	return noiseImgMat;
+	return noise_image;
     
 }

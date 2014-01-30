@@ -40,7 +40,9 @@ namespace easyeye
         static void cvSmooth(const CvArr* src, CvArr* dst, int smoothtype=CV_GAUSSIAN, int size1=3, int size2=0, double sigma1=0, double sigma2=0 );
         static double cvThreshold(const CvArr* src, CvArr* dst, double threshold, double max_value, int threshold_type);
         static cv::Mat GetROI(cv::Mat& image, int startX, int width, int startY, int height);
-        static bool IsGray(cv::Mat& image);
+        static bool IsGray(const cv::Mat& image);
+        static void myRect(const cv::Mat& image, int x, int y, int radius, int* destVal);
+
     };
 
     namespace serial 
