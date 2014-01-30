@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <fstream>
+#include "../src/easyeye/common/mylog.h"
 #include "../src/easyeye/encode/easyeye_encode.h"
 #include "../src/easyeye/match/easyeye_match.h"
 #include "MatchingTest.h"
@@ -29,7 +30,8 @@ void MatchingTest::setUp() {
 void MatchingTest::tearDown() {
 }
 
-void MatchingTest::testMethod() {
+void MatchingTest::testComputeScoresBasic() {
+    mylog::Logs::GetLogger().set_level(mylog::ALL);
     const int nencodings = NUM_SAMPLES;
     Encoding encodings[nencodings];
     for (int i = 0; i < nencodings;i++) {
@@ -40,16 +42,14 @@ void MatchingTest::testMethod() {
     
     Matcher matcher;
     for (int i = 0; i < nencodings; i++) {
-        for (int j = 0; j < nencodings; j++) {
+        for (int j = i + 1; j < nencodings; j++) {
             Encoding& g = encodings[i];
             Encoding& p = encodings[j];
-            double score = matcher.ComputeScore(g, p);
+            Matcher::Flag flag;
+            double score = matcher.ComputeScore(g, p, &flag);
+            CPPUNIT_ASSERT(flag == Matcher::CLEAN);
             cerr << score << '\t' << serialized_encodings[i] << '\t' << serialized_encodings[j] << endl;
         }
     }
-}
-
-void MatchingTest::testFailedMethod() {
-    
 }
 

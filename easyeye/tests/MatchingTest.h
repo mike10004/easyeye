@@ -13,8 +13,7 @@
 class MatchingTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(MatchingTest);
 
-    CPPUNIT_TEST(testMethod);
-    CPPUNIT_TEST(testFailedMethod);
+    CPPUNIT_TEST(testComputeScoresBasic);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -25,8 +24,7 @@ public:
     void tearDown();
 
 private:
-    void testMethod();
-    void testFailedMethod();
+    void testComputeScoresBasic();
 };
 
 #endif	/* MATCHINGTEST_H */
