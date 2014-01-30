@@ -165,8 +165,8 @@ public:
    *              0=cos(t), 1=sin(t), 2=r
    * @return      number of lines
    */
-  int findline(IMAGE* image, double* *lines);
-
+  int findline(unsigned char* data, int rows, int cols, double* *lines);
+    int findline(IMAGE* image, double **lines);
   /**
    * Function for convolving each row of an image with 1D log-Gabor filters
    *

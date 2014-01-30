@@ -34,9 +34,18 @@ function lines = findline(image)*/
 #include <math.h>
 #include <Masek.h>
 
-int Masek::findline(Masek::IMAGE *image, double **lines)
+int Masek::findline(unsigned char* data, int rows, int cols, double **lines)
 {
-	
+    int hsize0 = rows, hsize1 = cols;
+    IMAGE image_obj;
+    image_obj.data = data;
+    image_obj.hsize[0] = hsize0;
+    image_obj.hsize[1] = hsize1;
+    return findline(&image_obj, lines);
+}
+
+int Masek::findline(IMAGE* image, double **lines)
+{
 	filter *I2, *orND, *I3, *I4, *edgeimage;
 	double theta[180];
 	double *R, *xp;
