@@ -221,7 +221,7 @@ size_t Arrays::CountNotEqual(unsigned char const* a, unsigned char const* b, siz
     return numWrong;
 }
 
-string IOUtils::ToString(std::istream& in)
+string Streams::ToString(std::istream& in)
 {
     ostringstream ss;
     ss << in.rdbuf();

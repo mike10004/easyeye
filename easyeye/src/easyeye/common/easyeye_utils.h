@@ -28,7 +28,6 @@ public:
     static bool IsFile(const std::string& path);
     static bool IsDirectory(const std::string& path, int* errorCode);
     static bool IsFile(const std::string& path, int*errorCode);
-    static std::string ToString(std::istream& in);
 private:
     static std::string temp_directory_path_windows(int* errorCode);
     static std::string temp_directory_path_unix(int* errorCode);
@@ -39,6 +38,7 @@ class Streams
 {
 public:
     static void Copy(std::istream& in, std::ostream& out);
+    static std::string ToString(std::istream& in);
 private: 
     Streams();
 };
