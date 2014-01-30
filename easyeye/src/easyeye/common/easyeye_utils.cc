@@ -4,10 +4,12 @@
  * (c) 2013 IBG, A Novetta Solutions Company
  */
 
+#include <list>
 #include <algorithm>
 #include <fstream>
 #include <string>
-#include <errno.h>
+#include <cerrno>
+#include <iostream>
 #include "mylog.h"
 #include "easyeye_utils.h"
 #include <sys/stat.h>
@@ -15,11 +17,12 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 #include <sstream>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #ifdef EASYEYE_ISWINDOWS
 #include <Windows.h>
 #endif
-
 
 using mylog::Logs;
 using namespace std;
@@ -257,4 +260,127 @@ void Vectors::AddAll(char** src_array, const size_t array_len, vector<string>& d
     for (size_t i = 0; i < array_len; i++) {
         dst.push_back(src_array[i]);
     }
+}
+
+static void MakeDirFromParts(const std::vector<string>& parts, size_t end_exclusive, bool absolute, mode_t mode, int *error_code)
+{
+    ostringstream path_ss;
+    if (absolute) {
+        path_ss << '/';
+    }
+    for (size_t i = 0; i < end_exclusive; i++) {
+        path_ss << parts[i] << '/';
+    }
+    string path = path_ss.str();
+    int status = mkdir(path.c_str(), mode);
+    if (status != 0) {
+        *error_code = errno;
+    } else {
+        *error_code = 0;
+    }
+}
+
+bool IOUtils::MakeDirs(const std::string& path, mode_t mode, int* error_code)
+{
+    int code = 0;
+    if (!path.empty()) {
+        bool absolute = path[0] == '/';
+        vector<string> path_parts = Strings::Split(path, '/', false); // false = no empties allowed
+        if (!path_parts.empty()) {
+            size_t num_parts = path_parts.size();
+            for (size_t i = 1; i <= num_parts; i++) {
+                MakeDirFromParts(path_parts, i, absolute, mode, &code);
+                if (code != 0 && code != EEXIST) {
+                    break;
+                }
+            }
+        }
+    }
+    *error_code = code;
+    return IsDirectory(path);
+}
+
+bool IOUtils::MakeDirs(const std::string& path)
+{
+    int error_code;
+    return MakeDirs(path, &error_code);
+}
+
+bool IOUtils::MakeDirs(const std::string& path, mode_t mode)
+{
+    int error_code;
+    return MakeDirs(path, mode, &error_code);
+}
+
+bool IOUtils::MakeDirs(const std::string& path, int* error_code)
+{
+    return MakeDirs(path, DEFAULT_MKDIR_MODE, error_code);
+}
+
+Strings::Splitter::Splitter(char delim, bool allow_empty)
+    : delim_(delim), allow_empty_(allow_empty)
+{
+}
+
+size_t Strings::Splitter::Split(const std::string& s)
+{
+    istringstream ss(s);
+    return Split(ss);
+}
+
+size_t Strings::Splitter::Split(istream& in)
+{
+    std::string item;
+    size_t n = 0;
+    while (std::getline(in, item, delim_)) {
+        if (allow_empty_ || !item.empty()) {
+            tokens.push_back(item);
+            n++;
+        }
+    }
+    return n;
+}
+
+Strings::Joiner::Joiner(const std::string& glue) : delim_(glue)
+{
+}
+    
+
+void Strings::Joiner::Join(const std::list<std::string>& pieces, std::ostream& out)
+{
+    if (pieces.empty()) {
+        return;
+    }
+    list<string>::const_iterator it = pieces.begin();
+    out << *it;
+    ++it;
+    for (; it != pieces.end(); ++it) {
+        out << delim_;
+        out << *it;
+    }
+}
+
+string Strings::Joiner::Join(const list<string>& pieces)
+{
+    ostringstream ss;
+    Join(pieces, ss);
+    return ss.str();
+}
+
+vector<string> Strings::Split(const std::string& s, char delim, bool allow_empty)
+{
+    Splitter splitter(delim, allow_empty);
+    splitter.Split(s);
+    return splitter.tokens;
+}
+
+vector<string> Strings::Split(const std::string& s, char delim)
+{
+    return Split(s, delim, false);
+}
+
+string Strings::Join(const std::list<std::string>& pieces, const string& delimiter)
+{
+    Joiner joiner(delimiter);
+    return joiner.Join(pieces);
 }
