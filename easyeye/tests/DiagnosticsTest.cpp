@@ -44,7 +44,7 @@ void testSegment(const char* eyeImagePathname)
     cerr << "\t" << eyeImagePathname;
     cerr << endl;
     if (result.status != Result::SUCCESS) {
-        cerr << "%TEST_FAILED% time=0 testname=testSegmentEyeImage (ezisegment_test) message=failed to segment " << eyeImagePathname << endl;
+        cerr << "%TEST_FAILED% time=0 testname=testSegment (diagnostics) message=failed to segment " << eyeImagePathname << endl;
     } else {
         Diagnostician diag(eyeImagePathname);
         diag.set_output_dir("/tmp");
@@ -68,13 +68,6 @@ void DiagnosticsTest::testWriteSegmentationOutput() {
         "../testdata/images/probes_016.bmp",
         "../testdata/images/probes_022.bmp"
     };
-//    const char* eyeImagePathnames[] = {
-//        "/tmp/seeks/1.bmp",
-//        "/tmp/seeks/2.bmp",
-//        "/tmp/seeks/3.bmp",
-//        "/tmp/seeks/4.bmp",
-//        "/tmp/seeks/5.bmp"
-//    };
     const int nimages = 5;
     for (int i = 0; i < nimages; i++) {
         testSegment(eyeImagePathnames[i]);

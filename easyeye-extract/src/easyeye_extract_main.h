@@ -1,12 +1,12 @@
 /* 
- * File:   eziextract_main.h
+ * File:   easyeye_extract_main.h
  * Author: mchaberski
  *
  * Created on July 18, 2013, 12:55 PM
  */
 
-#ifndef EZIEXTRACT_MAIN_H
-#define	EZIEXTRACT_MAIN_H
+#ifndef EASYEYE_EXTRACT_MAIN_H
+#define	EASYEYE_EXTRACT_MAIN_H
 
 #include <iostream>
 #include <vector>
@@ -44,5 +44,5 @@ private:
     }    // end namespace extract
 } // end namespace easyeye
 
-#endif	/* EZIEXTRACT_MAIN_H */
+#endif	/* EASYEYE_EXTRACT_MAIN_H */
 

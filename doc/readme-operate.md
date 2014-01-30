@@ -12,7 +12,7 @@ Extracts features from an iris image and writes the encoding to file.
 
 Add in a -v switch to see some analysis information printed on standard error.
 
-## ezicompare
+## easyeye-compare
 
 Once you have two or more of those .json encodings created with 
 `easyeye-extract`, compute match scores like this:

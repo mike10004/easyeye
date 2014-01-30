@@ -1,5 +1,5 @@
 /*
- * eziencoding.h
+ * easyeye_encoding.h
  * 
  * (c) 2013 IBG, A Novetta Solutions Company
  * 

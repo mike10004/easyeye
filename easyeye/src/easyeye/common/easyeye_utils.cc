@@ -1,5 +1,5 @@
 /*
- * eziutils.cc
+ * easyeye_utils.cc
  * 
  * (c) 2013 IBG, A Novetta Solutions Company
  */
@@ -16,7 +16,7 @@
 #include <vector>
 #include <sstream>
 
-#ifdef EZI_ISWINDOWS
+#ifdef EASYEYE_ISWINDOWS
 #include <Windows.h>
 #endif
 
@@ -37,7 +37,7 @@ string IOUtils::GetTempDirPath()
     
 string IOUtils::GetTempDirPath(int* errorCode)
 {
-#ifdef EZI_ISWINDOWS
+#ifdef EASYEYE_ISWINDOWS
     return temp_directory_path_windows(errorCode);
 #else
     return temp_directory_path_unix(errorCode);
@@ -112,7 +112,7 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
   
   string IOUtils::temp_directory_path_windows(int* errorCode)
   {
-#ifdef EZI_ISWINDOWS
+#ifdef EASYEYE_ISWINDOWS
 	  //char buf[16384];
 	  //int len;
 	  //len = GetTempPathW(16384, buf);

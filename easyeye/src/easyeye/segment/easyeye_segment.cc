@@ -1,5 +1,5 @@
 /*
- * ezisegment.cc
+ * easyeye_segment.cc
  *
  *  Created on: Jul 11, 2013
  *      Author: mchaberski

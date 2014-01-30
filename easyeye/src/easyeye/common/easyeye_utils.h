@@ -1,19 +1,19 @@
 /* 
- * File:   eziutils.h
+ * File:   easyeye_utils.h
  * Author: mchaberski
  *
  * Created on July 16, 2013, 1:14 PM
  */
 
-#ifndef EZIUTILS_H
-#define	EZIUTILS_H
+#ifndef EASYEYE_UTILS_H
+#define	EASYEYE_UTILS_H
 
 #include <vector>
 #include <opencv2/core/core.hpp>
 #include <string>
 
 #ifdef _WIN32
-#define EZI_ISWINDOWS
+#define EASYEYE_ISWINDOWS
 #endif
 
 namespace easyeye
@@ -73,5 +73,5 @@ public:
 };
 
 }
-#endif	/* EZIUTILS_H */
+#endif	/* EASYEYE_UTILS_H */
 

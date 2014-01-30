@@ -1,5 +1,5 @@
-#ifndef EZICOMPARE_MAIN_H
-#define EZICOMPARE_MAIN_H
+#ifndef EASYEYE_COMPARE_MAIN_H
+#define EASYEYE_COMPARE_MAIN_H
 
 #include <iostream>
 #include <vector>
@@ -40,5 +40,5 @@ private:
     }// end namespace compare
 } // end namespace easyeye
 
-#endif
+#endif /* EASYEYE_COMPARE_MAIN_H */
 

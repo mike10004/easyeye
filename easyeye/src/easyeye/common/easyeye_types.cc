@@ -1,5 +1,5 @@
 /*
- * ezitypes.cc
+ * easyeye_types.cc
  *
  *  Created on: Jul 11, 2013
  *      Author: mchaberski
