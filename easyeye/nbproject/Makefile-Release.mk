@@ -238,7 +238,7 @@ ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/segmentation_correctness_test.o ${OBJE
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp 
 
-${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/testutils.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/utils_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp 
 
@@ -351,10 +351,10 @@ ${TESTDIR}/tests/segmentation_correctness_test.o: tests/segmentation_correctness
 	$(COMPILE.cc) -O2 -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/segmentation_correctness_test.o tests/segmentation_correctness_test.cc
 
 
-${TESTDIR}/tests/testutils.o: tests/testutils.cc 
+${TESTDIR}/tests/utils_test.o: tests/utils_test.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testutils.o tests/testutils.cc
+	$(COMPILE.cc) -O2 -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/utils_test.o tests/utils_test.cc
 
 
 ${OBJECTDIR}/src/easyeye/common/base64_nomain.o: ${OBJECTDIR}/src/easyeye/common/base64.o src/easyeye/common/base64.cc 
