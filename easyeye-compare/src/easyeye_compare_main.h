@@ -8,12 +8,22 @@
 #include <easyeye/match/easyeye_match.h>
 #include <easyeye/common/easyeye_utils.h>
 #include <easyeye/common/easyeye_program.h>
+
 namespace easyeye
 {
     namespace compare
     {
 
-        class Compare : public easyeye::program::Program
+class CompareOptions
+{
+public:
+    enum InfoType { ALL_INFO, SCORE_ONLY };
+    CompareOptions();
+    std::string delim;
+    InfoType info_type;
+};
+        
+class Compare : public easyeye::program::Program
 {
 public:
     Compare();
@@ -24,16 +34,20 @@ public:
     void PrintHelpFooter(std::ostream& out);
     bool IsPositionalsOk(const std::vector<std::string>& positionals);
     easyeye::program::Code Execute(const std::vector<std::string>& positionals);
+    void OptionParsed(const std::string& long_form, bool has_arg, const std::string& optarg);
     
 private:
     int numSuccesses;
     int numErrors;
     Matcher matcher;
-    std::string mProbeEncodingPathname;
-    void LoadEncoding(const std::string &pathname, Encoding& encoding);
+    CompareOptions compare_options_;
+    std::string probe_encoding_pathname_;
+    MatchInfo match_info_;
+    void LoadEncoding(const std::string &pathname, Encoding& encoding) const;
     void ComputeScores(const Encoding& probeEncoding, const std::vector<std::string> &targetEncodingPathnames);
     void ComputeScore(const Encoding& probeEncoding, const std::string &targetEncodingPathname);
-    void PrintScore(const double score, const std::string &targetEncodingPathname, const int statusCode);
+    void PrintMatchInfo(const std::string& targetEncodingPathname, const int io_code) const;
+    static void PrintDelimited(std::ostream& out, const MatchInfo& match_info, CompareOptions::InfoType info_type, const std::string& delim);
 };
 
 

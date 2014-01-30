@@ -16,13 +16,13 @@ HDCalculator::HDCalculator(const Encoding& e1, const Encoding& e2)
 {
     shifted_e2_.CopyFrom(e2.width(), e2.height(), e2.nscales(), e2.irisTemplate, e2.irisMask);
     if (!e1_.IsCongruent(e2_)) {
-        flag_ = Matcher::INCONGRUENT;
+        flag_ = MatchInfo::INCONGRUENT;
     } else {
-        flag_ = Matcher::CLEAN;
+        flag_ = MatchInfo::CLEAN;
     }
 }
 
-Matcher::Flag HDCalculator::flag() const 
+MatchInfo::Flag HDCalculator::flag() const 
 {
     return flag_;
 }
@@ -37,39 +37,34 @@ HDCalculator::~HDCalculator()
 
 const double HDCalculator::HD_NAN = std::numeric_limits<double>::quiet_NaN();//;//returnNaN();//quietnan;//sqrt(0);//nan(NULL);
 
-double HDCalculator::calcHD(const Encoding& e1, const Encoding& e2, int* num_diff, int* num_unmasked, int* same_ones, int* same_zeros)
+void HDCalculator::calcHD(const Encoding& e1, const Encoding& e2, MatchInfo& match_info)
 {
-	int num_unmasked_bits = 0;
-	int num_bits_diff = 0; 
-    int num_same_ones = 0, num_same_zeros = 0;
+	match_info.num_unmasked_bits = 0;
+    match_info.num_different_bits = 0;
+    int num_common_ones = 0, num_common_zeros = 0;
     const int width = e1.width(), height = e1.height();
     for (int i = 0; i < width * height; i++) {
         bool masked = e1.irisMask[i] == 1 || e2.irisMask[i] == 1;
         if (masked) {
             continue;
         }
-        num_unmasked_bits++;
+        match_info.num_unmasked_bits++;
         if (e1.irisTemplate[i] != e2.irisTemplate[i]) {
-            num_bits_diff++;
+            match_info.num_different_bits++;
         } else {
             if (e1.irisTemplate[i] == 0) {
-                num_same_ones++;
+                num_common_ones++;
             } else {
-                num_same_zeros++;
+                num_common_zeros++;
             }
         }
     }
-    double hd;
-    if (num_unmasked_bits == 0) {
-        hd = HD_NAN;
+    if (match_info.num_unmasked_bits == 0) {
+        match_info.hd = HD_NAN;
     } else {
-        hd = (double)num_bits_diff / (double)num_unmasked_bits;
+        match_info.hd = (double)match_info.num_different_bits / (double)match_info.num_unmasked_bits;
     }
-    *num_diff = num_bits_diff;
-    *num_unmasked = num_unmasked_bits;
-    *same_ones = num_same_ones;
-    *same_zeros = num_same_zeros;
-    return hd;
+    match_info.common_bits_differential = num_common_ones - num_common_zeros;
 }
 
 class ShiftBits 
@@ -151,77 +146,77 @@ static void Y_Shiftbits(int *templates, int width, int height, int noshifts,int 
 
 };
 
-double HDCalculator::computeHDX(int scales) 
+void HDCalculator::computeHDX(int scales, MatchInfo& match_info) 
 {
+    match_info.Reset();
+    MatchInfo candidate;
     double min_score = std::numeric_limits<double>::max();
 	for (int shifts = -maxShiftX; shifts <= maxShiftX; shifts++) {    
+        candidate.y_shift = 0;
+        candidate.x_shift = shifts;
 		ShiftBits::X_Shiftbits(e2_.irisTemplate, width_, height_, shifts, scales, shifted_e2_.irisTemplate);
 		ShiftBits::X_Shiftbits(e2_.irisMask, width_, height_, shifts, scales, shifted_e2_.irisMask);
-        int diff, unmasked, ones, zeros;
-		double hd1 = calcHD(e1_, shifted_e2_, &diff, &unmasked, &ones, &zeros);
-		if (hd1 < min_score) {
-            min_score = hd1;
-        }
-        if (diff == 0 && unmasked != 0) {
-            mylog::Logs::GetLogger().Log(mylog::DEBUG, "at shift %d, num diff = 0; %d unmasked bits; of same unmasked bits, %d ones and %d zeros\n", shifts, unmasked, ones, zeros);
-            break;
+		calcHD(e1_, shifted_e2_, candidate);
+		if (candidate.hd < min_score) {
+            min_score = candidate.hd;
+            match_info.CopyFrom(candidate);
         }
 	}
-	return min_score;
-
 }
 
 
-double HDCalculator::computeHDY(int scales) 
+void HDCalculator::computeHDY(int scales, MatchInfo& match_info) 
 {
-	double hd = std::numeric_limits<double>::max();
-	for (int shifts = -maxShiftY; shifts <= maxShiftY; shifts++)
-	{    
+    match_info.Reset();
+    MatchInfo candidate;
+	double min_score = std::numeric_limits<double>::max();
+	for (int shifts = -maxShiftY; shifts <= maxShiftY; shifts++) {    
+        candidate.x_shift = 0;
+        candidate.y_shift = shifts;
 		ShiftBits::Y_Shiftbits(e2_.irisTemplate, width_, height_, shifts, scales, shifted_e2_.irisTemplate);
 		ShiftBits::Y_Shiftbits(e2_.irisMask, width_, height_, shifts, scales, shifted_e2_.irisMask);
-        int diff, unmasked, ones, zeros;
-		double hd1 = calcHD(e1_, shifted_e2_, &diff, &unmasked, &ones, &zeros);
-        if (hd1 < hd) {
-			hd = hd1;
-        }
-        if (diff == 0 && unmasked != 0) {
-            mylog::Logs::GetLogger().Log(mylog::DEBUG, "at shift %d, num diff = 0; %d unmasked bits; of same unmasked bits, %d ones and %d zeros\n", shifts, unmasked, ones, zeros);
-            break;
+		calcHD(e1_, shifted_e2_, candidate);
+        if (candidate.hd < min_score) {
+			min_score = candidate.hd;
+            match_info.CopyFrom(candidate);
         }
 	}
-	return hd;
 }
 
-double HDCalculator::computeHDXorY(int scales) 
+void HDCalculator::computeHDXorY(int scales, MatchInfo& match_info) 
 {
-	double xHD = computeHDX(scales);
-    if (portability::Math::IsNaN(xHD)) {
-        return HD_NAN;
+    MatchInfo info_x;
+	computeHDX(scales, info_x);
+    MatchInfo info_y;
+	computeHDY(scales, info_y);
+    match_info.CopyFrom(info_x); // fill in common fields
+    if (info_x.flag != MatchInfo::CLEAN) {
+        match_info.flag = info_x.flag;
     }
-	double yHD = computeHDY(scales);
-    if (portability::Math::IsNaN(yHD)) {
-        return HD_NAN;
+    if (info_y.flag != MatchInfo::CLEAN) {
+        match_info.flag = info_y.flag;
     }
-	double hd = std::min(xHD, yHD);
-	return hd;
+	match_info.hd = std::min(info_x.hd, info_y.hd);
 }
 
-double HDCalculator::computeHDXandY(int scales) 
+void HDCalculator::computeHDXandY(int scales, MatchInfo& match_info) 
 {
     double min_hd = std::numeric_limits<double>::max();
+    MatchInfo candidate;
 	for (int shifts1 = -maxShiftY; shifts1 <= maxShiftY; shifts1++) { 	 
 		ShiftBits::Y_Shiftbits(e2_.irisTemplate, width_, height_, shifts1, scales, shifted_e2_.irisTemplate);
 		ShiftBits::Y_Shiftbits(e2_.irisMask, width_, height_, shifts1, scales, shifted_e2_.irisMask);
+        candidate.y_shift = shifts1;
 		for (int shifts2 = -maxShiftX; shifts2 <= maxShiftX; shifts2++) {
             ShiftBits::X_Shiftbits(e2_.irisTemplate, width_, height_, shifts2, scales, shifted_e2_.irisTemplate);
             ShiftBits::X_Shiftbits(e2_.irisMask, width_, height_, shifts2, scales, shifted_e2_.irisMask);
-            int diff, unmasked, ones, zeros;
-            double hd1 = calcHD(e1_, shifted_e2_, &diff, &unmasked, &ones, &zeros);
-            if (hd1 < min_hd) {
-                min_hd = hd1;
+            candidate.x_shift = shifts2;
+            calcHD(e1_, shifted_e2_, candidate);
+            if (candidate.hd < min_hd) {
+                min_hd = candidate.hd;
+                match_info.CopyFrom(candidate);
             }
 		}
 	}
-    return min_hd;
 }
 

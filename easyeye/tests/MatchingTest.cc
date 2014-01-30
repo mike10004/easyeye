@@ -45,9 +45,9 @@ void MatchingTest::testComputeScoresBasic() {
         for (int j = i + 1; j < nencodings; j++) {
             Encoding& g = encodings[i];
             Encoding& p = encodings[j];
-            Matcher::Flag flag;
-            double score = matcher.ComputeScore(g, p, &flag);
-            CPPUNIT_ASSERT(flag == Matcher::CLEAN);
+            MatchInfo match_info;
+            double score = matcher.ComputeScore(g, p, match_info);
+            CPPUNIT_ASSERT(match_info.flag == MatchInfo::CLEAN);
             cerr << score << '\t' << serialized_encodings[i] << '\t' << serialized_encodings[j] << endl;
         }
     }

@@ -17,26 +17,17 @@
 #include <sstream>
 #include <easyeye/common/easyeye_types.h>
 #include <easyeye/common/easyeye_utils.h>
+#include "../../easyeye/tests/testdata.h"
 
 using namespace easyeye::compare;
 using namespace std;
 
-static const char* serialized_encodings[] = {
-    "../testdata/encodings/gallery_132-encoding.json",
-    "../testdata/encodings/gallery_022-encoding.json",
-    "../testdata/encodings/gallery_014-encoding.json",
-    "../testdata/encodings/gallery_103-encoding.json",
-    "../testdata/encodings/gallery_140-encoding.json",
-    "../testdata/encodings/probes_013-encoding.json",
-    "../testdata/encodings/probes_016-encoding.json",
-    "../testdata/encodings/probes_010-encoding.json",
-    "../testdata/encodings/probes_006-encoding.json"
-};
-
 void testeasyeye_compare_main_multi() {
     vector<string> args;
     args.push_back("easyeye-compare");
-    const int nencodings = 9;
+    args.push_back("--delim");
+    args.push_back(" ");
+    const int nencodings = NUM_SAMPLES;
     for (int i = 0; i < nencodings; i++) {
         args.push_back(serialized_encodings[i]);
     }
@@ -51,9 +42,9 @@ void testeasyeye_compare_main_multi() {
 
 
 void testeasyeye_compare_main() {
-//    mylog::SetLogLevel(mylog::ALL);
     vector<string> args;
     args.push_back("easyeye-compare");
+    args.push_back("-s");
     args.push_back(serialized_encodings[0]);
     args.push_back(serialized_encodings[1]);
     const int argc =args.size();

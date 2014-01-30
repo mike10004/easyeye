@@ -42,7 +42,7 @@ class HDCalculator
  public:
 	HDCalculator(const Encoding& e1, const Encoding& e2);
 	virtual ~HDCalculator();
-    Matcher::Flag flag() const;
+    MatchInfo::Flag flag() const;
     static const double HD_NAN;
     
 	/**
@@ -55,7 +55,7 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD Minimum
 	*/
-	double computeHDX(int nscales);
+	void computeHDX(int nscales, MatchInfo& match_info);
 	/**
 	* Calculate HD in shifting towards the up and down
 	* and return minimum HD value.
@@ -66,7 +66,7 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD Minimum
 	*/
-	double computeHDY(int nscales); 
+	void computeHDY(int nscales, MatchInfo& match_info); 
 
 	/**
 	* Calculate HD in shifting towards left/right or up/down
@@ -78,7 +78,7 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD minimum
 	*/
-	double computeHDXorY(int nscales); 
+	void computeHDXorY(int nscales, MatchInfo& match_info); 
 
 	/**
 	* Calculate HD in shifting towards left/right and up/down
@@ -90,10 +90,10 @@ class HDCalculator
     *                 determine how many bits should be moved when shifting.
 	* @return HD minimum
 	*/
-	double computeHDXandY(int nscales); 
+	void computeHDXandY(int nscales, MatchInfo& match_info); 
 	
  private:
-    Matcher::Flag flag_;
+    MatchInfo::Flag flag_;
 	int maxShiftX;
 	int maxShiftY;
   
@@ -102,7 +102,7 @@ class HDCalculator
     const int width_, height_;
     Encoding shifted_e2_;
 
-    static double calcHD(const Encoding& e1, const Encoding& e2, int* num_diff, int* num_unmasked, int* same_ones, int* same_zeros);
+    static void calcHD(const Encoding& e1, const Encoding& e2, MatchInfo& match_info);
 }; // HDCalculator
 
 }

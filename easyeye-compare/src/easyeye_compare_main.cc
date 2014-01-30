@@ -22,8 +22,17 @@ using namespace std;
 using namespace easyeye::compare;
 using namespace easyeye::program;
 
-Compare::Compare() : Program("easyeye-compare", "0.1.0"), numErrors(0), numSuccesses(0)
+CompareOptions::CompareOptions()
+    : delim("\t"), info_type(ALL_INFO)
 {
+}
+
+Compare::Compare() 
+    : Program("easyeye-compare", "0.1.0"), 
+        matcher(), numErrors(0), numSuccesses(0), probe_encoding_pathname_(), compare_options_()
+{
+    AddOption("score-only", 's');
+    AddOption("delim", REQUIRED);
 }
 
 Compare::~Compare() {}
@@ -39,6 +48,19 @@ void Compare::PrintHelpFooter(std::ostream& out) {
 
 void Compare::PrintHelpHeader(std::ostream& out)
 {
+}
+
+void Compare::OptionParsed(const std::string& long_form, bool has_arg, const std::string& optarg)
+{
+    if (Eq(long_form, "score-only")) {
+        compare_options_.info_type = CompareOptions::SCORE_ONLY;
+    } else if (Eq(long_form, "delim")) {
+        if (Eq(optarg, "TAB")) {
+            compare_options_.delim.assign("\t");
+        } else {
+            compare_options_.delim.assign(optarg);
+        }
+    }
 }
 
 bool Compare::IsPositionalsOk(const std::vector<std::string>& positionals)
@@ -64,17 +86,16 @@ out <<
     
 }
 
-Code Compare::ComputeScores(const string& probeEncodingPathname, const vector<string> &targetEncodingPathnames)
+Code Compare::ComputeScores(const string& probe_encoding_pathname, const vector<string> &target_encoding_pathnames)
 {
-    mProbeEncodingPathname.assign(probeEncodingPathname);
-    string pathname = string(mProbeEncodingPathname);
-    Encoding probeEncoding;
-    LoadEncoding(pathname, probeEncoding);
-    if (probeEncoding.status != Result::SUCCESS) {
-        cerr << name << ": failed to load probe encoding from " << probeEncodingPathname << endl;
+    probe_encoding_pathname_.assign(probe_encoding_pathname);
+    Encoding probe_encoding;
+    LoadEncoding(probe_encoding_pathname_, probe_encoding);
+    if (probe_encoding.status != Result::SUCCESS) {
+        cerr << name << ": failed to load probe encoding from " << probe_encoding_pathname_ << endl;
         numErrors++;
     } else {
-        ComputeScores(probeEncoding, targetEncodingPathnames);
+        ComputeScores(probe_encoding, target_encoding_pathnames);
     }
     if (numSuccesses > 0) {
         return kExitSuccess;
@@ -83,7 +104,7 @@ Code Compare::ComputeScores(const string& probeEncodingPathname, const vector<st
     }
 }
 
-void Compare::LoadEncoding(const string &pathname, Encoding& encoding)
+void Compare::LoadEncoding(const string &pathname, Encoding& encoding) const
 {
     if (IOUtils::is_file(pathname)) {
         string json = Files::Read(pathname);
@@ -104,45 +125,56 @@ void Compare::ComputeScores(const Encoding& probeEncoding, const vector<string> 
     }
 }
 
-void Compare::PrintScore(const double score, const string& targetEncodingPathname, const int statusCode)
+void Compare::PrintDelimited(std::ostream& out, const MatchInfo& m, CompareOptions::InfoType info_type, const string& delim)
 {
-//    static char scoreStr[1024];
-//    sprintf(scoreStr, "%1.2f", score);
-//    cout << statusCode << '\t' << scoreStr << '\t' << mProbeEncodingPathname << '\t' << targetEncodingPathname << endl;
-    cout << statusCode << '\t' << score << '\t' << mProbeEncodingPathname << '\t' << targetEncodingPathname << endl;
+    out << m.hd;
+    if (info_type == CompareOptions::ALL_INFO) {
+        out << delim << m.num_different_bits
+                << delim << m.num_unmasked_bits
+                << delim << m.template_width
+                << delim << m.template_height
+                << delim << m.common_bits_differential
+                << delim << m.x_shift
+                << delim << m.y_shift;
+    }
+}
+
+void Compare::PrintMatchInfo(const string& target_encoding_pathname, const int io_code) const
+{
+    cout << io_code << compare_options_.delim 
+         << match_info_.flag << compare_options_.delim;
+    PrintDelimited(cout, match_info_, compare_options_.info_type, compare_options_.delim);
+    cout << compare_options_.delim << probe_encoding_pathname_
+         << compare_options_.delim << target_encoding_pathname;
+    cout << endl;
 }
 
 
 
-void Compare::ComputeScore(const Encoding& probeEncoding, const string &targetEncodingPathname)
+void Compare::ComputeScore(const Encoding& probeEncoding, const string &target_encoding_pathname)
 {
     Encoding targetEncoding;
-    LoadEncoding(targetEncodingPathname, targetEncoding);
-    double score = HDCalculator::HD_NAN;
-    int statusCode;
+    LoadEncoding(target_encoding_pathname, targetEncoding);
+    int io_code;
     if (targetEncoding.status == Result::SUCCESS) {
-        score = matcher.ComputeScore(probeEncoding, targetEncoding);
-        statusCode = 0;
+        matcher.ComputeScore(probeEncoding, targetEncoding, match_info_);
+        io_code = kExitSuccess;
         numSuccesses++;
     } else {
-        statusCode = kErrorIO;
+        io_code = kErrorIO;
         numErrors++;
     }
-    PrintScore(score, targetEncodingPathname, statusCode);
+    PrintMatchInfo(target_encoding_pathname, io_code);
 }
 
 Code Compare::Execute(const vector<string>& positionals)
 {
-    Code rv = kExitSuccess;
-    string probeEncodingPathname = positionals[0];
-    vector<string> targetEncodingPathnames;
-    const int indexOfFirstTargetEncoding = 1;
-    for (size_t i = indexOfFirstTargetEncoding; i < positionals.size(); i++) {
-        targetEncodingPathnames.push_back(positionals[i]);
+    vector<string> target_encoding_pathnames;
+    const int first_target_index = 1;
+    for (size_t i = first_target_index; i < positionals.size(); i++) {
+        target_encoding_pathnames.push_back(positionals[i]);
     }
-    Compare compare;
-    rv = compare.ComputeScores(probeEncodingPathname, targetEncodingPathnames);
-    return rv;
+    return ComputeScores(positionals[0], target_encoding_pathnames);
 }
 
 #ifndef _WIN32
