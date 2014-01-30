@@ -8,6 +8,7 @@
 #include "DiagnosticsTest.h"
 #include "../src/easyeye/segment/easyeye_segment.h"
 #include "../src/easyeye/common/easyeye_diagnostics.h"
+#include "testdata.h"
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
@@ -47,30 +48,25 @@ void testSegment(const char* eyeImagePathname)
         cerr << "%TEST_FAILED% time=0 testname=testSegment (diagnostics) message=failed to segment " << eyeImagePathname << endl;
     } else {
         Diagnostician diag(eyeImagePathname);
-        diag.set_output_dir("/tmp");
+        diag.set_output_dir("/tmp/easyeye_tests_diagnostics");
         diag.set_collect_pathnames(true);
         diag.DumpSegOutput(result.boundary_pair, result.eyelids_location, result.extrema_noise);
         vector<string> files = diag.files_written();
+        cerr << "wrote " << files.size() << " files" << endl;
         for (vector<string>::iterator it = files.begin(); it != files.end(); ++it) {
-            cerr << "wrote " << *it << endl;
+            cerr << "  " << *it << endl;
         }
     }
+    
     
 }
 
 
 
 void DiagnosticsTest::testWriteSegmentationOutput() {
-    const char* eyeImagePathnames[] = {
-        "../testdata/images/probes_006.bmp",
-        "../testdata/images/probes_010.bmp",
-        "../testdata/images/probes_013.bmp",
-        "../testdata/images/probes_016.bmp",
-        "../testdata/images/probes_022.bmp"
-    };
-    const int nimages = 5;
+    const int nimages = 3;
     for (int i = 0; i < nimages; i++) {
-        testSegment(eyeImagePathnames[i]);
+        testSegment(eye_image_files[i]);
     }
 }
 
