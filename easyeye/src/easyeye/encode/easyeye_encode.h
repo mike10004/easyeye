@@ -76,6 +76,7 @@ public:
     Encoding();
     Encoding(const EncoderConfig& encoder_config);
 	virtual ~Encoding();
+    bool IsCongruent(const Encoding& other) const;
     typedef Result::ResultType Status;
 	Status status;
 	int* irisTemplate;

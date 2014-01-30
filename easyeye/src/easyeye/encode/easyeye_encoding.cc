@@ -100,6 +100,7 @@ Encoding::Encoding(const int nscales, const int angularResolution, const int rad
 Encoding::Encoding(const EncoderConfig& encoder_config)
     : width_(CalculateTemplateWidth(encoder_config.encodeScales, encoder_config.angularRes)),
         height_(CalculateTemplateHeight(encoder_config.radialRes)),
+        nscales_(encoder_config.encodeScales),
         status(Result::NOT_YET_SET)
 {
 	irisTemplate = (int*) malloc(sizeof(int) * width_ * height_);
@@ -110,6 +111,13 @@ Encoding::~Encoding()
 {
 	free(irisTemplate);
 	free(irisMask);
+}
+
+bool Encoding::IsCongruent(const Encoding& other) const
+{
+    return width() == other.width() 
+            && height() == other.height() 
+            && nscales() == other.nscales();
 }
 
 char getTemplateOrMaskChar(const int value, bool *printedError) {
