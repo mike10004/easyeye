@@ -32,6 +32,8 @@ public:
     void set_collect_pathnames(bool collect_pathnames);
     std::vector<std::string>& files_written();
     void WriteImage(cv::Mat& image, const std::string& label);
+    void set_write_original(bool write_original);
+    bool write_original() const;
 private:
     std::string output_dir_;
     bool disabled_;
@@ -43,6 +45,8 @@ private:
     std::ostream& text_output_stream_;
     std::string image_format_suffix_;
     std::vector<std::string> files_written_;
+    bool write_original_;
+    bool original_written_;
     std::string ToFilename(const std::string& label, const std::string& suffix);
     void WriteImage(Masek::IMAGE* noiseImage, const char* label);
     void WriteFilter(Masek::filter* noiseImage, const char* label);

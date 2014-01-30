@@ -1,3 +1,4 @@
+#include <cerrno>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -9,9 +10,12 @@
 #include "easyeye_diagnostics.h"
 #include "easyeye_types.h"
 #include "src/easyeye/segment/FindEyelidMix.h"
+#include "easyeye_utils.h"
+#include "mylog.h"
 
 #ifndef _WIN32
 #include <unistd.h>
+#include <opencv2/imgproc/imgproc.hpp>
 #endif
 
 using std::vector;
@@ -33,7 +37,9 @@ Diagnostician::Diagnostician(const string& eyeImagePathname)
     eye_image_basename_(),
     text_output_stream_(cerr),
     image_format_suffix_(".png"),
-        collect_pathnames_(false)
+        collect_pathnames_(false), 
+        write_original_(false),
+        original_written_(false)
 {
 #ifndef _WIN32
     char cwd[4096];
@@ -164,10 +170,11 @@ void Diagnostician::DumpEncodeOutput(const int width, const int height, const in
 void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation& eyelids, cv::SparseMat& extrema_noise)
 {
     if (disabled()) return;
-    Scalar iris_color(0x0, 0xff, 0xff), pupil_color(0x0, 0xff, 0xff), noise_color(0xa0, 0x0, 0x0);
+    Scalar iris_color(0x0, 0xff, 0xff), pupil_color(0x0, 0xff, 0xff), noise_color(0xa0, 0x0, 0x0), 
+            eyelid_color(0x0, 0xff, 0x0);
     int thickness = 2, line_type = 8;
     Mat eye_image = cv::imread(eye_image_pathname_, CV_LOAD_IMAGE_COLOR);
-    eye_image = FindEyelidMix::CreateNoiseImage(eye_image, eyelids);
+    FindEyelidMix::DrawEyelidEllipse(eye_image, eyelids, eyelid_color);
     SparseMatConstIterator_<uchar>
     it = extrema_noise.begin<uchar>(),
     it_end = extrema_noise.end<uchar>();
@@ -212,10 +219,37 @@ void Diagnostician::CopyToMat(Masek::IMAGE* src, cv::Mat& dst)
     }
 }
 
+static void MaybeMakeDirs(const string& dir) 
+{
+    if (!IOUtils::IsDirectory(dir)) {
+        int error_code;
+        bool now_exists = IOUtils::MakeDirs(dir, &error_code);
+        if (!now_exists) {
+            mylog::Logs::GetLogger().Log(mylog::INFO, "failed to create directory %s with error %d %s\n", dir.c_str(), error_code, strerror(error_code));
+        }
+    }
+}
+
+bool Diagnostician::write_original() const
+{
+    return write_original_;
+}
+
+void Diagnostician::set_write_original(bool write_original)
+{
+    write_original_ = write_original;
+}
+
 void Diagnostician::WriteImage(cv::Mat& image, const string& label)
 {
     if (disabled()) return;
+    if (write_original_ && !original_written_) {
+        original_written_ = true;
+        Mat original = cv::imread(eye_image_pathname_);
+        WriteImage(original, "original");
+    }
     string output_pathname = ToFilename(label, image_format_suffix_);
+    MaybeMakeDirs(output_dir_);
     bool ok = cv::imwrite(output_pathname, image);
     if (ok) {
         if (verbose_) {
