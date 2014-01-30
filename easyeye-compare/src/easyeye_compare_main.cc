@@ -106,7 +106,7 @@ Code Compare::ComputeScores(const string& probe_encoding_pathname, const vector<
 
 void Compare::LoadEncoding(const string &pathname, Encoding& encoding) const
 {
-    if (IOUtils::is_file(pathname)) {
+    if (IOUtils::IsFile(pathname)) {
         string json = Files::Read(pathname);
         bool ok = serial::Deserialize(json, encoding);
         if (!ok) {

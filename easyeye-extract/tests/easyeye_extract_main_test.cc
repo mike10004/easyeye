@@ -42,7 +42,7 @@ void testExtractAndWrite() {
     Extract program;
     int rv = program.Main(argc, argv);
     std::cout << "main returned " << rv << std::endl;
-    bool is_file = easyeye::IOUtils::is_file("/tmp/easyeye-extract-test-encoding.json");
+    bool is_file = easyeye::IOUtils::IsFile("/tmp/easyeye-extract-test-encoding.json");
     if (rv != 0 || !is_file) {
         std::cout << "%TEST_FAILED% time=0 testname=testExtractAndWrite (easyeye_extract_main_test) message=failed with nonzero error code " << rv << std::endl;
     } else {

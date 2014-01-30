@@ -24,10 +24,10 @@ class IOUtils
 public:
     static std::string GetTempDirPath();
     static std::string GetTempDirPath(int* errorCode);
-    static bool is_directory(const std::string& path);
-    static bool is_file(const std::string& path);
-    static bool is_directory(const std::string& path, int* errorCode);
-    static bool is_file(const std::string& path, int*errorCode);
+    static bool IsDirectory(const std::string& path);
+    static bool IsFile(const std::string& path);
+    static bool IsDirectory(const std::string& path, int* errorCode);
+    static bool IsFile(const std::string& path, int*errorCode);
     static std::string ToString(std::istream& in);
 private:
     static std::string temp_directory_path_windows(int* errorCode);

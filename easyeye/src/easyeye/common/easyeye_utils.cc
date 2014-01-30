@@ -44,26 +44,26 @@ string IOUtils::GetTempDirPath(int* errorCode)
 #endif
     
 }
-bool IOUtils::is_directory(const string& path){
+bool IOUtils::IsDirectory(const string& path){
     int ec = 0;
-    bool yes = is_directory(path, &ec);
+    bool yes = IsDirectory(path, &ec);
     return yes;
 }
 
-bool IOUtils::is_file(const string& path)
+bool IOUtils::IsFile(const string& path)
 {
     int ec = 0;
-    bool yes = is_file(path, &ec);
+    bool yes = IsFile(path, &ec);
     return yes;
 }
 
 
-bool IOUtils::is_directory(const string& path, int *errorCode) 
+bool IOUtils::IsDirectory(const string& path, int *errorCode) 
 {
     return pathname_stat_has_mode(path, S_IFDIR, errorCode);
 }
 
-bool IOUtils::is_file(const string& path, int* errorCode)
+bool IOUtils::IsFile(const string& path, int* errorCode)
 {
     return pathname_stat_has_mode(path, S_IFREG, errorCode);
 }
@@ -96,7 +96,7 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
       (val = std::getenv("TEMPDIR"));
       
       string p((val!=0) ? val : "/tmp");
-      if (p.empty() || (!is_directory(p, errorCode)))
+      if (p.empty() || (!IsDirectory(p, errorCode)))
       {
         (*errorCode) = ENOTDIR;
         Logs::GetLogger().Log(mylog::ERROR, "Utils::temp_directory_path_unix returned bad temp dir path\n");
