@@ -1,7 +1,7 @@
 # easyeye
 
 EasyEye is software for biometric iris image segmentation, encoding, 
-and matching. It is at a very early, developmental state.
+and matching. It is in a very rough developmental state.
 
 ## Overview
 
