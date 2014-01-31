@@ -1,4 +1,4 @@
-#include "easyeye_imaging.h"
+#include "../common/easyeye_imaging.h"
 #include "FindPupilCircleNew.h"
 #include "ImageUtility.h"
 #include "../common/easyeye_utils.h"

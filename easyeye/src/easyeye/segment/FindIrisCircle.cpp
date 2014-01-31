@@ -3,7 +3,7 @@
 #include "ImageUtility.h"
 #include "../common/mylog.h"
 #include <opencv2/highgui/highgui.hpp>
-#include "easyeye_imaging.h"
+#include "../common/easyeye_imaging.h"
 
 using namespace easyeye;
 using cv::Mat;

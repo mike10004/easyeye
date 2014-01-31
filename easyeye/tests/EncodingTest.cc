@@ -79,7 +79,11 @@ void EncodingTest::testSerializeAndDeserializeRandomEncoding() {
 void testEncodeFromSegmentation(Segmentation& segmentation, int index)
 {
     const char* eye_image_pathname = eye_image_files[index];
+    Diagnostician diags;
+    diags.set_eye_image_pathname(eye_image_pathname);
+    diags.set_output_dir("/tmp/easyeye_tests_encoding");
     Encoder encoder;
+    encoder.set_diagnostician(&diags);
     Normalization norm(encoder.config());
     Mat eye_image = cv::imread(eye_image_pathname);
     CPPUNIT_ASSERT(eye_image.data != NULL);

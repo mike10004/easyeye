@@ -109,7 +109,7 @@ Code Extract::Execute(const vector<string>& pathnames) {
     bool writeEncoding = pathnames.size() == 2;
     string eye_image_pathname = pathnames[0];
     Logs::GetLogger().set_level(options_.verbose ? mylog::TRACE : mylog::INFO);
-    Diagnostician diags(eye_image_pathname);
+    Diagnostician diags;
     cv::Mat eyeImage = cv::imread(eye_image_pathname, CV_LOAD_IMAGE_GRAYSCALE);
     if (eyeImage.data == NULL) {
         cerr << name << ": failed to load image from file " << eye_image_pathname << endl;
@@ -118,6 +118,7 @@ Code Extract::Execute(const vector<string>& pathnames) {
     Segmentation segmentation;
     Segmenter segmenter;
     if (!extract_options_.diagnostics_dir.empty()) {
+        diags.set_eye_image_pathname(eye_image_pathname);
         diags.set_output_dir(extract_options_.diagnostics_dir);
         diags.set_disabled(false);
         segmenter.set_diagnostician(&diags);

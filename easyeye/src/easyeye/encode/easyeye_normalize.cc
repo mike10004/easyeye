@@ -11,7 +11,7 @@
 #include <Masek.h>
 #include "../common/easyeye_types.h"
 #include "easyeye_encode.h"
-#include "../segment/easyeye_imaging.h"
+#include "../common/easyeye_imaging.h"
 #include "../segment/FindEyelidMix.h"
 #include <portability.h>
 
@@ -19,37 +19,23 @@ using namespace easyeye;
 using namespace cv;
 
 Normalization::Normalization(const EncoderConfig& encoder_config)
-:status(Result::NOT_YET_SET)
+: status(Result::NOT_YET_SET), angular_resolution_(encoder_config.angularRes), 
+        radial_resolution_(encoder_config.radialRes)
 {
-    InitArrays(encoder_config.angularRes, encoder_config.radialRes);
 }
     
 Normalization::Normalization(const int angularResolution, const int radialResolution)
-   :status(Result::NOT_YET_SET)
+   :status(Result::NOT_YET_SET), angular_resolution_(angularResolution), radial_resolution_(radialResolution)
 {
-    InitArrays(angularResolution, radialResolution);
 }
 
 Normalization::~Normalization()
 {
-	free(polarArray.data);
-	free(noiseArray.data);
 }
 
-void Normalization::InitArrays(const int angularResolution, const int radialResolution) 
+void Encoder::NormalizeIris(const Mat& src_eye_image, const Segmentation& segmentation, Normalization& result) 
 {
-    polarArray.hsize[0] = radialResolution;
-    polarArray.hsize[1] = angularResolution;
-	polarArray.data = (double*)malloc(sizeof(double) * angularResolution * radialResolution);
-    noiseArray.hsize[0] = radialResolution;
-    noiseArray.hsize[1] = angularResolution;
-    noiseArray.data = (unsigned char*)malloc(sizeof(unsigned char) * angularResolution * radialResolution);
-    
-}
-
-void Encoder::NormalizeIris(cv::Mat& eye_image, const Segmentation& segmentation, Normalization& result) const
-{
-    eye_image = FindEyelidMix::CreateNoiseImage(eye_image, segmentation.eyelids_location);
+    Mat noisified_eye_image = FindEyelidMix::CreateNoiseImage(src_eye_image, segmentation.eyelids_location);
     SparseMatConstIterator_<uchar> it = segmentation.extrema_noise.begin<uchar>();
     SparseMatConstIterator_<uchar> it_end = segmentation.extrema_noise.end<uchar>();
     double noise_indicator = portability::Math::GetNaN();
@@ -62,32 +48,42 @@ void Encoder::NormalizeIris(cv::Mat& eye_image, const Segmentation& segmentation
         const SparseMat::Node* n = it.node();
         int y = n->idx[0], x = n->idx[1];
         //uchar value = it.value<uchar>();
-        uchar* p = eye_image.ptr<uchar>(y, x);
+        uchar* p = noisified_eye_image.ptr<uchar>(y, x);
         for (int j = 0; j < 3; j++) {
             p[j] = noise_color_u;
         }
     }
     
 	Masek masek;
-	Masek::filter imgWithNoise;
-
-	imgWithNoise.hsize[HSIZE_WIDTH] = eye_image.cols;
-    imgWithNoise.hsize[HSIZE_HEIGHT] = eye_image.rows;
-	imgWithNoise.data = (double*) malloc(sizeof(double)*imgWithNoise.hsize[0]*imgWithNoise.hsize[1]);
-
-    const int rows = eye_image.rows, cols = eye_image.cols;
-    for (int i = 0; i < rows * cols; i++) {
-        if (eye_image.data[i] < 1) {
-            imgWithNoise.data[i] = noise_indicator;//sqrt((double) -1); // NaN
-        } else {
-            imgWithNoise.data[i] = (double) eye_image.data[i];
+    Mat img_with_noise(noisified_eye_image.rows, noisified_eye_image.cols, Imaging::FLOAT_DATA_TYPE);
+    const int rows = noisified_eye_image.rows, cols = noisified_eye_image.cols;
+    for (int y = 0; y < rows; y++) {
+        Mat src_row = noisified_eye_image.row(y);
+        Mat row = img_with_noise.row(y);
+        for (int x = 0; x < cols; x++) {
+            Imaging::GrayDataType src_value = src_row.at<Imaging::GrayDataType>(x);
+            double value = src_value < 1 ? noise_indicator : src_value;
+            row.at<Imaging::FloatDataType>(x) = (Imaging::FloatDataType) value;
         }
     }
-	masek.normaliseiris(&imgWithNoise,
+    Masek::filter polarArray;
+    Masek::IMAGE noiseArray;
+    polarArray.hsize[0] = config_.radialRes;
+    polarArray.hsize[1] = config_.angularRes;
+	polarArray.data = (double*)malloc(sizeof(double) * config_.angularRes * config_.radialRes);
+    noiseArray.hsize[0] = config_.radialRes;
+    noiseArray.hsize[1] = config_.angularRes;
+    noiseArray.data = (unsigned char*)malloc(sizeof(unsigned char) * config_.angularRes * config_.radialRes);
+    
+    Masek::filter* imgWithNoise = Imaging::CopyToFilter(img_with_noise);
+	masek.normaliseiris(imgWithNoise,
 			segmentation.boundary_pair.irisX, segmentation.boundary_pair.irisY, segmentation.boundary_pair.irisR,
 			segmentation.boundary_pair.pupilX, segmentation.boundary_pair.pupilY, segmentation.boundary_pair.pupilR,
-			config_.radialRes, config_.angularRes, &(result.polarArray), &(result.noiseArray));
-	free(imgWithNoise.data);
+			config_.radialRes, config_.angularRes, &polarArray, &noiseArray);
+	Imaging::FreeFilter(imgWithNoise);
 	result.status = Result::SUCCESS;
+    Imaging::CopyFromFilter(&polarArray, result.polar_array);
+    Imaging::CopyFromMasek(&noiseArray, result.noise_array);
+    diagnostician()->DumpNormOutput(result.polar_array, result.noise_array);
 }
 

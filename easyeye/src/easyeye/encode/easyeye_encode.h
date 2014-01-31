@@ -50,11 +50,12 @@ public:
 	virtual ~Normalization();
     typedef Result::ResultType Status;
     Status status;
-	Masek::filter polarArray;
-	Masek::IMAGE noiseArray;
-    void Dump(Diagnostician& diag);
+	Imaging::FloatImage polar_array;
+    Imaging::ByteImage noise_array;
 private:
     void InitArrays(const int angularResolution, const int radialResolution);
+    const int angular_resolution_;
+    const int radial_resolution_;
 };
 
 class Encoding
@@ -120,9 +121,9 @@ class Encoder : public DiagnosticsCreator
 public:
 	Encoder();
     Encoder(EncoderConfig config);
-	void NormalizeIris(cv::Mat& eye_image, const Segmentation& segmentation, Normalization& result) const;
-    void EncodeIris(Normalization& normalization, Encoding& result) const;
-    void EncodeIris(Masek::filter* polarArray, Masek::IMAGE* noiseArray, Encoding& result) const;
+	void NormalizeIris(const cv::Mat& eye_image, const Segmentation& segmentation, Normalization& result);
+    void EncodeIris(const Normalization& normalization, Encoding& result) const;
+    void EncodeIris(const Imaging::FloatImage& polar_array, const Imaging::ByteImage& noise_array, Encoding& result) const;
     const EncoderConfig& config();
 private:
     EncoderConfig config_;

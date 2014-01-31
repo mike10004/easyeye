@@ -6,7 +6,7 @@
 #include <string.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "../common/easyeye_utils.h"
-#include "easyeye_imaging.h"
+#include "../common/easyeye_imaging.h"
 #include <algorithm>
 
 using mylog::Logs;
@@ -20,7 +20,7 @@ FindEyelidMix::FindEyelidMix(EyelidFinderConfig config)
     
 }
 
-void FindEyelidMix::doFindPoints(cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location)
+void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location)
 {
     int xPupil = bp.pupilX, yPupil = bp.pupilY, rPupil = bp.pupilR;
     int yIris = bp.irisY, xIris = bp.irisX, rIris = bp.irisR;
@@ -201,7 +201,7 @@ double FindEyelidMix::triLength(int a, int b)
 }
 
 // Determine threshold value used to detect the eyelid corners
-int FindEyelidMix::doFindThres(Mat& img, int thresRange)
+int FindEyelidMix::doFindThres(const Mat& img, int thresRange)
 {
 	int mean = cvRound(ImageUtility::myMean(img));
     int threshold = 0;
@@ -213,7 +213,7 @@ int FindEyelidMix::doFindThres(Mat& img, int thresRange)
 	  return threshold;
 }
 
-cv::Point2i FindEyelidMix::findContourPoint(Mat& grayMatImg, int threshold, int locate, int mode)
+cv::Point2i FindEyelidMix::findContourPoint(const Mat& grayMatImg, int threshold, int locate, int mode)
 {
 	cv::Point2i xyValue;	
 	if(locate == 1) // Left
@@ -336,7 +336,7 @@ Mat FindEyelidMix::getNoiseImage(const Mat& eye_image, const EyelidsLocation& ey
       return noise_image;
 }
 
-cv::Mat FindEyelidMix::CreateNoiseImage(cv::Mat& image, const EyelidsLocation& eyelids_location)
+cv::Mat FindEyelidMix::CreateNoiseImage(const cv::Mat& image, const EyelidsLocation& eyelids_location)
 {
 // Two methods
 //==================================================

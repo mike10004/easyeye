@@ -6,7 +6,7 @@
  */
 
 
-#include "easyeye_imaging.h"
+#include "../common/easyeye_imaging.h"
 #include "easyeye_segment.h"
 #include "ImageUtility.h"
 #include "FindPupilCircleNew.h"

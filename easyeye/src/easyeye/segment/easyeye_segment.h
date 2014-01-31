@@ -8,7 +8,7 @@
 #ifndef EASYEYE_SEGMENT_H_
 #define EASYEYE_SEGMENT_H_
 
-#include "easyeye_imaging.h"
+#include "../common/easyeye_imaging.h"
 #include "../common/easyeye_serial.h"
 #include "../common/easyeye_utils.h"
 #include "../common/easyeye_types.h"

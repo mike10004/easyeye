@@ -104,7 +104,7 @@ Masek::IMAGE* ImageUtility:: getROIImage_C(Masek::IMAGE* eyeImg, int startX, int
 }
 
 
-ImageUtility::SETVALUE ImageUtility::setImage(cv::Mat& eye_img, CvPoint center,
+ImageUtility::SETVALUE ImageUtility::setImage(const cv::Mat& eye_img, CvPoint center,
 		int cr, int xLimit, int yLimit)
 {
 	Logs::GetLogger().Log(mylog::TRACE, "ImageUtility::setImage %dx%d center=(%d,%d) cr=%d, xLimit=%d, yLimit=%d\n",
@@ -190,7 +190,7 @@ void ImageUtility:: myRect(IplImage* img, int x, int y, int radius, int* destVal
 	
 }
 
-void ImageUtility:: myXYRect(cv::Mat& image, int x, int y, int width, int height, int* destVal)
+void ImageUtility:: myXYRect(const cv::Mat& image, int x, int y, int width, int height, int* destVal)
 {  
 	int startX, endX, startY, endY;
 	startX = x-width;// X starting point

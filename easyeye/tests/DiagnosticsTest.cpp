@@ -47,7 +47,8 @@ void testSegment(const char* eyeImagePathname)
     if (result.status != Result::SUCCESS) {
         cerr << "%TEST_FAILED% time=0 testname=testSegment (diagnostics) message=failed to segment " << eyeImagePathname << endl;
     } else {
-        Diagnostician diag(eyeImagePathname);
+        Diagnostician diag;
+        diag.set_eye_image_pathname(eyeImagePathname);
         diag.set_output_dir("/tmp/easyeye_tests_diagnostics");
         diag.set_collect_pathnames(true);
         diag.DumpSegOutput(result.boundary_pair, result.eyelids_location, result.extrema_noise);

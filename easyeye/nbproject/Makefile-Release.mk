@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/common/base64.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_config.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o \
+	${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_program.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_serial.o \
 	${OBJECTDIR}/src/easyeye/common/easyeye_types.o \
@@ -54,7 +55,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o \
 	${OBJECTDIR}/src/easyeye/segment/ImageUtility.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o \
-	${OBJECTDIR}/src/easyeye/segment/easyeye_imaging.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o
 
 # Test Directory
@@ -115,6 +115,11 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o: src/easyeye/common/easyey
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o src/easyeye/common/easyeye_diagnostics.cc
+
+${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o: src/easyeye/common/easyeye_imaging.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o src/easyeye/common/easyeye_imaging.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_program.o: src/easyeye/common/easyeye_program.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
@@ -195,11 +200,6 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o: src/easyeye/segment/ea
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o src/easyeye/segment/easyeye_extrema_noise.cpp
-
-${OBJECTDIR}/src/easyeye/segment/easyeye_imaging.o: src/easyeye/segment/easyeye_imaging.cc 
-	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_imaging.o src/easyeye/segment/easyeye_imaging.cc
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o: src/easyeye/segment/easyeye_segment.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
@@ -425,6 +425,19 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o: ${OBJECTDIR}/src/e
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o: ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o src/easyeye/common/easyeye_imaging.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o src/easyeye/common/easyeye_imaging.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o: ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/common/easyeye_program.o`; \
@@ -631,19 +644,6 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o: ${OBJECTDIR}/sr
 	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o src/easyeye/segment/easyeye_extrema_noise.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o;\
-	fi
-
-${OBJECTDIR}/src/easyeye/segment/easyeye_imaging_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_imaging.o src/easyeye/segment/easyeye_imaging.cc 
-	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/segment/easyeye_imaging.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_imaging_nomain.o src/easyeye/segment/easyeye_imaging.cc;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_imaging.o ${OBJECTDIR}/src/easyeye/segment/easyeye_imaging_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o src/easyeye/segment/easyeye_segment.cc 

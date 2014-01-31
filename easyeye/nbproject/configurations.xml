@@ -8,6 +8,7 @@
         <itemPath>src/easyeye/common/base64.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_config.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_diagnostics.h</itemPath>
+        <itemPath>src/easyeye/common/easyeye_imaging.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_program.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_serial.h</itemPath>
         <itemPath>src/easyeye/common/easyeye_types.h</itemPath>
@@ -27,7 +28,6 @@
         <itemPath>src/easyeye/segment/FindPupilCircleNew.h</itemPath>
         <itemPath>src/easyeye/segment/ImageUtility.h</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.h</itemPath>
-        <itemPath>src/easyeye/segment/easyeye_imaging.h</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -42,6 +42,7 @@
         <itemPath>src/easyeye/common/base64.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_config.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_diagnostics.cc</itemPath>
+        <itemPath>src/easyeye/common/easyeye_imaging.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_program.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_serial.cc</itemPath>
         <itemPath>src/easyeye/common/easyeye_types.cc</itemPath>
@@ -64,7 +65,6 @@
         <itemPath>src/easyeye/segment/FindPupilCircleNew.cpp</itemPath>
         <itemPath>src/easyeye/segment/ImageUtility.cpp</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.cpp</itemPath>
-        <itemPath>src/easyeye/segment/easyeye_imaging.cc</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.cc</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -431,6 +431,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/easyeye/common/easyeye_imaging.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_imaging.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/common/easyeye_program.cc"
             ex="false"
             tool="1"
@@ -541,16 +551,6 @@
             flavor2="0">
       </item>
       <item path="src/easyeye/segment/easyeye_extrema_noise.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/easyeye_imaging.cc"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/easyeye_imaging.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -911,6 +911,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/easyeye/common/easyeye_imaging.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/common/easyeye_imaging.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/common/easyeye_program.cc"
             ex="false"
             tool="1"
@@ -1016,16 +1026,6 @@
             flavor2="0">
       </item>
       <item path="src/easyeye/segment/easyeye_extrema_noise.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/easyeye_imaging.cc"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/easyeye_imaging.h"
             ex="false"
             tool="3"
             flavor2="0">

@@ -22,7 +22,7 @@ using namespace easyeye;
 using namespace std;
 using cv::Mat;
 
-static const char* output_dir = "/tmp/trace_segmentation";
+static const char* output_dir = "/tmp/easyeye_tests_segmenter";
 
 BoundaryPair expected_boundary_pairs[10];
 
@@ -164,7 +164,8 @@ bool traceSegmentation(const char* eyeImagePathname, BoundaryPair& expected, con
     mylog::Logs::GetLogger().set_level(mylog::TRACE);
     Segmentation result;
     Segmenter segmenter;
-    Diagnostician diags(eyeImagePathname);
+    Diagnostician diags;
+    diags.set_eye_image_pathname(eyeImagePathname);
     configureDiagnostics(diags);
     segmenter.set_diagnostician(&diags);
     Mat eyeImage = cv::imread(eyeImagePathname, CV_LOAD_IMAGE_GRAYSCALE);

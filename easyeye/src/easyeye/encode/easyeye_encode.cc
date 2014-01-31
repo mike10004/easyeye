@@ -18,7 +18,7 @@
 
 using mylog::Logs;
 using namespace easyeye;
-
+using namespace cv;
 EncoderConfig::EncoderConfig() : Config(), 
         encodeScales(DEFAULT_NSCALES), 
         minWaveLength(18), 
@@ -39,13 +39,15 @@ Encoder::Encoder(EncoderConfig config) : config_(config)
     
 }
 
-void Encoder::EncodeIris(Normalization& normalization, Encoding& result) const
+void Encoder::EncodeIris(const Normalization& normalization, Encoding& result) const
 {
-    return EncodeIris(&(normalization.polarArray), &(normalization.noiseArray), result);
+    return EncodeIris(normalization.polar_array, normalization.noise_array, result);
 }
 
-void Encoder::EncodeIris(Masek::filter* polarArray, Masek::IMAGE* noiseArray, Encoding& result) const
+void Encoder::EncodeIris(const Imaging::FloatImage& polar_array, const Imaging::ByteImage& noise_array, Encoding& result) const
 {
+    Masek::filter* polarArray = Imaging::CopyToFilter(polar_array);
+    Masek::IMAGE* noiseArray = Imaging::CopyToMasek((Mat&)noise_array);
     int* irisTemplate = result.irisTemplate;
     int* irisMask = result.irisMask;
     if (irisTemplate == NULL || irisMask == NULL) {
@@ -59,11 +61,8 @@ void Encoder::EncodeIris(Masek::filter* polarArray, Masek::IMAGE* noiseArray, En
 		config_.mult, config_.sigmaOnf, irisTemplate, irisMask);
 //		&(result.width), &(result.height));
 	result.status = Result::SUCCESS;
-}
-
-void Normalization::Dump(Diagnostician& diag)
-{
-    diag.DumpNormOutput(&polarArray, &noiseArray);
+    Imaging::FreeFilter(polarArray);
+    Imaging::FreeImage(noiseArray);
 }
 
 bool Encoding::Equals(const Encoding& b) const

@@ -57,8 +57,8 @@ public:
 	*               - \c 2 = video captured at a distance (distant-videos)
 	* @return Noise image
 	*/
-    void doFindPoints(cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location);
-    static cv::Mat CreateNoiseImage(cv::Mat& image, const EyelidsLocation& eyelids_location);
+    void doFindPoints(const cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location);
+    static cv::Mat CreateNoiseImage(const cv::Mat& image, const EyelidsLocation& eyelids_location);
     const static int ANGLE_DEST_VAL_LEN = 1;
 	/// FUTURE WORK.
 	//Masek::IMAGE* removeReflections(IplImage* eyeImg, IplImage* noiseImg, int eyelashThres, int reflectThres);
@@ -79,7 +79,7 @@ private:
 	*               - \c 2 = video captured at a distance (distant-videos)
 	* @return Contour point
 	*/
-	static cv::Point2i findContourPoint(cv::Mat& setImg, int threshold, int locate, 
+	static cv::Point2i findContourPoint(const cv::Mat& setImg, int threshold, int locate, 
 									int dataType);
 	
     /**
@@ -89,7 +89,7 @@ private:
 	* @param thresRange Range of possible threshold values
 	* @return Threshold value 
 	*/	
-	int doFindThres(cv::Mat& img, int thresRange);
+	int doFindThres(const cv::Mat& img, int thresRange);
 	
 	/**
 	* Calculates the eyelid's corner points.

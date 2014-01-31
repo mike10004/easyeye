@@ -10,6 +10,7 @@
 #include "easyeye_diagnostics.h"
 #include "easyeye_types.h"
 #include "easyeye_utils.h"
+#include "easyeye_imaging.h"
 #include "mylog.h"
 
 #ifndef _WIN32
@@ -27,13 +28,12 @@ using namespace easyeye;
 using std::string;
 using namespace cv;
 
-Diagnostician::Diagnostician(const string& eyeImagePathname)
+Diagnostician::Diagnostician()
     : output_dir_("."),
     disabled_(false),
     verbose_(true),
     num_images_written_(0),
-        eye_image_pathname_(eyeImagePathname),
-    eye_image_basename_(),
+    eye_image_pathname_(),
     text_output_stream_(cerr),
     image_format_suffix_(".png"),
         collect_pathnames_(false), 
@@ -42,21 +42,18 @@ Diagnostician::Diagnostician(const string& eyeImagePathname)
 {
 #ifndef _WIN32
     char cwd[4096];
-    disabled_ = (getcwd(cwd, 4096) == NULL);
-    output_dir_.assign(cwd);
-    if (disabled_) {
-        cerr << "warning: diagnostics disabled because current directory pathname is unavailable" << endl;
+    bool got_cwd = (getcwd(cwd, 4096) != NULL);
+    if (!got_cwd) {
+        int err = errno;
+        const char* errstr = strerror(err);
+        mylog::Logs::GetLogger().Log(mylog::WARN, "failed to get full path of current working directory; errno = %d %s\n", err, errstr);
+        output_dir_.assign(".");
+    } else {
+        output_dir_.assign(cwd);
     }
 #else
     disabled_ = true;
 #endif
-    char* pathname_copy = strdup(eyeImagePathname.c_str());
-    char* base = basename(pathname_copy);
-    eye_image_basename_.assign(base);
-    free(pathname_copy);
-    if (eye_image_basename_.length() == 0) {
-        eye_image_basename_.assign("eye_image");
-    }
 }
 
 void Diagnostician::set_disabled(bool disabled) {
@@ -100,41 +97,29 @@ void Diagnostician::WriteImage(Masek::IMAGE* image, const char* prefix)
 
 #else
 
-//void dump_histo(Masek::IMAGE* noiseArray) 
-//{
-//    int noiseArrayLen = noiseArray->hsize[0] * noiseArray->hsize[1];
-//    int noiseHisto[256];
-//    memset(noiseHisto, 0, sizeof(int) * 256);
-//    for (int i = 0; i < noiseArrayLen; i++) {
-//        unsigned char val = noiseArray->data[i];
-//        noiseHisto[val] = noiseHisto[val] + 1;
-//    }
-//    for (int i = 0; i < 256; i++) {
-//        if (noiseHisto[i] > 0) std::cerr << "noiseHisto[" << i << "] = " << noiseHisto[i] << std::endl;
-//    }
-//}
+void Diagnostician::set_eye_image_pathname(const std::string& eye_image_pathname)
+{
+    eye_image_pathname_.assign(eye_image_pathname);
+}
 
-void Diagnostician::DumpNormOutput(Masek::filter* polarArray, Masek::IMAGE* noiseArray)
+string Diagnostician::eye_image_pathname() const
+{
+    return eye_image_pathname_;
+}
+
+void Diagnostician::DumpNormOutput(const cv::Mat& polar_array, const cv::Mat& noise_array)
 {
     if (disabled()) return;
-    Masek::IMAGE scaledNoise;
-    int noiseArrayLen = noiseArray->hsize[0] * noiseArray->hsize[1];
-    scaledNoise.hsize[0] = noiseArray->hsize[0];
-    scaledNoise.hsize[1] = noiseArray->hsize[1];
-    scaledNoise.data = (unsigned char*) malloc(sizeof(unsigned char) * noiseArrayLen);
-    for (int i = 0; i < noiseArrayLen; i++) {
-        scaledNoise.data[i] = 255 * noiseArray->data[i];
-    }
-    WriteImage(&scaledNoise, "normNoiseArray");
-    free(scaledNoise.data);
-    WriteFilter(polarArray, "normPolarArray");
+    WriteImage(noise_array * (uchar)255, "polarnoise");
+    WriteImage(polar_array * 255.0, "polardata");
 }
 
 string Diagnostician::ToFilename(const string& label, const string& suffix)
 {
     std::ostringstream ss;
     num_images_written_++;
-    ss << output_dir_ << '/' << eye_image_basename_ << '-' << num_images_written_ << '-' << label << suffix;
+    string stem = Files::GetFilenameStem(eye_image_pathname_);
+    ss << output_dir_ << '/' << stem << '-' << num_images_written_ << '-' << label << suffix;
     return ss.str();
 }
 
@@ -211,30 +196,6 @@ void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation&
     WriteImage(eye_image, "segmentation");
 }
 
-void Diagnostician::CopyToMat(Masek::filter* src, cv::Mat& dst)
-{
-    int rows = src->hsize[1];
-    int cols = src->hsize[0];
-    dst.create(rows, cols, CV_64FC1);
-    for (int y = 0; y < rows; y++) {
-        for (int x = 0; x < cols; x++) {
-            double v = src->data[y * cols + x];
-            dst.at<double>(x, y) = v;
-        }
-    }
-}
-
-void Diagnostician::CopyToMat(Masek::IMAGE* src, cv::Mat& dst)
-{
-    int rows = src->hsize[1], cols = src->hsize[0];
-    dst.create(rows, cols, CV_8U);
-    for (int y = 0; y < rows; y++) {
-        for (int x = 0; x < cols; x++) {
-            dst.at<uchar>(x, y) = src->data[y * cols + x];
-        }
-    }
-}
-
 static void MaybeMakeDirs(const string& dir) 
 {
     if (!IOUtils::IsDirectory(dir)) {
@@ -256,7 +217,7 @@ void Diagnostician::set_write_original(bool write_original)
     write_original_ = write_original;
 }
 
-void Diagnostician::WriteImage(cv::Mat& image, const string& label)
+void Diagnostician::WriteImage(const cv::Mat& image, const string& label)
 {
     if (disabled()) return;
     if (write_original_ && !original_written_) {
@@ -281,7 +242,7 @@ void Diagnostician::WriteFilter(Masek::filter* image, const char* label)
 {
     if (disabled()) return;
     Mat imagecopy;
-    CopyToMat(image, imagecopy);
+    Imaging::CopyToMat(image, imagecopy);
     WriteImage(imagecopy, label);
 }
 
@@ -289,7 +250,7 @@ void Diagnostician::WriteImage(Masek::IMAGE* image, const char* label)
 {
     if (disabled()) return;
     Mat imagecopy;
-    CopyToMat(image, imagecopy);
+    Imaging::CopyToMat(image, imagecopy);
     WriteImage(imagecopy, label);
 }
 
@@ -326,7 +287,7 @@ Diagnostician* DiagnosticsCreator::diagnostician()
 }
 
 DiagnosticsCreator::DiagnosticsCreator() 
-        : diagnostician_(NULL), inactive_diagnostician_("")
+        : diagnostician_(NULL), inactive_diagnostician_()
 {
     inactive_diagnostician_.set_disabled(true);
 }

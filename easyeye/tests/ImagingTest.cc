@@ -9,7 +9,7 @@
 #include "ImagingTest.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "../src/easyeye/segment/easyeye_imaging.h"
+#include "../src/easyeye/common/easyeye_imaging.h"
 #include "../src/easyeye/segment/ImageUtility.h"
 
 using namespace std;

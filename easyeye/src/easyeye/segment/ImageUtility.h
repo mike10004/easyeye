@@ -86,7 +86,7 @@ public:
 	 * @param Ht height
 	 * @return Extracted image.
 	 */
-    static cv::Mat extractImagePart(cv::Mat& img, cv::Rect& rect, int x, int y, int wd, int ht);
+    static cv::Mat extractImagePart(const cv::Mat& img, cv::Rect& rect, int x, int y, int wd, int ht);
 	
 	
 	/** 
@@ -148,7 +148,7 @@ public:
 	 * @return Rect info and center point
 	 * See also SETVALUE
 	 */
-	static SETVALUE setImage(cv::Mat& eye_image, CvPoint center, int cr, int xLimit, int yLimit);
+	static SETVALUE setImage(const cv::Mat& eye_image, CvPoint center, int cr, int xLimit, int yLimit);
 	
 	/** 
 	 * Calculate the square rectangular info.
@@ -171,7 +171,7 @@ public:
 	 * @param height Input Y radius
 	 * @param destVal Used to return the rect info (0:left, 1:right, 2:bottom, 3:top)
 	 */
-	static void myXYRect(cv::Mat& image, int x, int y, int width, int height, int* destVal);
+	static void myXYRect(const cv::Mat& image, int x, int y, int width, int height, int* destVal);
     
 	static IplImage* getROIImage(IplImage* eyeImg, int startX, int endX, int startY, int endY);
 	static IplImage* extractImagePart(IplImage* img, CvRect& rect, int x, int y, int wd, int ht);

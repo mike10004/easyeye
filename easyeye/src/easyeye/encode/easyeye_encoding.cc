@@ -77,8 +77,9 @@ Encoding::Encoding(const int nscales, const int angularResolution, const int rad
         nscales_(nscales),
         status(Result::NOT_YET_SET)
 {
-	irisTemplate = (int*) malloc(sizeof(int) * width_ * height_);
-	irisMask = (int*) malloc(sizeof(int) * width_ * height_);
+    int num_bytes = sizeof(int) * width_ * height_;
+	irisTemplate = (int*) malloc(num_bytes);
+	irisMask = (int*) malloc(num_bytes);
 }
 
 Encoding::Encoding(const EncoderConfig& encoder_config)
