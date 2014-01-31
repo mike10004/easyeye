@@ -40,17 +40,16 @@ The following big-picture changes are planned:
  - Provide API and executables for iris image quality analysis
  - Support Windows as a development and deployment platform
 
-## Binaries
+## Releases
 
-On Ubuntu, you can install binaries generated from these modified 
-sources by adding the PPA 
-https://launchpad.net/~mchaberski/+archive/ppa to your repository 
-sources. Follow the PPA link above for more detailed instructions, but 
-this is the short version:
+Binaries built from the source code are available from a PPA at 
+[https://launchpad.net/~mchaberski/+archive/ppa]. Follow the PPA link for 
+detailed instructions. This is the short version:
 
     $ sudo add-apt-repository ppa:mchaberski/ppa
     $ sudo apt-get update
     $ sudo apt-get install easyeye
 
-This should also work on Debian, but you may have to align the Ubuntu
-series (e.g. saucy) with your Debian version (e.g. sid).
+This should also work on Debian, but after you add the repository, you may
+want to edit the `.list` file in `/etc/apt/sources.list.d` to align the 
+Ubuntu series (e.g. saucy) with your Debian version (e.g. sid).
