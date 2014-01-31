@@ -671,6 +671,7 @@
             <linkerLibLibItem>opencv_imgproc</linkerLibLibItem>
             <linkerLibLibItem>opencv_objdetect</linkerLibLibItem>
             <linkerLibLibItem>jsoncpp</linkerLibLibItem>
+            <linkerLibLibItem>uuid</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </folder>
