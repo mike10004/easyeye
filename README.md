@@ -21,7 +21,6 @@ of the code that they wrote. To list a few:
 - Xiaomei Liu (University of Notre Dame)
 - Libor Masek (University of Western Australia)
 - Peter Kovesi (University of Western Australia)
-- René Nyffenegger (base-64 codec)
 
 New and derived code is copyright (c) 2014 Michael Chaberski, 
 distributed under the terms of the MIT License. (See LICENSE file for 
@@ -29,11 +28,29 @@ full text.)
 
 ## Roadmap
 
-The following changes are planned:
+The following big-picture changes are planned:
 
+ - Support greater configurability/extensibility in image processing, 
+   segmentation, and encoding (e.g. alternative boundary and eyelid 
+   detection techniques, other normalization and encoding strategies)
  - Remove unnecessary legacy code (in optimasek) 
- - Support greater configurability/extensibility in image processing and 
-   segmentation code
+ - Add support for segmenting/encoding eye images at a distance, as 
+   from frames of video (the `NIR_FACE_VIDEO` and `NIR_IRIS_VIDEO`
+   data types that are supported in VASIR)
  - Provide API and executables for iris image quality analysis
- - Support building on Windows
+ - Support Windows as a development and deployment platform
 
+## Binaries
+
+On Ubuntu, you can install binaries generated from these modified 
+sources by adding the PPA 
+https://launchpad.net/~mchaberski/+archive/ppa to your repository 
+sources. Follow the PPA link above for more detailed instructions, but 
+this is the short version:
+
+    $ sudo add-apt-repository ppa:mchaberski/ppa
+    $ sudo apt-get update
+    $ sudo apt-get install easyeye
+
+This should also work on Debian, but you may have to align the Ubuntu
+series (e.g. saucy) with your Debian version (e.g. sid).
