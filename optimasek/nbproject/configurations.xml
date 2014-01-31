@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="89">
+<configurationDescriptor version="90">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>include/Masek.h</itemPath>
-      <itemPath>include/global.h</itemPath>
       <itemPath>include/portability.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -18,12 +17,12 @@
       <itemPath>src/adjgamma.cpp</itemPath>
       <itemPath>src/canny.cpp</itemPath>
       <itemPath>src/circlecoordinates.cpp</itemPath>
+      <itemPath>src/common.cpp</itemPath>
       <itemPath>src/encode.cpp</itemPath>
       <itemPath>src/findcircle.cpp</itemPath>
       <itemPath>src/findline.cpp</itemPath>
       <itemPath>src/gaborconvolve.cpp</itemPath>
       <itemPath>src/gauss.cpp</itemPath>
-      <itemPath>src/global.cpp</itemPath>
       <itemPath>src/houcircle.cpp</itemPath>
       <itemPath>src/hysthresh.cpp</itemPath>
       <itemPath>src/interp2.cpp</itemPath>
@@ -55,7 +54,6 @@
   <confs>
     <conf name="Debug" type="3">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -71,8 +69,6 @@
       </compileType>
       <item path="include/Masek.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/global.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/portability.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/adjgamma.cpp" ex="false" tool="1" flavor2="0">
@@ -80,6 +76,8 @@
       <item path="src/canny.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/circlecoordinates.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/common.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/encode.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -90,8 +88,6 @@
       <item path="src/gaborconvolve.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/gauss.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/global.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/houcircle.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -116,7 +112,6 @@
     </conf>
     <conf name="Release" type="3">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -142,8 +137,6 @@
       </compileType>
       <item path="include/Masek.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/global.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/portability.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/adjgamma.cpp" ex="false" tool="1" flavor2="0">
@@ -151,6 +144,8 @@
       <item path="src/canny.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/circlecoordinates.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/common.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/encode.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -161,8 +156,6 @@
       <item path="src/gaborconvolve.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/gauss.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/global.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/houcircle.cpp" ex="false" tool="1" flavor2="0">
       </item>

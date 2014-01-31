@@ -25,6 +25,8 @@
 % pk@cs.uwa.edu.au     www.cs.uwa.edu.au/~pk
 % July 2001*/
 
+#include <cstdio>
+#include <cstdlib>
 #include <math.h>
 #include <Masek.h>
 

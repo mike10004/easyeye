@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdio>
+#include <cstdlib>
+
 #if 0
 #if defined MASEK_EXPORTS
 #define MASEK_API __declspec(dllexport)
@@ -7,9 +10,6 @@
 #define MASEK_API __declspec(dllimport)
 #endif
 #endif
-
-
-#include "global.h"
 
 /**
  * This class gives all Masek methods a unified namespace, and makes it easy
@@ -31,10 +31,28 @@ public:
   #define PI (double)3.14159265358979
   #define AdjPrecision (double)0.0000000000005
 
-  typedef struct mat_data   MAT_DATA;
-  typedef struct _image     IMAGE;
-  typedef struct _filter    filter;
-  typedef struct a_complex  Complex;
+  struct MAT_DATA
+  {
+    char name[50];		/* the name of the data			*/
+    int dim[2];		/* the dimension of the data			*/
+    void *ptr;		/* the point to the data*/
+  };
+//  typedef struct _image     IMAGE;
+  struct IMAGE
+  {
+    int hsize[2];
+	unsigned char *data;
+  };
+  struct filter
+  {
+	int hsize[2];
+	double *data;
+  };
+  struct Complex
+  {
+    double real;
+    double img;
+  };
 
   /*@}*/
 

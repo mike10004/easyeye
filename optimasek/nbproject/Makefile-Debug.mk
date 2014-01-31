@@ -38,12 +38,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/adjgamma.o \
 	${OBJECTDIR}/src/canny.o \
 	${OBJECTDIR}/src/circlecoordinates.o \
+	${OBJECTDIR}/src/common.o \
 	${OBJECTDIR}/src/encode.o \
 	${OBJECTDIR}/src/findcircle.o \
 	${OBJECTDIR}/src/findline.o \
 	${OBJECTDIR}/src/gaborconvolve.o \
 	${OBJECTDIR}/src/gauss.o \
-	${OBJECTDIR}/src/global.o \
 	${OBJECTDIR}/src/houcircle.o \
 	${OBJECTDIR}/src/hysthresh.o \
 	${OBJECTDIR}/src/interp2.o \
@@ -97,6 +97,11 @@ ${OBJECTDIR}/src/circlecoordinates.o: src/circlecoordinates.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/circlecoordinates.o src/circlecoordinates.cpp
 
+${OBJECTDIR}/src/common.o: src/common.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/common.o src/common.cpp
+
 ${OBJECTDIR}/src/encode.o: src/encode.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -121,11 +126,6 @@ ${OBJECTDIR}/src/gauss.o: src/gauss.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/gauss.o src/gauss.cpp
-
-${OBJECTDIR}/src/global.o: src/global.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/global.o src/global.cpp
 
 ${OBJECTDIR}/src/houcircle.o: src/houcircle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

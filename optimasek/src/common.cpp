@@ -8,11 +8,7 @@
 *  U. of Notre Dame
 ***************************************************/
 
-#include <global.h>
-#include <math.h>
-#include <float.h>
 #include <Masek.h>
-#include <portability.h>
 
 int Masek::roundND(double x)
 {
