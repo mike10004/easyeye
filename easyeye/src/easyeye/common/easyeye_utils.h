@@ -56,12 +56,54 @@ private:
     Streams();
 };
 
+class PathInfo
+{
+public:
+    PathInfo();
+    PathInfo(const std::string& path, const std::string& dirname, 
+        const std::string& filename, const std::string& filename_stem, 
+        const std::string& filename_extension);
+    
+    /**
+     * The path provided as input to the Files::GetPathInfo function. Unchanged
+     * from the input.
+     */
+    std::string path;
+    
+    /**
+     * Path of the directory that is the parent of the pathname this instance
+     * represents.
+     */
+    std::string dirname;
+    std::string filename;
+    
+    /**
+     * File name without its file extension or path. This is similar to the 
+     * basename unix command. The result does not include the '.'.
+     */
+    std::string filename_stem;
+    
+    /**
+     * File extension for the given file name, or the empty string if the 
+     * file has no extension. The result does not include the '.'.
+     */
+    std::string filename_extension;
+    std::string ToString() const;
+    bool Equals(const PathInfo& other) const;
+};
+
 class Files
 {
 public:
     static bool Write(const std::string& data, const std::string& pathname);
     static bool Copy(std::istream& in, const std::string& pathname);
     static std::string Read(const std::string& pathname);
+    static PathInfo GetPathInfo(const std::string& pathname);
+    static void ParsePathInfo(const std::string& pathname, PathInfo& path_info);
+    static std::string GetDirname(const std::string& pathname);
+    static std::string GetFilename(const std::string& pathname);
+    static std::string GetFilenameStem(const std::string& pathname);
+    static std::string GetFilenameExtension(const std::string& pathname);
 private:
     Files();
 };

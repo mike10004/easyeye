@@ -19,6 +19,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <libgen.h>
 
 #ifdef EASYEYE_ISWINDOWS
 #include <Windows.h>
@@ -383,4 +384,124 @@ string Strings::Join(const std::list<std::string>& pieces, const string& delimit
 {
     Joiner joiner(delimiter);
     return joiner.Join(pieces);
+}
+
+PathInfo::PathInfo() 
+    : path(), dirname(), filename(), filename_stem(), filename_extension()
+{
+    
+}
+    
+PathInfo::PathInfo(const std::string& path_, const std::string& dirname_, 
+        const std::string& filename_, const std::string& filename_stem_, 
+        const std::string& filename_extension_)
+    : path(path_), 
+      dirname(dirname_), 
+      filename(filename_), 
+      filename_stem(filename_stem_), 
+      filename_extension(filename_extension_)
+{
+}
+
+static char* portable_strdup(const std::string& src)
+{
+    char* path = new char[src.length() + 1];
+    path[src.length()] = '\0';
+    strncpy(path, src.c_str(), src.length());
+    return path;
+}
+
+static string ParseFilenameStem(const string& base)
+{
+    if (base.empty()) {
+        return string("");
+    }
+    if (base.find_first_not_of('.') == string::npos) {
+        return base;
+    }
+    int last_dot_pos = base.find_last_of('.');
+    if (last_dot_pos == string::npos || last_dot_pos == 0 ) {
+        return base; // name like "hello" or ".bashrc"
+    }
+    return base.substr(0, last_dot_pos);
+}
+
+static string ParseFilenameExtension(const string& base)
+{
+    if (base.empty()) {
+        return base;
+    }
+    if (base.find_first_not_of('.') == string::npos) {
+        return string("");
+    }
+    int last_dot_pos = base.find_last_of('.');
+    if (last_dot_pos == string::npos || last_dot_pos == 0) {
+        return string(""); // no extension, e.g. "hello" or ".bashrc"
+    }
+    return base.substr(last_dot_pos + 1, base.length() - (last_dot_pos + 1));
+}
+
+void Files::ParsePathInfo(const std::string& pathname, PathInfo& path_info)
+{
+    path_info.path.assign(pathname);    
+    char* dirname_src = portable_strdup(pathname);
+    char* basename_src = portable_strdup(pathname);
+    char* dirname_dst = dirname(dirname_src);
+    char* basename_dst = basename(basename_src);
+    path_info.dirname.assign(dirname_dst);
+    path_info.filename.assign(basename_dst);
+    delete dirname_src, basename_src;
+    path_info.filename_stem.assign(ParseFilenameStem(path_info.filename));
+    path_info.filename_extension.assign(ParseFilenameExtension(path_info.filename));
+}
+
+std::string PathInfo::ToString() const
+{
+    ostringstream ss;
+    ss << "PathInfo{path=" << path
+            << ",dir=" << dirname
+            << ",filename=" << filename
+            << ",stem=" << filename_stem
+            << ",ext=" << filename_extension << "}";
+    return ss.str();
+}
+
+bool PathInfo::Equals(const PathInfo& other) const
+{
+    return (path.compare(other.path) == 0)
+            && (dirname.compare(other.dirname) == 0)
+            && (filename.compare(other.filename) == 0)
+            && (filename_stem.compare(other.filename_stem) == 0)
+            && (filename_extension.compare(other.filename_extension) == 0);
+}
+
+PathInfo Files::GetPathInfo(const std::string& pathname)
+{
+    PathInfo path_info;
+    ParsePathInfo(pathname, path_info);
+    return path_info;
+}
+
+std::string Files::GetFilename(const std::string& pathname)
+{
+    PathInfo p = GetPathInfo(pathname);
+    return p.filename;
+}
+
+std::string Files::GetFilenameStem(const std::string& pathname)
+{
+    PathInfo p = GetPathInfo(pathname);
+    return p.filename_stem;
+}
+
+std::string Files::GetFilenameExtension(const std::string& pathname)
+{
+    PathInfo p = GetPathInfo(pathname);
+    return p.filename_extension;
+}
+
+std::string Files::GetDirname(const std::string& pathname) 
+{
+    PathInfo p = GetPathInfo(pathname);
+    return p.dirname;
 }
