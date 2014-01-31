@@ -11,7 +11,8 @@ and match iris encodings.
 
 The origin of the iris image analysis source code is the VASIR project
 (Video-based Automatic System for Iris Recognition) from NIST. The code
-is reorganized and refactored to facilitate development.
+has been modified, updated, reorganized and refactored to facilitate 
+development.
 
 The portions of the EasyEye source code that were developed by NIST are
 in the public domain. There are many authors deserving acknowledgment 
@@ -43,7 +44,8 @@ The following big-picture changes are planned:
 ## Releases
 
 Binaries built from the source code are available from a PPA at 
-[https://launchpad.net/~mchaberski/+archive/ppa]. Follow the PPA link for 
+[https://launchpad.net/~mchaberski/+archive/ppa]
+([https://launchpad.net/~mchaberski/+archive/ppa). Follow the PPA link for 
 detailed instructions. This is the short version:
 
     $ sudo add-apt-repository ppa:mchaberski/ppa
@@ -51,5 +53,5 @@ detailed instructions. This is the short version:
     $ sudo apt-get install easyeye
 
 This should also work on Debian, but after you add the repository, you may
-want to edit the `.list` file in `/etc/apt/sources.list.d` to align the 
+want to edit the new `.list` file in `/etc/apt/sources.list.d` to align the 
 Ubuntu series (e.g. saucy) with your Debian version (e.g. sid).
