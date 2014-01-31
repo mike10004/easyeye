@@ -58,7 +58,7 @@ public:
     void AddOption(const std::string& long_form_, const char short_form_);
     void AddOption(const std::string& long_form_, ArgSpec arg_spec_);
     void AddOption(const std::string& long_form_);
-    virtual void OptionParsed(const std::string& long_form, bool arg_present, const std::string& arg);
+    virtual void OptionParsed(const std::string& long_form, bool arg_present, const std::string& arg) = 0;
     virtual bool IsPositionalsOk(const std::vector<std::string>& positionals);
     virtual Code Execute(const std::vector<std::string>& positionals) = 0;
     const Options& options();

@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <easyeye/common/easyeye_types.h>
 #include <easyeye/encode/easyeye_encode.h>
+#include <easyeye/common/easyeye_diagnostics.h>
 #include <easyeye/segment/easyeye_segment.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -28,8 +29,17 @@ using easyeye::program::Program;
 using easyeye::program::Options;
 using easyeye::program::Code;
 
+ExtractOptions::ExtractOptions() 
+    : program::Options(), 
+        diagnostics_dir(),
+        csv_file("/dev/null")
+{
+}    
+
 Extract::Extract() : program::Program("easyeye-extract", "0.1.0"), extract_options_()
 {
+    AddOption("diagnostics", 'd', program::REQUIRED);
+    AddOption("csv", program::REQUIRED);
 }
 
 Extract::~Extract() {}
@@ -71,10 +81,19 @@ void Extract::PrintUsage(ostream& out)
 "  --csv=FILE             print segmentation summary to FILE" << endl;
 }
 
-void PrintCsvResult(ostream& out, const string& image_pathname, const Segmentation& seg)
+void Extract::PrintCsvResult(const string& image_pathname, const Segmentation& seg)
 {
+    ostream* csv_out = &cout;
+    ofstream csv_file_out;
+    bool csv_stdout = extract_options_.csv_file.compare("-") == 0;
+    if (!csv_stdout) {
+        ios_base::openmode mode = ios_base::out | ios_base::app;
+        csv_file_out.open(extract_options_.csv_file.c_str(), mode);
+        csv_out = &csv_file_out;
+    }
+
     string delim = ", ";
-    out << image_pathname << delim 
+    *csv_out << image_pathname << delim 
             << Result::DescribeStatus(seg.status) << delim
             << seg.boundary_pair.irisX << delim
             << seg.boundary_pair.irisY << delim
@@ -88,19 +107,26 @@ void PrintCsvResult(ostream& out, const string& image_pathname, const Segmentati
 Code Extract::Execute(const vector<string>& pathnames) {
     assert(pathnames.size() == 1 || pathnames.size() == 2);
     bool writeEncoding = pathnames.size() == 2;
-    string eyeImagePathname = pathnames[0];
+    string eye_image_pathname = pathnames[0];
     Logs::GetLogger().set_level(options_.verbose ? mylog::TRACE : mylog::INFO);
-    cv::Mat eyeImage = cv::imread(eyeImagePathname, CV_LOAD_IMAGE_GRAYSCALE);
+    Diagnostician diags(eye_image_pathname);
+    cv::Mat eyeImage = cv::imread(eye_image_pathname, CV_LOAD_IMAGE_GRAYSCALE);
     if (eyeImage.data == NULL) {
-        cerr << name << ": failed to load image from file " << eyeImagePathname << endl;
+        cerr << name << ": failed to load image from file " << eye_image_pathname << endl;
         return program::kErrorIO;
     }
     Segmentation segmentation;
     Segmenter segmenter;
+    if (!extract_options_.diagnostics_dir.empty()) {
+        diags.set_output_dir(extract_options_.diagnostics_dir);
+        diags.set_disabled(false);
+        segmenter.set_diagnostician(&diags);
+    }
     segmenter.SegmentEyeImage(eyeImage, segmentation);
     
     Code rv = program::kExitSuccess;
-    PrintCsvResult(cout, eyeImagePathname, segmentation);
+    PrintCsvResult(eye_image_pathname, segmentation);
+    
     if (segmentation.status == Result::SUCCESS && writeEncoding) {
         ofstream fout(pathnames[1].c_str());
         if (fout.is_open()) {
@@ -135,9 +161,13 @@ Code Extract::Execute(const vector<string>& pathnames) {
     return rv;
 }
 
-void Extract::OptionParsed(const std::string& long_form, bool has_arg, const std::string optarg)
+void Extract::OptionParsed(const std::string& long_form, bool has_arg, const std::string& option_arg)
 {
-    
+    if (Eq(long_form, "diagnostics")) {
+        extract_options_.diagnostics_dir.assign(option_arg);
+    } else if (Eq(long_form, "csv")) {
+        extract_options_.csv_file.assign(option_arg);
+    }
 }
 
 #ifndef _WIN32

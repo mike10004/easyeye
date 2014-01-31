@@ -111,7 +111,6 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 	FindEyelidMix eyelid_finder(config_.eyelid_finder_config);
 	eyelid_finder.doFindPoints(eyeImg, bpair, seg.eyelids_location);
     Mat eyelidImg = eyelid_finder.CreateNoiseImage(eyeImg, seg.eyelids_location);
-    diagnostician()->WriteImage(eyelidImg, "eyelidImg");
     ExtremaNoiseFinder extrema_noise_finder(config_.extrema_noise_finder_config);
 	extrema_noise_finder.FindExtremaNoise(eyeImg).copyTo(seg.extrema_noise);
     diagnostician()->DumpSegOutput(seg.boundary_pair, seg.eyelids_location, seg.extrema_noise);

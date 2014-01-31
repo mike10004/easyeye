@@ -221,11 +221,11 @@ void Program::AddOption(const std::string& long_form_)
 }
 
 
-void Program::OptionParsed(const std::string& long_form, bool arg_present, const std::string& arg)
-{
-    // do nothing; this is not pure virtual because it may be the case that
-    // the program has no options besides --help, --version, and --verbose 
-}
+//void Program::OptionParsed(const std::string& long_form, bool arg_present, const std::string& arg)
+//{
+//    // do nothing; this is not pure virtual because it may be the case that
+//    // the program has no options besides --help, --version, and --verbose 
+//}
 
 
 const Options& Program::options()

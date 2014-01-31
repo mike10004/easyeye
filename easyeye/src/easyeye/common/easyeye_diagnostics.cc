@@ -133,6 +133,7 @@ void Diagnostician::DumpNormOutput(Masek::filter* polarArray, Masek::IMAGE* nois
 string Diagnostician::ToFilename(const string& label, const string& suffix)
 {
     std::ostringstream ss;
+    num_images_written_++;
     ss << output_dir_ << '/' << eye_image_basename_ << '-' << num_images_written_ << '-' << label << suffix;
     return ss.str();
 }
