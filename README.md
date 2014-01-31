@@ -1,7 +1,7 @@
 # easyeye
 
 EasyEye is software for biometric iris image segmentation, encoding, 
-and matching.
+and matching. It is at a very early, developmental state.
 
 ## Overview
 
@@ -26,6 +26,23 @@ of the code that they wrote. To list a few:
 New and derived code is copyright (c) 2014 Michael Chaberski, 
 distributed under the terms of the MIT License. (See LICENSE file for 
 full text.)
+
+## Does it work?
+The short answer is  "I don't know, but maybe." All the pieces are there, and 
+the upstream (VASIR) works, in that the segmentation and matching outputs are
+rougly within range of what's expected. However, the process of deriving more 
+manageable, transparent, and debuggable code from upstream -- that is, turning
+VASIR into EasyEye -- could have introduced fundamental errors.
+
+Diagnostic images produced by the software show that the core segmentation
+implementation does work, in that it reliably produces reasonably accurate
+results on high quality input eye images. Eyelid detection is currently 
+pretty hairy, and it's uncertain whether that is a regression from the 
+upstream version. Normalization, encoding, and matching have not been tested
+for accuracy or reliability. In other words, it's currently possible that 
+the matching results are no better than a coin flip, but we know that they
+used to be better than a coin flip, and work is underway to get them back
+to that performance level.
 
 ## Roadmap
 
