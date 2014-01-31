@@ -1,5 +1,5 @@
 #include "easyeye_extrema_noise.h"
-#include "ImageUtility.h"
+
 #include <opencv2/core/core.hpp>
 #include "../common/easyeye_imaging.h"
 

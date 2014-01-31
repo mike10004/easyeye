@@ -1,6 +1,6 @@
 #include "FindIrisCircle.h"
 #include <Masek.h>
-#include "ImageUtility.h"
+
 #include "../common/mylog.h"
 #include <opencv2/highgui/highgui.hpp>
 #include "../common/easyeye_imaging.h"

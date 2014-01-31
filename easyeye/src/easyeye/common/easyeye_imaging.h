@@ -29,6 +29,15 @@ namespace easyeye
     class Imaging
     {
     public:
+        /**
+         * Region of Interest and center points information
+         */
+        typedef struct 
+        {
+            cv::Rect rect; /// ROI.
+            cv::Point2i p; /// Center point.
+        } EyeImageROI;
+        
         typedef float FloatDataType;
         typedef uchar GrayDataType;
         typedef cv::Mat FloatImage;
@@ -59,6 +68,12 @@ namespace easyeye
         static void CopyToMat(Masek::filter* src, cv::Mat& dst);
         static long Round(FloatDataType float_value);
         static uchar Clamp(long value, uchar min_inclusive, uchar max_inclusive);
+        static void myXYRect(const cv::Mat& image, int x, int y, int width, int height, int* destVal);
+        static float myMean(const cv::Mat& img);
+        static int getValue(int value, int maxSize);
+        static float mySD(const cv::Mat& image, double n, float mean);
+        static EyeImageROI GetEyeImageROI(const cv::Mat& eye_img, cv::Point2i center,
+        		int cr, int xLimit, int yLimit);
     };
 
     namespace serial 

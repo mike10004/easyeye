@@ -1,17 +1,16 @@
 /*
- * vasirencode.h
+ * easyeye_encode.h
  *
  *  Created on: Jul 11, 2013
  *      Author: mchaberski
  */
 
-#ifndef VASIRENCODE_H_
-#define VASIRENCODE_H_
+#ifndef EASYEYE_ENCODE_H_
+#define EASYEYE_ENCODE_H_
 
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <Masek.h>
 #include "../segment/easyeye_segment.h"
 #include "../common/easyeye_types.h"
 #include "../common/easyeye_utils.h"
@@ -132,22 +131,11 @@ private:
 namespace serial 
 {
 
-    class EncodingAdapter : public serial::Adapter
+class EncodingAdapter : public serial::Adapter
 {
 public:
     bool FromJson(const Json::Value& src, void* dst);
     void ToJson(void* src, Json::Value& dst);
-    /**
-     * 
-     * @param jsonBuffer the buffer into which the json encoding of this
-     * iris encoding will be written. This buffer must be allocated with
-     * length at least ENCODING_DESERIALIZATION_BUFFER_LEN.
-     */
-//    static std::string Serialize() const;
-//    static bool Serialize(std::ostream& out) const;
-//    const static int ENCODING_DESERIALIZATION_BUFFER_LEN = 65536;
-//	static void Deserialize(std::istream & in);
-//    static void Deserialize(const std::string& json);
 };
 
 bool Deserialize(const std::string& json, Encoding& encoding);
@@ -155,4 +143,4 @@ std::string Serialize(const Encoding& encoding);
 
 } // end namespace serial
 } // end namespace easyeye
-#endif /* VASIRENCODE_H_ */
+#endif /* EASYEYE_ENCODE_H_ */

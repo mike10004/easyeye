@@ -70,33 +70,6 @@ void Diagnostician:: set_output_dir(const string& output_dir)
     output_dir_.assign(output_dir);
 }
 
-
-#ifdef WIN32
-
-void Diagnostician::DumpNormOutput(Masek::filter* polarArray, Masek::IMAGE* noiseArray)
-{
-}
-
-void Diagnostician::DumpEncodeOutput(const int width, const int height, const int* irisTemplate, const int* irisMask)
-{
-}
-
-void Diagnostician::DumpSegOutput(Masek::IMAGE* noiseImage, int iris[], int pupil[])
-{
-}
-
-IplImage* Diagnostician::CopyToIplImage(Masek::IMAGE* image)
-{
-    return NULL;
-}
-
-void Diagnostician::WriteImage(Masek::IMAGE* image, const char* prefix) 
-{
-}
-
-
-#else
-
 void Diagnostician::set_eye_image_pathname(const std::string& eye_image_pathname)
 {
     eye_image_pathname_.assign(eye_image_pathname);
@@ -238,24 +211,21 @@ void Diagnostician::WriteImage(const cv::Mat& image, const string& label)
     }
 }
 
-void Diagnostician::WriteFilter(Masek::filter* image, const char* label) 
-{
-    if (disabled()) return;
-    Mat imagecopy;
-    Imaging::CopyToMat(image, imagecopy);
-    WriteImage(imagecopy, label);
-}
-
-void Diagnostician::WriteImage(Masek::IMAGE* image, const char* label) 
-{
-    if (disabled()) return;
-    Mat imagecopy;
-    Imaging::CopyToMat(image, imagecopy);
-    WriteImage(imagecopy, label);
-}
-
-
-#endif
+//void Diagnostician::WriteFilter(Masek::filter* image, const char* label) 
+//{
+//    if (disabled()) return;
+//    Mat imagecopy;
+//    Imaging::CopyToMat(image, imagecopy);
+//    WriteImage(imagecopy, label);
+//}
+//
+//void Diagnostician::WriteImage(Masek::IMAGE* image, const char* label) 
+//{
+//    if (disabled()) return;
+//    Mat imagecopy;
+//    Imaging::CopyToMat(image, imagecopy);
+//    WriteImage(imagecopy, label);
+//}
 
 void Diagnostician::set_collect_pathnames(bool value)
 {

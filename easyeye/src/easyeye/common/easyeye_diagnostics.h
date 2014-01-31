@@ -49,8 +49,6 @@ private:
     bool write_original_;
     bool original_written_;
     std::string ToFilename(const std::string& label, const std::string& suffix);
-    void WriteImage(Masek::IMAGE* noiseImage, const char* label);
-    void WriteFilter(Masek::filter* noiseImage, const char* label);
 };
 
 class DiagnosticsCreator

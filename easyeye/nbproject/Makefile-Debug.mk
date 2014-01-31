@@ -53,7 +53,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/segment/FindEyelidMix.o \
 	${OBJECTDIR}/src/easyeye/segment/FindIrisCircle.o \
 	${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o \
-	${OBJECTDIR}/src/easyeye/segment/ImageUtility.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o
 
@@ -190,11 +189,6 @@ ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o: src/easyeye/segment/FindP
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o src/easyeye/segment/FindPupilCircleNew.cpp
-
-${OBJECTDIR}/src/easyeye/segment/ImageUtility.o: src/easyeye/segment/ImageUtility.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/ImageUtility.o src/easyeye/segment/ImageUtility.cpp
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o: src/easyeye/segment/easyeye_extrema_noise.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
@@ -618,19 +612,6 @@ ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o: ${OBJECTDIR}/src/e
 	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o src/easyeye/segment/FindPupilCircleNew.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o;\
-	fi
-
-${OBJECTDIR}/src/easyeye/segment/ImageUtility_nomain.o: ${OBJECTDIR}/src/easyeye/segment/ImageUtility.o src/easyeye/segment/ImageUtility.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/segment/ImageUtility.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/ImageUtility_nomain.o src/easyeye/segment/ImageUtility.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/easyeye/segment/ImageUtility.o ${OBJECTDIR}/src/easyeye/segment/ImageUtility_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o src/easyeye/segment/easyeye_extrema_noise.cpp 

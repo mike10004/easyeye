@@ -6,10 +6,12 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <jsoncpp/json/json.h>
 #include <cmath>
+#include "../common/mylog.h"
 
 using namespace easyeye;
 using namespace std;
 using namespace cv;
+using mylog::Logs;
 
 Mat Imaging::CreateGrayImage(int nrows, int ncols)
 {
@@ -284,4 +286,131 @@ uchar Imaging::Clamp(long value, uchar min_inclusive, uchar max_inclusive)
         return max_inclusive;
     }
     return (uchar) value;
+}
+
+void Imaging:: myXYRect(const cv::Mat& image, int x, int y, int width, int height, int* destVal)
+{  
+	int startX, endX, startY, endY;
+	startX = x-width;// X starting point
+	endX = x+width;// X end point	
+    startY = y-height;// Y starting point
+	endY = y+height;// Y end point
+
+	// Debugging
+	destVal[0] = clamp(startX, 1, image.cols);
+	destVal[1] = clamp(endX, 1, image.cols);	
+	destVal[2] = clamp(startY, 1, image.rows);
+	destVal[3] = clamp(endY, 1, image.rows);
+}
+
+float Imaging::myMean(const Mat& img)
+{
+	float mean = 0.0f;
+	double sum =0.0f;
+
+	for(int y=0; y< img.rows; y++)
+		for(int x=0; x< img.cols; x++)
+		{
+			sum += (unsigned char) img.data[y*img.cols+x];
+		}
+	mean = (float) sum / (float)(img.rows * img.cols);
+	return mean;
+}
+
+int Imaging::getValue(int value, int maxSize)
+{
+    return clamp(value, 1, maxSize);
+}
+
+float Imaging::mySD(const cv::Mat& image, double n, float mean)
+{
+	float variance = 0.0f, sd=0.0f;
+    const int GRAY_LEVEL = 256;
+	// Use a look-up table for faster calculation
+	double lookup[GRAY_LEVEL];
+	for (int val = 0; val < GRAY_LEVEL; val++) 
+	{
+		lookup[val] = pow((val - mean), 2);
+	}
+
+	for(int y=0; y<image.rows; y++)
+	{
+		for(int x=0; x<image.cols; x++)
+		{
+			unsigned char val = (unsigned char) image.data[y * image.cols + x];
+			variance += (float)lookup[val];
+		}
+	}
+	sd = sqrt(variance/(float)(n));
+	return sd;
+}
+
+Imaging::EyeImageROI Imaging::GetEyeImageROI(const cv::Mat& eye_img, cv::Point2i center,
+		int cr, int xLimit, int yLimit)
+{
+	Logs::GetLogger().Log(mylog::TRACE, "ImageUtility::setImage %dx%d center=(%d,%d) cr=%d, xLimit=%d, yLimit=%d\n",
+			eye_img.cols, eye_img.rows, center.x, center.y, cr, xLimit, yLimit);
+	EyeImageROI setVal;
+
+	// Initialize
+	setVal.rect.x = 0;
+	setVal.rect.y = 0;
+	setVal.rect.width = 0;
+	setVal.rect.height = 0;
+	setVal.p.x = 0;
+	setVal.p.y = 0;	
+			
+	if(center.x != 0 && center.y != 0 && cr != 0)
+	{
+		CvPoint newCircle;
+		int newRadius= cr;
+		
+		// Set ROI in the assumed iris area
+		int startX, endX, startY, endY;
+		
+		if(center.x-cr < 0)
+		{
+			startX = MAX(0, 0);
+			newCircle.x = center.x;
+		}
+		else
+		{
+			startX = MAX(center.x-xLimit, 0);
+			newCircle.x = xLimit;
+		}
+		
+		endX = MIN(center.x+xLimit, eye_img.cols);
+
+		if(center.y-cr < 0)
+		{
+			startY = MAX(0,0);
+			newCircle.y = center.y;
+		}
+		else
+		{
+			startY = MAX(center.y-yLimit, 0);
+			newCircle.y = yLimit;
+		}
+
+		endY = MIN(center.y+yLimit, eye_img.rows);
+		
+		// Return ROI and center points
+		setVal.rect.x = startX;
+		setVal.rect.y = startY;
+		setVal.rect.width = endX-startX;
+		setVal.rect.height = endY-startY;
+		setVal.p.x = newCircle.x;
+		setVal.p.y = newCircle.y;
+
+		if(setVal.p.x < 1 || setVal.p.y < 1)
+		{
+			Logs::GetLogger().Log(mylog::ERROR, "ImageUtility::setImage Failed to load ROI for new circle\n");
+		}
+	} else {
+		Logs::GetLogger().Log(mylog::ERROR, "ImageUtility::setImage did not attempt to load ROI for new circle\n");
+	}
+	Logs::GetLogger().Log(mylog::TRACE, "ImageUtility::setImage setVal.rect = %dx%d+%d+%d, setVal.p = %d,%d\n",
+				setVal.rect.width, setVal.rect.height, setVal.rect.x, setVal.rect.y,
+				setVal.p.x, setVal.p.y);
+	return setVal;
 }

@@ -26,7 +26,6 @@
         <itemPath>src/easyeye/segment/FindEyelidMix.h</itemPath>
         <itemPath>src/easyeye/segment/FindIrisCircle.h</itemPath>
         <itemPath>src/easyeye/segment/FindPupilCircleNew.h</itemPath>
-        <itemPath>src/easyeye/segment/ImageUtility.h</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.h</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.h</itemPath>
       </logicalFolder>
@@ -63,7 +62,6 @@
         <itemPath>src/easyeye/segment/FindEyelidMix.cpp</itemPath>
         <itemPath>src/easyeye/segment/FindIrisCircle.cpp</itemPath>
         <itemPath>src/easyeye/segment/FindPupilCircleNew.cpp</itemPath>
-        <itemPath>src/easyeye/segment/ImageUtility.cpp</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.cpp</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.cc</itemPath>
       </logicalFolder>
@@ -538,13 +536,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="src/easyeye/segment/ImageUtility.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/ImageUtility.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/easyeye/segment/easyeye_extrema_noise.cpp"
             ex="false"
             tool="1"
@@ -1012,13 +1003,6 @@
             ex="false"
             tool="3"
             flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/ImageUtility.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="src/easyeye/segment/ImageUtility.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/easyeye/segment/easyeye_extrema_noise.cpp"
             ex="false"

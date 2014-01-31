@@ -8,7 +8,7 @@
 
 #include "../common/easyeye_imaging.h"
 #include "easyeye_segment.h"
-#include "ImageUtility.h"
+
 #include "FindPupilCircleNew.h"
 #include "FindIrisCircle.h"
 #include "FindEyelidMix.h"
@@ -87,10 +87,10 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
     bpair.set_pupil(pupilCircle);
 	// Set-up ROI for detecting the iris circle
     const int rIrisMax = config_.iris_finder_config.max_radius();
-	ImageUtility::SETVALUE setVal = ImageUtility::setImage(eyeImg,
+    Imaging::EyeImageROI eye_image_roi = Imaging::GetEyeImageROI(eyeImg,
 			pupilCircle.center, bpair.pupilR, rIrisMax, rIrisMax);	//82 is the best for video images, previous 80
-    Mat setImg = Imaging::GetROI(eyeImg, setVal.rect.x, setVal.rect.width,
-			setVal.rect.y, setVal.rect.height);
+    Mat setImg = Imaging::GetROI(eyeImg, eye_image_roi.rect.x, eye_image_roi.rect.width,
+			eye_image_roi.rect.y, eye_image_roi.rect.height);
 	
 	/// \todo Possible to optimize?
 	// Define maximum distance between pupil and iris center position
@@ -103,7 +103,7 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 	CvPoint xyIrisIn;
 	xyIrisIn.x = bpair.irisX;
 	xyIrisIn.y = bpair.irisY;
-	cv::Point2i xyIris = iris_finder.getOriginPoints(pupilCircle.center, xyIrisIn, setVal.p);
+	cv::Point2i xyIris = iris_finder.getOriginPoints(pupilCircle.center, xyIrisIn, eye_image_roi.p);
 	bpair.irisX = xyIris.x;
 	bpair.irisY = xyIris.y;
     

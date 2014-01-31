@@ -1,6 +1,6 @@
 #include "../common/easyeye_imaging.h"
 #include "FindPupilCircleNew.h"
-#include "ImageUtility.h"
+
 #include "../common/easyeye_utils.h"
 #include "easyeye_segment.h"
 #include <vector>
@@ -146,9 +146,9 @@ int FindPupilCircleNew::getThreshold(Mat& image, int minVal)
 	
 	int n = image.rows * image.cols;
 	// Mean
-	float mean = ImageUtility::myMean(image);
+	float mean = Imaging::myMean(image);
 	// Standard Deviation
-	float sd = ImageUtility::mySD(image, n, mean);
+	float sd = Imaging::mySD(image, n, mean);
 
 	int threshold = 0;
 	// Find the threshold for the pupil boundaries

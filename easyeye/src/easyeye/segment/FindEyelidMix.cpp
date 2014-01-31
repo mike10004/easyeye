@@ -1,5 +1,5 @@
 #include "FindEyelidMix.h"
-#include "ImageUtility.h"
+
 #include "easyeye_segment.h"
 #include "../common/mylog.h"
 #include <iostream>
@@ -41,9 +41,9 @@ void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, E
 	
 	
 	// Detect the top and bottom eyelid points
-	int topHeight = ImageUtility::getValue(yPupil-irl, irl+yPupil);	
-	int bottomHeight = ImageUtility::getValue(iru-(yPupil+rPupil), iru);	
-	int centerX = ImageUtility::getValue(icl + (icu-icl)/2, image.cols);//eyeImage->hsize[1]);
+	int topHeight = Imaging::getValue(yPupil-irl, irl+yPupil);	
+	int bottomHeight = Imaging::getValue(iru-(yPupil+rPupil), iru);	
+	int centerX = Imaging::getValue(icl + (icu-icl)/2, image.cols);//eyeImage->hsize[1]);
     Mat top_eyelid = Imaging::GetROI(image, icl, icu-icl, irl, topHeight);
     Mat bottom_eyelid = Imaging::GetROI(image, icl, icu-icl,
 			(int)(yPupil+rPupil+(bottomHeight*0.3)), (int)(bottomHeight*0.7));
@@ -66,13 +66,13 @@ void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, E
 	int adj = rIris/4;
 	int corRadius_X = cvRound(rIris*1.8)/2;
 	int corRadius_Y = (iru-irl)/2;
-	int corLeftCenter_X = ImageUtility::getValue(icl - (corRadius_X + adj), icl-1);
-	int corRightCenter_X = ImageUtility::getValue(icu + (corRadius_X + adj), image.cols - 1);
-	int corCenter_Y = ImageUtility::getValue(yIris+(rPupil/2), image.rows - 1);
+	int corLeftCenter_X = Imaging::getValue(icl - (corRadius_X + adj), icl-1);
+	int corRightCenter_X = Imaging::getValue(icu + (corRadius_X + adj), image.cols - 1);
+	int corCenter_Y = Imaging::getValue(yIris+(rPupil/2), image.rows - 1);
 
 	int leftDestVal[4], rightDestVal[4];
-	ImageUtility::myXYRect(image, corLeftCenter_X, corCenter_Y, corRadius_X, corRadius_Y, leftDestVal);
-	ImageUtility::myXYRect(image, corRightCenter_X, corCenter_Y, corRadius_X, corRadius_Y, rightDestVal);
+	Imaging::myXYRect(image, corLeftCenter_X, corCenter_Y, corRadius_X, corRadius_Y, leftDestVal);
+	Imaging::myXYRect(image, corRightCenter_X, corCenter_Y, corRadius_X, corRadius_Y, rightDestVal);
 
 	int leftStartX = leftDestVal[0];
 	int leftEndX = leftDestVal[1];
@@ -203,7 +203,7 @@ double FindEyelidMix::triLength(int a, int b)
 // Determine threshold value used to detect the eyelid corners
 int FindEyelidMix::doFindThres(const Mat& img, int thresRange)
 {
-	int mean = cvRound(ImageUtility::myMean(img));
+	int mean = cvRound(Imaging::myMean(img));
     int threshold = 0;
 	  if(mean!= 0)
 		  threshold= mean-32; // classical still images 
