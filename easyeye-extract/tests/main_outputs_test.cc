@@ -21,7 +21,7 @@ void testExtractWithDiagnostics() {
     string diag_file;
     diag_file.append(diags_dir);
     diag_file.append("/");
-    diag_file.append("gallery_022.bmp-1-segmentation.png");
+    diag_file.append("gallery_022-1-segmentation.png");
     unlink(diag_file.c_str());
     char* argv[] = {
         (char*) "./easyeye-extract",
