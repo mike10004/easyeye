@@ -17,3 +17,6 @@ build/
 dist/
 private/
 
+# for debian packaging
+/build/
+/stage/
