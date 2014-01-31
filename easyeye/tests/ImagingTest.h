@@ -13,8 +13,7 @@
 class ImagingTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(ImagingTest);
 
-    CPPUNIT_TEST(testMethod);
-    CPPUNIT_TEST(testFailedMethod);
+    CPPUNIT_TEST(testGetROI);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -25,8 +24,7 @@ public:
     void tearDown();
 
 private:
-    void testMethod();
-    void testFailedMethod();
+    void testGetROI();
 };
 
 #endif	/* IMAGINGTEST_H */

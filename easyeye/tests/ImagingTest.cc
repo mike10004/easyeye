@@ -40,7 +40,7 @@ void Describe(ostream& out, string name, Mat& image)
     out << name << ' ' << image.cols << 'x' << image.rows << " continuous = " << image.isContinuous() << "; submatrix = " << image.isSubmatrix() << endl;
 }
 
-void ImagingTest::testMethod() {
+void ImagingTest::testGetROI() {
     IplImage* ipl = cvLoadImage("../testdata/images/green-rectangle.png", CV_LOAD_IMAGE_GRAYSCALE);
     Mat mat = cv::imread("../testdata/images/green-rectangle.png", CV_LOAD_IMAGE_GRAYSCALE);
     
@@ -53,11 +53,9 @@ void ImagingTest::testMethod() {
     Describe(cerr, "ipl_roi", ipl_roi);
     Describe(cerr, "mat_roi", mat_roi);
 
+    CPPUNIT_ASSERT_EQUAL(ipl_roi->width, mat_roi.cols);
+    CPPUNIT_ASSERT_EQUAL(ipl_roi->height, mat_roi.rows);
+    
     cvReleaseImage(&ipl);
     cvReleaseImage(&ipl_roi);
 }
-
-void ImagingTest::testFailedMethod() {
-//    CPPUNIT_ASSERT(false);
-}
-
