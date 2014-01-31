@@ -12,8 +12,6 @@
 #include "easyeye_types.h"
 #include <iostream>
 #include <Masek.h>
-#include <json/json_object.h>
-#include <json/json_tokener.h>
 #include <jsoncpp/json/json.h>
 #include <vector>
 

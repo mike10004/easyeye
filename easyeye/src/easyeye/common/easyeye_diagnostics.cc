@@ -9,7 +9,6 @@
 #include <Masek.h>
 #include "easyeye_diagnostics.h"
 #include "easyeye_types.h"
-#include "src/easyeye/segment/FindEyelidMix.h"
 #include "easyeye_utils.h"
 #include "mylog.h"
 
@@ -167,6 +166,22 @@ void Diagnostician::DumpEncodeOutput(const int width, const int height, const in
     }
 }
 
+static void DrawEyelidEllipse(cv::Mat& eye_image, const EyelidsLocation& eyelids_location, const Scalar color)
+{
+      const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
+      int width = eyelids_location.ellipse_vals[2], 
+              topHeight = eyelids_location.ellipse_vals[3], 
+              bottomHeight = eyelids_location.ellipse_vals[4];
+      double angle = eyelids_location.angle;
+      int rows = eye_image.rows, cols = eye_image.cols;
+      int thickness = 3;
+      Size top_size(width, topHeight);
+      Size bottom_size(width, bottomHeight);
+      cv::ellipse(eye_image, center, top_size, angle, 0, 180, color, thickness, CV_AA, 0);
+      cv::ellipse(eye_image, center, bottom_size, angle, 180, 360, color, thickness, CV_AA, 0);
+}
+
+
 void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation& eyelids, cv::SparseMat& extrema_noise)
 {
     if (disabled()) return;
@@ -174,7 +189,7 @@ void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation&
             eyelid_color(0x0, 0xff, 0x0);
     int thickness = 2, line_type = 8;
     Mat eye_image = cv::imread(eye_image_pathname_, CV_LOAD_IMAGE_COLOR);
-    FindEyelidMix::DrawEyelidEllipse(eye_image, eyelids, eyelid_color);
+    DrawEyelidEllipse(eye_image, eyelids, eyelid_color);
     SparseMatConstIterator_<uchar>
     it = extrema_noise.begin<uchar>(),
     it_end = extrema_noise.end<uchar>();

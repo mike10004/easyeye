@@ -1,5 +1,5 @@
 /* 
- * File:   Diagnostics.h
+ * File:   easyeye_diagnostics.h
  * Author: mchaberski
  *
  * Created on July 17, 2013, 11:26 AM

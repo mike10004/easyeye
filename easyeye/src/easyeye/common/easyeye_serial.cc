@@ -3,8 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <json/json_object.h>
-#include <json/json_tokener.h>
 #include "mylog.h"
 
 using namespace easyeye;

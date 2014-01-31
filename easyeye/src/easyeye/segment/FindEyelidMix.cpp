@@ -336,21 +336,6 @@ Mat FindEyelidMix::getNoiseImage(const Mat& eye_image, const EyelidsLocation& ey
       return noise_image;
 }
 
-void FindEyelidMix::DrawEyelidEllipse(cv::Mat& eye_image, const EyelidsLocation& eyelids_location, const Scalar color)
-{
-      const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
-      int width = eyelids_location.ellipse_vals[2], 
-              topHeight = eyelids_location.ellipse_vals[3], 
-              bottomHeight = eyelids_location.ellipse_vals[4];
-      double angle = eyelids_location.angle;
-      int rows = eye_image.rows, cols = eye_image.cols;
-      int thickness = 3;
-      Size top_size(width, topHeight);
-      Size bottom_size(width, bottomHeight);
-      cv::ellipse(eye_image, center, top_size, angle, 0, 180, color, thickness, CV_AA, 0);
-      cv::ellipse(eye_image, center, bottom_size, angle, 180, 360, color, thickness, CV_AA, 0);
-}
-
 cv::Mat FindEyelidMix::CreateNoiseImage(cv::Mat& image, const EyelidsLocation& eyelids_location)
 {
 // Two methods

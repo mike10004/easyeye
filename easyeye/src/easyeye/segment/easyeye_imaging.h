@@ -15,7 +15,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <Masek.h>
-#include <json/json_object.h>
 #include "../common/base64.h"
 #include <string>
 

@@ -10,8 +10,6 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <json/json_object.h>
-#include <json/json_tokener.h>
 #include "SegmentationSerializerTest.h"
 #include "../src/easyeye/segment/easyeye_segment.h"
 #include "../src/easyeye/common/mylog.h"

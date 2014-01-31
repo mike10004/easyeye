@@ -18,8 +18,6 @@
 #include "../common/base64.h"
 #include <iostream>
 #include <string>
-#include <json/json_object.h>
-#include <json/json_tokener.h>
 
 using mylog::Logs;
 using mylog::TRACE;

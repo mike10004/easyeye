@@ -18,7 +18,6 @@
 #include <iostream>
 #include "../common/easyeye_diagnostics.h"
 #include "../common/easyeye_config.h"
-#include <json/json_tokener.h>
 
 namespace easyeye
 {

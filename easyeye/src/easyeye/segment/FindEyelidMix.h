@@ -59,7 +59,6 @@ public:
 	*/
     void doFindPoints(cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location);
     static cv::Mat CreateNoiseImage(cv::Mat& image, const EyelidsLocation& eyelids_location);
-    static void DrawEyelidEllipse(cv::Mat& eye_image, const EyelidsLocation& eyelids_location, const cv::Scalar color);
     const static int ANGLE_DEST_VAL_LEN = 1;
 	/// FUTURE WORK.
 	//Masek::IMAGE* removeReflections(IplImage* eyeImg, IplImage* noiseImg, int eyelashThres, int reflectThres);
