@@ -16,14 +16,6 @@
 #include "../common/base64.h"
 #include <vector>
 
-/*
- * The EasyEye source distribution contains json-c sources so that Windows users
- * don't have to retrieve them separately. Non-windows users have an easier time
- * installing the json-c development files (apt-get install libjson-c-dev), so we
- * don't bother for them. But the json-c sources included with the EasyEye sources
- * are in the json-c-0.11 subdirectory, so we add that as an include directory to 
- * the compiler settings and declare a different path in this #include directive.
- */
 #ifdef _WIN32
 #include <jsoncpp.h>
 #else
@@ -33,14 +25,6 @@
 using namespace easyeye;
 using namespace std;
 using mylog::Logs;
-
-//const char * Encoding::key_width = "width";
-//const char * Encoding::key_height = "height";
-//const char * Encoding::key_irisTemplate = "irisTemplate";
-//const char * Encoding::key_irisMask = "irisMask";
-//const char * Encoding::key_arrayEncoding = "arrayEncoding";
-//const char * Encoding::value_arrayEncoding_ZeroAndOneChars = "ZeroAndOneChars";
-//const char * Encoding::value_arrayEncoding_Base64 = "Base64";
 
 int Encoding::CalculateTemplateLength(const int nscales, const int angularResolution, const int radialResolution)
 {
