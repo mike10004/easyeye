@@ -44,7 +44,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/common/easyeye_utils.o \
 	${OBJECTDIR}/src/easyeye/common/mylog.o \
 	${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o \
+	${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o \
 	${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o \
+	${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o \
 	${OBJECTDIR}/src/easyeye/match/HDCalculator.o \
 	${OBJECTDIR}/src/easyeye/match/easyeye_match.o \
 	${OBJECTDIR}/src/easyeye/segment/FindEyelidMix.o \
@@ -143,10 +145,20 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o: src/easyeye/encode/easyeye_enc
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o src/easyeye/encode/easyeye_encode.cc
 
+${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o: src/easyeye/encode/easyeye_encoding.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o src/easyeye/encode/easyeye_encoding.cc
+
 ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o: src/easyeye/encode/easyeye_encoding_serial.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o src/easyeye/encode/easyeye_encoding_serial.cc
+
+${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o: src/easyeye/encode/easyeye_normalize.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o src/easyeye/encode/easyeye_normalize.cc
 
 ${OBJECTDIR}/src/easyeye/match/HDCalculator.o: src/easyeye/match/HDCalculator.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/match
@@ -474,6 +486,19 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_encode_nomain.o: ${OBJECTDIR}/src/easyey
 	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o: ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o src/easyeye/encode/easyeye_encoding.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o src/easyeye/encode/easyeye_encoding.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o: ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o src/easyeye/encode/easyeye_encoding_serial.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o`; \
@@ -485,6 +510,19 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o: ${OBJECTDIR}/s
 	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o src/easyeye/encode/easyeye_encoding_serial.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o: ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o src/easyeye/encode/easyeye_normalize.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../optimasek/include -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o src/easyeye/encode/easyeye_normalize.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/easyeye/match/HDCalculator_nomain.o: ${OBJECTDIR}/src/easyeye/match/HDCalculator.o src/easyeye/match/HDCalculator.cc 

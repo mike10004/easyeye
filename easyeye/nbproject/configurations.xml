@@ -914,7 +914,17 @@
             tool="1"
             flavor2="0">
       </item>
+      <item path="src/easyeye/encode/easyeye_encoding.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/encode/easyeye_encoding_serial.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/encode/easyeye_normalize.cc"
             ex="false"
             tool="1"
             flavor2="0">

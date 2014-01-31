@@ -1,5 +1,5 @@
 #include "easyeye_imaging.h"
-#include "src/easyeye/common/base64.h"
+#include "../common/base64.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <cstring>

@@ -11,7 +11,7 @@
 #include <Masek.h>
 #include "../common/easyeye_types.h"
 #include "easyeye_encode.h"
-#include "src/easyeye/segment/easyeye_imaging.h"
+#include "../segment/easyeye_imaging.h"
 #include "../segment/FindEyelidMix.h"
 #include <portability.h>
 
