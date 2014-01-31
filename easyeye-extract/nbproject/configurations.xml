@@ -22,6 +22,12 @@
       <logicalFolder name="f3" displayName="main" projectFiles="true" kind="TEST">
         <itemPath>tests/easyeye_extract_main_test.cc</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="main_outputs"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/main_outputs_test.cc</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="options" projectFiles="true" kind="TEST">
         <itemPath>tests/options_test.cc</itemPath>
       </logicalFolder>
@@ -134,6 +140,21 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f3">
         <cTool>
           <incDir>
@@ -154,6 +175,8 @@
       <item path="src/easyeye_extract_main.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/easyeye_extract_main_test.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/main_outputs_test.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/options_test.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -265,6 +288,21 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f3">
         <cTool>
           <incDir>
@@ -285,6 +323,8 @@
       <item path="src/easyeye_extract_main.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/easyeye_extract_main_test.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/main_outputs_test.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/options_test.cc" ex="false" tool="1" flavor2="0">
       </item>

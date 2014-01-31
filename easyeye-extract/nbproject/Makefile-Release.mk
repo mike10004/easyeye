@@ -43,6 +43,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f3 \
+	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f1
 
 # C Compiler Flags
@@ -89,6 +90,10 @@ ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/easyeye_extract_main_test.o ${OBJECTFI
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/main_outputs_test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/options_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
@@ -98,6 +103,12 @@ ${TESTDIR}/tests/easyeye_extract_main_test.o: tests/easyeye_extract_main_test.cc
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../easyeye/src -I../optimasek/include -Isrc -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/easyeye_extract_main_test.o tests/easyeye_extract_main_test.cc
+
+
+${TESTDIR}/tests/main_outputs_test.o: tests/main_outputs_test.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../easyeye/src -I../optimasek/include -Isrc -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/main_outputs_test.o tests/main_outputs_test.cc
 
 
 ${TESTDIR}/tests/options_test.o: tests/options_test.cc 
@@ -124,6 +135,7 @@ ${OBJECTDIR}/src/easyeye_extract_main_nomain.o: ${OBJECTDIR}/src/easyeye_extract
 	@if [ "${TEST}" = "" ]; \
 	then  \
 	    ${TESTDIR}/TestFiles/f3 || true; \
+	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
 	    ./${TEST} || true; \

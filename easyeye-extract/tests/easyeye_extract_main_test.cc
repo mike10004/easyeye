@@ -94,9 +94,9 @@ int main(int argc, char** argv) {
     testExtractAndDoNotWrite();
     std::cout << "%TEST_FINISHED% time=0 testExtractAndDoNotWrite (easyeye_extract_main_test)" << std::endl;
 
-    std::cout << "%TEST_STARTED% testExtractAndWriteNull (easyeye_extract_main_test)" << std::endl;
+    std::cout << "%TEST_STARTED% testExtractAndWriteNullWithCsvStdout (easyeye_extract_main_test)" << std::endl;
     testExtractAndWriteNull();
-    std::cout << "%TEST_FINISHED% time=0 testExtractAndWriteNull (easyeye_extract_main_test)" << std::endl;
+    std::cout << "%TEST_FINISHED% time=0 testExtractAndWriteNullWithCsvStdout (easyeye_extract_main_test)" << std::endl;
 
     std::cout << "%TEST_STARTED% testExtractAndWrite (easyeye_extract_main_test)" << std::endl;
     testExtractAndWrite();
