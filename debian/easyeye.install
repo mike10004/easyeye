@@ -1,0 +1,5 @@
+#MAIN#
+usr/bin/easyeye-extract
+usr/bin/easyeye-compare
+usr/share/man/man1/easyeye-compare.1
+usr/share/man/man1/easyeye-extract.1

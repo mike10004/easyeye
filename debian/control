@@ -1,0 +1,41 @@
+Source: easyeye
+Section: misc
+Priority: extra
+Maintainer: Michael Chaberski <mchaberski+dev@gmail.com>
+Build-Depends: debhelper (>= 9), libopencv-core-dev, libopencv-highgui-dev, libopencv-objdetect-dev, libopencv-imgproc-dev, libjsoncpp-dev, libcppunit-dev, uuid-dev, help2man
+Standards-Version: 3.9.4
+Homepage: https://github.com/mike10004/easyeye
+#Vcs-Git: git://git.debian.org/collab-maint/easyeye.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/easyeye.git;a=summary
+
+Package: easyeye
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libopencv-core2.4, libopencv-highgui2.4, libopencv-imgproc2.4, libopencv-objdetect2.4, libjsoncpp0
+Description: iris image analysis and feature encoding software
+ EasyEye is iris image analysis software. It is a suite of command-line 
+ utilities that analyze iris images, encode iris features, and match 
+ iris encodings. 
+ .
+ The origin of the iris image analysis source code is the VASIR project
+ (Video-based Automatic System for Iris Recognition) from NIST. The code
+ is reorganized and refactored to facilitate development.
+ .
+ This package contains the executable programs that analyze iris images,
+ encode features, and compare encodings to produce match scores.
+
+Package: libeasyeye-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, easyeye
+Description: development files for easyeye
+ EasyEye is iris image analysis software. It is a suite of command-line 
+ utilities that analyze iris images, encode iris features, and match 
+ iris encodings. 
+ .
+ The origin of the iris image analysis source code is the VASIR project
+ (Video-based Automatic System for Iris Recognition) from NIST. The code
+ is reorganized and refactored to facilitate development.
+ .
+ This package contains the headers and static libraries that can be 
+ used to integrate easyeye in new programs.
+

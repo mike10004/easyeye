@@ -1,0 +1,6 @@
+easyeye (0.1.0-2mikeppa1) saucy; urgency=low
+
+  * Fixed multiarch incompatibility in debian/libeasyeye-dev.install 
+  * Initial release (Closes: #101)
+
+ -- Michael Chaberski <mchaberski+dev@gmail.com>  Fri, 31 Jan 2014 11:58:28 -0500
