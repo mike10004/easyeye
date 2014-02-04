@@ -96,11 +96,11 @@ void Extract::PrintCsvResult(const string& image_pathname, const Segmentation& s
     *csv_out << image_pathname << delim 
             << Result::DescribeStatus(seg.status) << delim
             << seg.boundary_pair.irisX << delim
-            << seg.boundary_pair.irisY << delim
-            << seg.boundary_pair.irisR << delim
-            << seg.boundary_pair.pupilX << delim
-            << seg.boundary_pair.pupilY << delim
-            << seg.boundary_pair.pupilR 
+            << seg.boundary_pair.iris.center.y << delim
+            << seg.boundary_pair.iris.radius << delim
+            << seg.boundary_pair.pupil.center.x << delim
+            << seg.boundary_pair.pupil.center.y << delim
+            << seg.boundary_pair.pupil.radius 
             << endl;
 }
 

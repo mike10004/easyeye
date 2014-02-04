@@ -64,8 +64,8 @@ vector<SegResult> ReadExpecteds() {
         cerr << "input: \"" << line << "\"" << endl;
         istringstream line_in(line);
         line_in >> r.image_filename 
-                >> r.bp.irisX >> r.bp.irisY >> r.bp.irisR
-                >> r.bp.pupilX >> r.bp.pupilY >> r.bp.pupilR
+                >> r.bp.iris.center.x >> r.bp.iris.center.y >> r.bp.iris.radius
+                >> r.bp.pupil.center.x >> r.bp.pupil.center.y >> r.bp.pupil.radius
                 >> r.pupil2.center.x >> r.pupil2.center.y >> r.pupil2.radius 
                 >> r.eyelid1 >> r.eyelid2 >> r.eyelid3 >> r.eyelid4 >> r.eyelid5
                 >> r.eyelid_angle;
@@ -92,8 +92,8 @@ bool Compare(SegResult& expected, Segmentation& actual)
 {
     double center_tolerance = 10.0;
     int radius_tolerance = 6;
-    return Compare(expected.bp.iris(), actual.boundary_pair.iris(), center_tolerance, radius_tolerance)
-            && Compare(expected.bp.pupil(), actual.boundary_pair.pupil(), center_tolerance, radius_tolerance);
+    return Compare(expected.bp.iris, actual.boundary_pair.iris, center_tolerance, radius_tolerance)
+            && Compare(expected.bp.pupil, actual.boundary_pair.pupil, center_tolerance, radius_tolerance);
 }
 
 void VasirComparisonTest::testAgainstVasirResults() {

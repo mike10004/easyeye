@@ -77,8 +77,8 @@ void Encoder::NormalizeIris(const Mat& src_eye_image, const Segmentation& segmen
     
     Masek::filter* imgWithNoise = Imaging::CopyToFilter(img_with_noise);
 	masek.normaliseiris(imgWithNoise,
-			segmentation.boundary_pair.irisX, segmentation.boundary_pair.irisY, segmentation.boundary_pair.irisR,
-			segmentation.boundary_pair.pupilX, segmentation.boundary_pair.pupilY, segmentation.boundary_pair.pupilR,
+			segmentation.boundary_pair.iris.center.x, segmentation.boundary_pair.iris.center.y, segmentation.boundary_pair.iris.radius,
+			segmentation.boundary_pair.pupil.center.x, segmentation.boundary_pair.pupil.center.y, segmentation.boundary_pair.pupil.radius,
 			config_.radialRes, config_.angularRes, &polarArray, &noiseArray);
 	Imaging::FreeFilter(imgWithNoise);
 	result.status = Result::SUCCESS;

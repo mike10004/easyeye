@@ -22,8 +22,8 @@ FindEyelidMix::FindEyelidMix(EyelidFinderConfig config)
 
 void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location)
 {
-    int xPupil = bp.pupilX, yPupil = bp.pupilY, rPupil = bp.pupilR;
-    int yIris = bp.irisY, xIris = bp.irisX, rIris = bp.irisR;
+    int xPupil = bp.pupil.center.x, yPupil = bp.pupil.center.y, rPupil = bp.pupil.radius;
+    int yIris = bp.iris.center.y, xIris = bp.iris.center.x, rIris = bp.iris.radius;
     const IrisImageType dataType = config_.iris_image_type;
 	Logs::GetLogger().Log(mylog::TRACE, "FindEyelidMix::doFindPoints image %d x %d, pupil (%d, %d) r = %d, iris (%d, %d) r = %d, dataType = %d\n",
 			image.cols, image.rows, xPupil, yPupil, rPupil, xIris, yIris, rIris, dataType);

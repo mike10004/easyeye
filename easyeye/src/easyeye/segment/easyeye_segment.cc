@@ -88,7 +88,7 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 	// Set-up ROI for detecting the iris circle
     const int rIrisMax = config_.iris_finder_config.max_radius();
     Imaging::EyeImageROI eye_image_roi = Imaging::GetEyeImageROI(eyeImg,
-			pupilCircle.center, bpair.pupilR, rIrisMax, rIrisMax);	//82 is the best for video images, previous 80
+			pupilCircle.center, bpair.pupil.radius, rIrisMax, rIrisMax);	//82 is the best for video images, previous 80
     Mat setImg = Imaging::GetROI(eyeImg, eye_image_roi.rect.x, eye_image_roi.rect.width,
 			eye_image_roi.rect.y, eye_image_roi.rect.height);
 	
@@ -98,14 +98,14 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 
 	// Find iris circle using Hough Transform
 	FindIrisCircle iris_finder(config_.iris_finder_config);
-    IntCircle irisCircle = iris_finder.doDetect(setImg, bpair.pupilR);
+    IntCircle irisCircle = iris_finder.doDetect(setImg, bpair.pupil.radius);
     bpair.set_iris(irisCircle);
 	CvPoint xyIrisIn;
-	xyIrisIn.x = bpair.irisX;
-	xyIrisIn.y = bpair.irisY;
+	xyIrisIn.x = bpair.iris.center.x;
+	xyIrisIn.y = bpair.iris.center.y;
 	cv::Point2i xyIris = iris_finder.getOriginPoints(pupilCircle.center, xyIrisIn, eye_image_roi.p);
-	bpair.irisX = xyIris.x;
-	bpair.irisY = xyIris.y;
+	bpair.iris.center.x = xyIris.x;
+	bpair.iris.center.y = xyIris.y;
     
 	// Find the upper and lower eyelid(s)
 	FindEyelidMix eyelid_finder(config_.eyelid_finder_config);

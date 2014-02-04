@@ -45,8 +45,8 @@ void serial::BoundaryPairAdapter::ToJson(void* src, Json::Value& dst)
 {
     BoundaryPair& bp = *((BoundaryPair*)src);
     Json::Value iris, pupil;
-    Serialize(bp.iris(), iris);
-    Serialize(bp.pupil(), pupil);
+    Serialize(bp.iris, iris);
+    Serialize(bp.pupil, pupil);
     dst["iris"] = iris;
     dst["pupil"] = pupil;
 }

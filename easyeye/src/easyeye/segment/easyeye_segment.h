@@ -1,5 +1,5 @@
 /*
- * vasirsegment.h
+ * easyeye_segment.h
  *
  *  Created on: Jul 11, 2013
  *      Author: mchaberski
@@ -8,6 +8,7 @@
 #ifndef EASYEYE_SEGMENT_H_
 #define EASYEYE_SEGMENT_H_
 
+#include <vector>
 #include "../common/easyeye_imaging.h"
 #include "../common/easyeye_serial.h"
 #include "../common/easyeye_utils.h"
@@ -31,6 +32,8 @@ public:
     typedef Result::ResultType Status;
     Status status;
 	BoundaryPair boundary_pair;
+    std::vector<cv::Point2i> iris_boundary;
+    std::vector<cv::Point2i> pupil_boundary;
     EyelidsLocation eyelids_location;
     cv::SparseMat extrema_noise;
     void Describe(std::ostream& out) const;

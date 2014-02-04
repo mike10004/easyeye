@@ -37,16 +37,16 @@ class BoundaryPair
 public:
 	BoundaryPair();
 
-	int irisX;
-	int irisY;
-	int irisR;
-	int pupilX, pupilY, pupilR;
+//	int irisX;
+//	int irisY;
+//	int irisR;
+//	int pupilX, pupilY, pupilR;
     void Describe(std::ostream& out) const;
     bool Equals(const BoundaryPair& other) const;
     void set_iris(const IntCircle& iris);
     void set_pupil(const IntCircle& pupil);
-    IntCircle iris() const;
-    IntCircle pupil() const;
+    IntCircle iris;
+    IntCircle pupil;
 private:
     static void DescribeBoundary(std::ostream& out, int x, int y, int r);
 };

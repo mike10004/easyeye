@@ -161,9 +161,9 @@ void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation&
         Vec3b* p = eye_image.ptr<Vec3b>(y, x);
         for (int j = 0; j < 3; j++) p[j] = noise_color[j];
     }
-    Point iris_center(bp.irisX, bp.irisY);
-    Point pupil_center(bp.pupilX, bp.pupilY);
-    int iris_radius = bp.irisR, pupil_radius = bp.pupilR;
+    Point iris_center(bp.iris.center.x, bp.iris.center.y);
+    Point pupil_center(bp.pupil.center.x, bp.pupil.center.y);
+    int iris_radius = bp.iris.radius, pupil_radius = bp.pupil.radius;
     cv::circle(eye_image, iris_center, iris_radius, iris_color, thickness, line_type);
     cv::circle(eye_image, pupil_center, pupil_radius, pupil_color, thickness, line_type);
     WriteImage(eye_image, "segmentation");

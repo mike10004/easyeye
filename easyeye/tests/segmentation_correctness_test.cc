@@ -31,80 +31,80 @@ static bool write_segmentation_serializations = false;
 void populateExpectedBoundaryPairs() 
 {
     int k = 0;
-    expected_boundary_pairs[k].irisX = 401;
-    expected_boundary_pairs[k].irisY = 271;
-    expected_boundary_pairs[k].irisR = 140;
-    expected_boundary_pairs[k].pupilX = 400;
-    expected_boundary_pairs[k].pupilY = 278;
-    expected_boundary_pairs[k].pupilR = 40;
+    expected_boundary_pairs[k].iris.center.x = 401;
+    expected_boundary_pairs[k].iris.center.y = 271;
+    expected_boundary_pairs[k].iris.radius = 140;
+    expected_boundary_pairs[k].pupil.center.x = 400;
+    expected_boundary_pairs[k].pupil.center.y = 278;
+    expected_boundary_pairs[k].pupil.radius = 40;
     k = 1;
-    expected_boundary_pairs[k].irisX = 202;
-    expected_boundary_pairs[k].irisY = 272;
-    expected_boundary_pairs[k].irisR = 117;
-    expected_boundary_pairs[k].pupilX = 204;
-    expected_boundary_pairs[k].pupilY = 271;
-    expected_boundary_pairs[k].pupilR = 38;
+    expected_boundary_pairs[k].iris.center.x = 202;
+    expected_boundary_pairs[k].iris.center.y = 272;
+    expected_boundary_pairs[k].iris.radius = 117;
+    expected_boundary_pairs[k].pupil.center.x = 204;
+    expected_boundary_pairs[k].pupil.center.y = 271;
+    expected_boundary_pairs[k].pupil.radius = 38;
     k = 2;
-    expected_boundary_pairs[k].irisX = 254;
-    expected_boundary_pairs[k].irisY = 259;
-    expected_boundary_pairs[k].irisR = 145;
-    expected_boundary_pairs[k].pupilX = 253;
-    expected_boundary_pairs[k].pupilY = 258;
-    expected_boundary_pairs[k].pupilR = 46;
+    expected_boundary_pairs[k].iris.center.x = 254;
+    expected_boundary_pairs[k].iris.center.y = 259;
+    expected_boundary_pairs[k].iris.radius = 145;
+    expected_boundary_pairs[k].pupil.center.x = 253;
+    expected_boundary_pairs[k].pupil.center.y = 258;
+    expected_boundary_pairs[k].pupil.radius = 46;
     k = 3;
-    expected_boundary_pairs[k].irisX = 388;
-    expected_boundary_pairs[k].irisY = 258;
-    expected_boundary_pairs[k].irisR = 120;
-    expected_boundary_pairs[k].pupilX = 385;
-    expected_boundary_pairs[k].pupilY = 257;
-    expected_boundary_pairs[k].pupilR = 43;
+    expected_boundary_pairs[k].iris.center.x = 388;
+    expected_boundary_pairs[k].iris.center.y = 258;
+    expected_boundary_pairs[k].iris.radius = 120;
+    expected_boundary_pairs[k].pupil.center.x = 385;
+    expected_boundary_pairs[k].pupil.center.y = 257;
+    expected_boundary_pairs[k].pupil.radius = 43;
     k = 4;
-    expected_boundary_pairs[k].irisX = 244;
-    expected_boundary_pairs[k].irisY = 258;
-    expected_boundary_pairs[k].irisR = 122;
-    expected_boundary_pairs[k].pupilX = 246;
-    expected_boundary_pairs[k].pupilY = 255;
-    expected_boundary_pairs[k].pupilR = 45;
+    expected_boundary_pairs[k].iris.center.x = 244;
+    expected_boundary_pairs[k].iris.center.y = 258;
+    expected_boundary_pairs[k].iris.radius = 122;
+    expected_boundary_pairs[k].pupil.center.x = 246;
+    expected_boundary_pairs[k].pupil.center.y = 255;
+    expected_boundary_pairs[k].pupil.radius = 45;
     k = 5;
-    expected_boundary_pairs[k].irisX = 343;
-    expected_boundary_pairs[k].irisY = 282;
-    expected_boundary_pairs[k].irisR = 145;
-    expected_boundary_pairs[k].pupilX = 352;
-    expected_boundary_pairs[k].pupilY = 281;
-    expected_boundary_pairs[k].pupilR = 39;
+    expected_boundary_pairs[k].iris.center.x = 343;
+    expected_boundary_pairs[k].iris.center.y = 282;
+    expected_boundary_pairs[k].iris.radius = 145;
+    expected_boundary_pairs[k].pupil.center.x = 352;
+    expected_boundary_pairs[k].pupil.center.y = 281;
+    expected_boundary_pairs[k].pupil.radius = 39;
     k = 6;
-    expected_boundary_pairs[k].irisX = 258;
-    expected_boundary_pairs[k].irisY = 260;
-    expected_boundary_pairs[k].irisR = 142;
-    expected_boundary_pairs[k].pupilX = 257;
-    expected_boundary_pairs[k].pupilY = 257;
-    expected_boundary_pairs[k].pupilR = 46;
+    expected_boundary_pairs[k].iris.center.x = 258;
+    expected_boundary_pairs[k].iris.center.y = 260;
+    expected_boundary_pairs[k].iris.radius = 142;
+    expected_boundary_pairs[k].pupil.center.x = 257;
+    expected_boundary_pairs[k].pupil.center.y = 257;
+    expected_boundary_pairs[k].pupil.radius = 46;
     k = 7;
-    expected_boundary_pairs[k].irisX = 274;
-    expected_boundary_pairs[k].irisY = 309;
-    expected_boundary_pairs[k].irisR = 137;
-    expected_boundary_pairs[k].pupilX = 241;
-    expected_boundary_pairs[k].pupilY = 296;
-    expected_boundary_pairs[k].pupilR = 41;
+    expected_boundary_pairs[k].iris.center.x = 274;
+    expected_boundary_pairs[k].iris.center.y = 309;
+    expected_boundary_pairs[k].iris.radius = 137;
+    expected_boundary_pairs[k].pupil.center.x = 241;
+    expected_boundary_pairs[k].pupil.center.y = 296;
+    expected_boundary_pairs[k].pupil.radius = 41;
     k = 8;
-    expected_boundary_pairs[k].irisX = 257;
-    expected_boundary_pairs[k].irisY = 263;
-    expected_boundary_pairs[k].irisR = 122;
-    expected_boundary_pairs[k].pupilX = 259;
-    expected_boundary_pairs[k].pupilY = 260;
-    expected_boundary_pairs[k].pupilR = 36;
+    expected_boundary_pairs[k].iris.center.x = 257;
+    expected_boundary_pairs[k].iris.center.y = 263;
+    expected_boundary_pairs[k].iris.radius = 122;
+    expected_boundary_pairs[k].pupil.center.x = 259;
+    expected_boundary_pairs[k].pupil.center.y = 260;
+    expected_boundary_pairs[k].pupil.radius = 36;
 }
 
 const int boundaryPairMaxDelta = 10;
 
 bool isBoundaryPairEquivalent(BoundaryPair& expected, BoundaryPair& actual)
 {
-    int ixDelta = abs(expected.irisX - actual.irisX);
-    int iyDelta = abs(expected.irisY - actual.irisY);
-    int irDelta = abs(expected.irisR - actual.irisR);
-    int pxDelta = abs(expected.pupilX - actual.pupilX);
-    int pyDelta = abs(expected.pupilY - actual.pupilY);
-    int prDelta = abs(expected.pupilR - actual.pupilR);
+    int ixDelta = abs(expected.iris.center.x - actual.iris.center.x);
+    int iyDelta = abs(expected.iris.center.y - actual.iris.center.y);
+    int irDelta = abs(expected.iris.radius - actual.iris.radius);
+    int pxDelta = abs(expected.pupil.center.x - actual.pupil.center.x);
+    int pyDelta = abs(expected.pupil.center.y - actual.pupil.center.y);
+    int prDelta = abs(expected.pupil.radius - actual.pupil.radius);
     cout << "deltas:" 
             << ' ' << ixDelta 
             << ' ' << iyDelta
@@ -125,8 +125,8 @@ bool isBoundaryPairEquivalent(BoundaryPair& expected, BoundaryPair& actual)
 void printResult(const char* eyeImagePathname, Segmentation& result) {
     const char* status = Result::DescribeStatus(result.status);
     cout << "  " << status << ' ' << eyeImagePathname << endl;
-    cout << "  iris  " << result.boundary_pair.irisX << ' ' << result.boundary_pair.irisY << ' ' << result.boundary_pair.irisR << endl;
-    cout << "  pupil " << result.boundary_pair.pupilX << ' ' << result.boundary_pair.pupilY << ' ' << result.boundary_pair.pupilR << endl;
+    cout << "  iris  " << result.boundary_pair.iris.center.x << ' ' << result.boundary_pair.iris.center.y << ' ' << result.boundary_pair.iris.radius << endl;
+    cout << "  pupil " << result.boundary_pair.pupil.center.x << ' ' << result.boundary_pair.pupil.center.y << ' ' << result.boundary_pair.pupil.radius << endl;
 }
 
 void stateFailed(const char* testname, const char* message) 
@@ -153,8 +153,8 @@ void printParamsAsCsv(ostream& out, const char* category, const char* eyeImagePa
 {
     cout << "CSV," 
             << "\"" << category << "\",\"" << eyeImagePathname 
-            << "\",\"circle " << bp.irisX << ' ' << bp.irisY << ' ' << bp.irisR 
-            << "\",\"circle " << bp.pupilX << ' ' << bp.pupilY << ' ' << bp.pupilR 
+            << "\",\"circle " << bp.iris.center.x << ' ' << bp.iris.center.y << ' ' << bp.iris.radius 
+            << "\",\"circle " << bp.pupil.center.x << ' ' << bp.pupil.center.y << ' ' << bp.pupil.radius 
             << "\"" << endl;
 }
 

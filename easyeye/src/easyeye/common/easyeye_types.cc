@@ -16,12 +16,8 @@ using namespace std;
 using namespace easyeye;
 
 BoundaryPair::BoundaryPair() :
-        irisX(0),
-        irisY(0),
-        irisR(0),
-        pupilX(0),
-        pupilY(0),
-        pupilR(0)
+        iris(),
+        pupil()
 {}
 
 void BoundaryPair::DescribeBoundary(ostream& out, int x, int y, int r)
@@ -32,20 +28,20 @@ void BoundaryPair::DescribeBoundary(ostream& out, int x, int y, int r)
 void BoundaryPair::Describe(ostream& out) const
 {
     out << "iris ";
-    DescribeBoundary(out, irisX, irisY, irisR);
+    DescribeBoundary(out, iris.center.x, iris.center.y, iris.radius);
     out << "; pupil ";
-    DescribeBoundary(out, pupilX, pupilY, pupilR);
+    DescribeBoundary(out, pupil.center.x, pupil.center.y, pupil.radius);
     
 }
 
 bool BoundaryPair::Equals(const BoundaryPair& other) const
 {
-    return irisX == other.irisX
-            && irisY == other.irisY
-            && irisR == other.irisR
-            && pupilX == other.pupilX
-            && pupilY == other.pupilY
-            && pupilR == other.pupilR;
+    return iris.center.x == other.iris.center.x
+            && iris.center.y == other.iris.center.y
+            && iris.radius == other.iris.radius
+            && pupil.center.x == other.pupil.center.x
+            && pupil.center.y == other.pupil.center.y
+            && pupil.radius == other.pupil.radius;
 }
 
 Result::Result() {}
@@ -61,18 +57,18 @@ const char* Result::DescribeStatus(const int result)
 }
   
 
-void BoundaryPair::set_iris(const IntCircle& iris) 
+void BoundaryPair::set_iris(const IntCircle& iris_) 
 {
-    irisX = iris.center.x;
-    irisY = iris.center.y;
-    irisR = iris.radius;
+    iris.center.x = iris_.center.x;
+    iris.center.y = iris_.center.y;
+    iris.radius = iris_.radius;
 }
 
-void BoundaryPair::set_pupil(const IntCircle& pupil) 
+void BoundaryPair::set_pupil(const IntCircle& pupil_) 
 {
-    pupilX = pupil.center.x;
-    pupilY = pupil.center.y;
-    pupilR = pupil.radius;
+    pupil.center.x = pupil_.center.x;
+    pupil.center.y = pupil_.center.y;
+    pupil.radius = pupil_.radius;
 }
 
 void IntCircle::CopyFrom(const IntCircle& other)
@@ -97,20 +93,7 @@ IntCircle::IntCircle(int x, int y, int r)
 IntCircle::IntCircle() 
     : center(0, 0), radius(0)
 {
-
 }
-
-IntCircle BoundaryPair::iris() const
-{
-    IntCircle circle(irisX, irisY, irisR);
-    return circle;
-}
-
-IntCircle BoundaryPair::pupil() const
-{
-    IntCircle circle(pupilX, pupilY, pupilR);
-    return circle;
-}        
 
 EyelidsLocation::EyelidsLocation()
 {
