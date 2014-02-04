@@ -145,6 +145,14 @@
         <itemPath>tests/testdata.h</itemPath>
         <itemPath>tests/utils_test.cc</itemPath>
       </logicalFolder>
+      <logicalFolder name="f13"
+                     displayName="vasir_comparison"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/VasirComparisonTest.cc</itemPath>
+        <itemPath>tests/VasirComparisonTest.h</itemPath>
+        <itemPath>tests/vasir_comparison_test_runner.cc</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -277,6 +285,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f12</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f13">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f13</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -590,6 +612,10 @@
       </item>
       <item path="tests/SegmentationSerializerTest.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests/VasirComparisonTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/VasirComparisonTest.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tests/base64_test.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/bitpacking_test_runner.cc" ex="false" tool="1" flavor2="0">
@@ -625,6 +651,11 @@
       <item path="tests/testutils_bitpacking.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/utils_test.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/vasir_comparison_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="3">
@@ -750,6 +781,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f12</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f13">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f13</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -1058,6 +1103,10 @@
       </item>
       <item path="tests/SegmentationSerializerTest.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests/VasirComparisonTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/VasirComparisonTest.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tests/base64_test.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/bitpacking_test_runner.cc" ex="false" tool="1" flavor2="0">
@@ -1093,6 +1142,11 @@
       <item path="tests/testutils_bitpacking.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/utils_test.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/vasir_comparison_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
     </conf>
   </confs>

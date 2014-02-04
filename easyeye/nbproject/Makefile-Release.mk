@@ -72,7 +72,8 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f6 \
-	${TESTDIR}/TestFiles/f8
+	${TESTDIR}/TestFiles/f8 \
+	${TESTDIR}/TestFiles/f13
 
 # C Compiler Flags
 CFLAGS=
@@ -253,6 +254,10 @@ ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/utils_test.o ${OBJECTFILES:%.o=%_nomai
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid 
 
+${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/VasirComparisonTest.o ${TESTDIR}/tests/vasir_comparison_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
+
 
 ${TESTDIR}/tests/base64_test.o: tests/base64_test.cc 
 	${MKDIR} -p ${TESTDIR}/tests
@@ -378,6 +383,18 @@ ${TESTDIR}/tests/utils_test.o: tests/utils_test.cc
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/utils_test.o tests/utils_test.cc
+
+
+${TESTDIR}/tests/VasirComparisonTest.o: tests/VasirComparisonTest.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/VasirComparisonTest.o tests/VasirComparisonTest.cc
+
+
+${TESTDIR}/tests/vasir_comparison_test_runner.o: tests/vasir_comparison_test_runner.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/vasir_comparison_test_runner.o tests/vasir_comparison_test_runner.cc
 
 
 ${OBJECTDIR}/src/easyeye/common/base64_nomain.o: ${OBJECTDIR}/src/easyeye/common/base64.o src/easyeye/common/base64.cc 
@@ -656,6 +673,7 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easy
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
+	    ${TESTDIR}/TestFiles/f13 || true; \
 	else  \
 	    ./${TEST} || true; \
 	fi
