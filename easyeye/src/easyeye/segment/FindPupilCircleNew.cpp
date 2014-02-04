@@ -38,7 +38,8 @@ static bool IsValidPupil(const IntCircle& pupil) {
  * default detection -- the center of the image, with radius equal to half
  * the limit -- is used
  */
-IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
+IntCircle FindPupilCircleNew::doDetect(const cv::Mat& eye_image,
+        std::vector<cv::Point> contour_coordinates)
 {	
     if (!Imaging::IsGray(eye_image)) {
         Logs::GetLogger().Log(mylog::WARN, "FindPupilCircleNew::doDetect image is not " 
@@ -95,7 +96,7 @@ IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
 	// First attempt
 	while(size > 2 && dstVal.radius < 1) {
 		for(int i=threshold; i >= 0; i=i-m) {//orgin i--;
-			getCoordinates(eye_image, closeItr, openItr, i, size, dstVal, candidate);
+			getCoordinates(eye_image, closeItr, openItr, i, size, dstVal, candidate, contour_coordinates);
             if (IsValidPupil(dstVal)) {
                 break;
             }
@@ -110,7 +111,7 @@ IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
 	while(dstVal.radius < 1 && size > 1) {
 		openItr=openItr+3; // Count region
 		for(int i=threshold+5; i <threshold+30 ; i=i+m) { //origin i=i++
-			getCoordinates(eye_image, closeItr, openItr, i, size, dstVal, candidate);
+			getCoordinates(eye_image, closeItr, openItr, i, size, dstVal, candidate, contour_coordinates);
             if (IsValidPupil(dstVal)) {
                 break;
             }
@@ -141,7 +142,7 @@ IntCircle FindPupilCircleNew::doDetect(Mat& eye_image)
     return dstVal;
 }
 
-int FindPupilCircleNew::getThreshold(Mat& image, int minVal)
+int FindPupilCircleNew::getThreshold(const Mat& image, int minVal)
 {
 	
 	int n = image.rows * image.cols;
@@ -161,9 +162,12 @@ int FindPupilCircleNew::getThreshold(Mat& image, int minVal)
 }
 
 /// \todo Code needs to be rearranged
-void FindPupilCircleNew::getCoordinates(Mat& eye_image, int closeItr, int openItr, int threshold, 
-									 float size, IntCircle& primary, IntCircle& candidate)
+void FindPupilCircleNew::getCoordinates(const Mat& eye_image, 
+        int closeItr, int openItr, int threshold, 
+        float size, IntCircle& primary, IntCircle& candidate, 
+        vector<Point>& contour_coordinates)
 {
+    contour_coordinates.clear();
     const int limitRadius = config_.max_radius();
     const int nScale = config_.nScale;
     const IrisImageType dataType = config_.iris_image_type;
@@ -191,11 +195,12 @@ void FindPupilCircleNew::getCoordinates(Mat& eye_image, int closeItr, int openIt
 	getMaxCount(contours, maxCount);
 		
 	// Get the pupil center and radius
-	getPupilPosition(contours, minCount, maxCount[0], size, primary, candidate);
-
+	int contour_index = getPupilPosition(contours, minCount, maxCount[0], size, primary, candidate);
+    vector<Point>& winning_contour = contours[contour_index];
+    Contours::AddAll(winning_contour, contour_coordinates);
 }
 
-void FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contours, int minCount, 
+int FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contours, int minCount, 
 										  int maxCount, float size, IntCircle& primary, IntCircle& candidate)
 {	
     const int limitRadius = config_.max_radius();
@@ -203,8 +208,10 @@ void FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contour
     const IrisImageType dataType = config_.iris_image_type;
 	cv::Point2i center;
 	int radius;
-    for (vector< vector<Point2i> >::iterator it = contours.begin(); it != contours.end(); ++it) {
-        vector<Point2i>& contour = *it;
+    int winner = -1;
+    for (size_t i = 0; i < contours.size(); i++) {
+        vector<Point2i>& contour = contours[i];
+        winner = i;
 		center.x = 0;
 		center.y = 0;
 		radius = 0;		
@@ -232,7 +239,7 @@ void FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contour
             }
 		}		
 	}
-    return;
+    return winner;
 }
 
 int FindPupilCircleNew::getRadius(int width, int height, float size)

@@ -8,6 +8,7 @@
 #ifndef EASYEYE_UTILS_H
 #define	EASYEYE_UTILS_H
 
+#include <list>
 #include <vector>
 #include <opencv2/core/core.hpp>
 #include <string>

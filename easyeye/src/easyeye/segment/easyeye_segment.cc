@@ -82,7 +82,7 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 
 	FindPupilCircleNew pupil_finder(config_.pupil_finder_config);
     pupil_finder.set_diagnostician(diagnostician_);
-    IntCircle pupilCircle = pupil_finder.doDetect(eyeImg);
+    IntCircle pupilCircle = pupil_finder.doDetect(eyeImg, seg.pupil_boundary);
 	BoundaryPair& bpair = seg.boundary_pair;
     bpair.set_pupil(pupilCircle);
 	// Set-up ROI for detecting the iris circle
@@ -98,9 +98,10 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 
 	// Find iris circle using Hough Transform
 	FindIrisCircle iris_finder(config_.iris_finder_config);
+    iris_finder.set_diagnostician(diagnostician_);
     IntCircle irisCircle = iris_finder.doDetect(setImg, bpair.pupil.radius);
     bpair.set_iris(irisCircle);
-	CvPoint xyIrisIn;
+	cv::Point2i xyIrisIn;
 	xyIrisIn.x = bpair.iris.center.x;
 	xyIrisIn.y = bpair.iris.center.y;
 	cv::Point2i xyIris = iris_finder.getOriginPoints(pupilCircle.center, xyIrisIn, eye_image_roi.p);
@@ -110,7 +111,6 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 	// Find the upper and lower eyelid(s)
 	FindEyelidMix eyelid_finder(config_.eyelid_finder_config);
 	eyelid_finder.doFindPoints(eyeImg, bpair, seg.eyelids_location);
-    Mat eyelidImg = eyelid_finder.CreateNoiseImage(eyeImg, seg.eyelids_location);
     ExtremaNoiseFinder extrema_noise_finder(config_.extrema_noise_finder_config);
 	extrema_noise_finder.FindExtremaNoise(eyeImg).copyTo(seg.extrema_noise);
     diagnostician()->DumpSegOutput(seg.boundary_pair, seg.eyelids_location, seg.extrema_noise);
@@ -192,4 +192,12 @@ bool serial::Deserialize(const std::string& json, Segmentation& data)
 {
     SegmentationAdapter adapter;
     return Deserialize(json, &adapter, data);
+}
+
+void Contours::AddAll(std::vector<Point>& from, std::vector<Point>& to)
+{
+    for (vector<Point>::iterator it = from.begin(); it != from.end(); ++it)
+    {
+        to.push_back(*it);
+    }
 }

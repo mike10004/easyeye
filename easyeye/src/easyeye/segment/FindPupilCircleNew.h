@@ -49,7 +49,7 @@ public:
 	*               - \c 1 = classic still image
 	*               - \c 2 = video captured at a distance (distant-videos)
 	*/
-	IntCircle doDetect(cv::Mat& img);	
+	IntCircle doDetect(const cv::Mat& img, std::vector<cv::Point> contour_coordinates);	
 	const static int DEST_VAL_LEN = 6;
 private:
     PupilFinderConfig config_;
@@ -62,7 +62,7 @@ private:
 	* @param minVal Minimum intensity within an image
 	* @return Threshold
 	*/
-	int getThreshold(cv::Mat& img, int minVal);
+	int getThreshold(const cv::Mat& img, int minVal);
 
 	/**
 	* Find the pupil's location from thresholding image
@@ -82,8 +82,8 @@ private:
 	*               - \c 1 = classic still image
 	*               - \c 2 = video captured at a distance (distant-videos)
 	*/
-	void getCoordinates(cv::Mat& grayImg, int closeItr, int openItr,
-		int threshold, float size, IntCircle& primary, IntCircle& candidate);
+	void getCoordinates(const cv::Mat& grayImg, int closeItr, int openItr,
+		int threshold, float size, IntCircle& primary, IntCircle& candidate, std::vector<cv::Point>& contour_points);
 	
 	/**
 	* Returns the radius of a pupil circle.
@@ -107,7 +107,7 @@ private:
 	* @param circles Returns the pupil center points and radius
     *     (Biggest circle-> 0:x, 1:y, 2:radius, Secondary circle->3:x, 4:y, 5:radius,)
     */
-	void getPupilPosition(std::vector< std::vector<cv::Point> >& contours, 
+	int getPupilPosition(std::vector< std::vector<cv::Point> >& contours, 
             int minCount, int maxCount, float size, IntCircle& primary, IntCircle& candidate);
 
 	/**
@@ -116,7 +116,7 @@ private:
 	* @param contour contour Sequences of points defining a curve within an image
 	* @param count Returns the maximum and second maximum contour point
 	*/
-	void getMaxCount(CvSeq* contour, int* count);
+	//void getMaxCount(CvSeq* contour, int* count);
 	void getMaxCount(std::vector< std::vector<cv::Point> >& contours, int* count);
 	/// Future work.
 	//static int fit_circle_radius(CvPoint* arrPt, int crx, int cry, int crar, int biggest_crar);

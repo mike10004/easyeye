@@ -80,6 +80,7 @@ class Contours
 public:
     static cv::RotatedRect fitEllipse(std::vector<cv::Point2i>& points);
     static cv::RotatedRect fitEllipse(std::vector<cv::Point2i>::iterator points_begin, std::vector<cv::Point2i>::iterator points_end);
+    static void AddAll(std::vector<cv::Point>& from, std::vector<cv::Point>& to);
 private:
     Contours();
 };
