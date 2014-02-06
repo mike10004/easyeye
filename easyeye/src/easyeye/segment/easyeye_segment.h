@@ -37,6 +37,8 @@ public:
     EyelidsLocation eyelids_location;
     cv::SparseMat extrema_noise;
     void Describe(std::ostream& out) const;
+    bool Equals(const Segmentation& other) const;
+    bool Equals(const Segmentation& other, int radius_delta) const;
 };
 
 class SegmenterConfig : public Config
