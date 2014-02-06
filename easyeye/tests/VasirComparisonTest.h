@@ -8,13 +8,15 @@
 #ifndef VASIRCOMPARISONTEST_H
 #define	VASIRCOMPARISONTEST_H
 
+#include <vector>
+#include "../src/easyeye/segment/easyeye_segment.h"
 #include <cppunit/extensions/HelperMacros.h>
 
 class VasirComparisonTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(VasirComparisonTest);
 
-    //CPPUNIT_TEST(testMethod);
-    CPPUNIT_TEST(testAgainstVasirResults);
+    CPPUNIT_TEST(testIrisBoundaryLocations);
+    CPPUNIT_TEST(testEyelidsLocations);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -26,7 +28,13 @@ public:
 
 private:
     //void testMethod();
-    void testAgainstVasirResults();
+    static std::vector<std::string> image_filenames;
+    static std::vector<easyeye::Segmentation> expecteds;
+    static std::vector<easyeye::Segmentation> actuals;
+    void ReadExpecteds();
+    void PerformSegmentation();
+    void testIrisBoundaryLocations();
+    void testEyelidsLocations();
 };
 
 #endif	/* VASIRCOMPARISONTEST_H */
