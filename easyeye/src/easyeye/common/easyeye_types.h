@@ -90,7 +90,7 @@ public:
     bool EqualsApprox(const EyelidsLocation& other) const;
     static const double DEFAULT_MAX_ANGLE_DELTA;
     bool Equals(const EyelidsLocation& other, double max_angle_delta) const;
-    bool Equals(const EyelidsLocation& other, int ellipse_deltas[], double max_angle_delta) const;
+    bool Equals(const EyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const;
     bool Equals(const EyelidsLocation& other, int ellipse_delta, double max_angle_delta) const;
     void Describe(std::ostream& out);
     std::string ToString();

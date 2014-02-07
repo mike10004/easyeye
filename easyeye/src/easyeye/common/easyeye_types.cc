@@ -209,7 +209,7 @@ string EyelidsLocation::ToString()
     return ss.str();
 }
 
-bool EyelidsLocation::Equals(const EyelidsLocation& other, int ellipse_deltas[], double max_angle_delta) const
+bool EyelidsLocation::Equals(const EyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const
 {
     if (abs(angle - other.angle) > max_angle_delta) {
         return false;
