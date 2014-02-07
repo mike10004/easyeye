@@ -43,7 +43,7 @@ void FindEyelidsTest::testDetectionCorrectness() {
         CPPUNIT_ASSERT(serial::Deserialize(Files::Read(serialized_segmentations[i]), seg));
         EyelidFinderConfig config;
         FindEyelidMix eyelid_finder(config);
-        int max_delta[] = { 3, 3, 3, 84, 3 }; // temp until we find bug in eyelid finder
+        const int max_delta[] = { 3, 3, 3, 3, 3 }; 
         EyelidsLocation& expected = seg.eyelids_location;
         cerr << i << " expected: " << expected.ToString() << endl;
         EyelidsLocation actual;

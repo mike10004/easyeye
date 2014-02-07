@@ -94,18 +94,19 @@ void VasirComparisonTest::ReadExpecteds() {
     cerr << expecteds.size() << " expected segmentations read from " << expecteds_file << endl;
 } 
 
+static const int max_ellipse_deltas[] = { 5, 5, 5, 5, 5 };
+static const double max_angle_delta = 1.5;
+static const double max_center_offset = 3.0;
+static const int max_radius_difference = 3;
+static const IntCircle::Delta max_delta(max_center_offset, max_radius_difference);
+
 bool Compare(const EyelidsLocation& expected, const EyelidsLocation& actual)
 {
-    int max_ellipse_deltas[] = { 5, 5, 5, 5, 5 };
-    double max_angle_delta = 2.0;
     return expected.Equals(actual, max_ellipse_deltas, max_angle_delta);
 }
 
 bool Compare(BoundaryPair& expected, BoundaryPair& actual)
 {
-    double center_tolerance = 10.0;
-    int radius_tolerance = 6;
-    IntCircle::Delta max_delta(center_tolerance, radius_tolerance);
     return expected.Equals(actual, max_delta, max_delta);
 }
 

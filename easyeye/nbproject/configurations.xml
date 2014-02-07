@@ -104,6 +104,14 @@
         <itemPath>tests/EncodingTest.h</itemPath>
         <itemPath>tests/encoding_test_runner.cc</itemPath>
       </logicalFolder>
+      <logicalFolder name="f15"
+                     displayName="eyelid_fix"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/EyelidFixTest.cc</itemPath>
+        <itemPath>tests/EyelidFixTest.h</itemPath>
+        <itemPath>tests/eyelid_fix_test_runner.cc</itemPath>
+      </logicalFolder>
       <logicalFolder name="f12" displayName="files" projectFiles="true" kind="TEST">
         <itemPath>tests/FilesTest.cc</itemPath>
         <itemPath>tests/FilesTest.h</itemPath>
@@ -116,6 +124,14 @@
         <itemPath>tests/FindEyelidsTest.cc</itemPath>
         <itemPath>tests/FindEyelidsTest.h</itemPath>
         <itemPath>tests/find_eyelids_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f16"
+                     displayName="hough_parabola"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/HoughParabolaTest.cc</itemPath>
+        <itemPath>tests/HoughParabolaTest.h</itemPath>
+        <itemPath>tests/hough_parabola_test_runner.cc</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="imaging" projectFiles="true" kind="TEST">
         <itemPath>tests/ImagingTest.cc</itemPath>
@@ -318,6 +334,34 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f14</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f15">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f15</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f16">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f16</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -608,6 +652,10 @@
       </item>
       <item path="tests/EncodingTest.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests/EyelidFixTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/EyelidFixTest.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tests/FilesTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/FilesTest.h" ex="false" tool="3" flavor2="0">
@@ -615,6 +663,10 @@
       <item path="tests/FindEyelidsTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/FindEyelidsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/HoughParabolaTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HoughParabolaTest.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/ImagingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -649,9 +701,16 @@
       </item>
       <item path="tests/encoding_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="tests/eyelid_fix_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/files_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/find_eyelids_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/hough_parabola_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/imaging_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -834,6 +893,34 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f14</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f15">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f15</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f16">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f16</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -1119,6 +1206,10 @@
       </item>
       <item path="tests/EncodingTest.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests/EyelidFixTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/EyelidFixTest.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tests/FilesTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/FilesTest.h" ex="false" tool="3" flavor2="0">
@@ -1126,6 +1217,10 @@
       <item path="tests/FindEyelidsTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/FindEyelidsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/HoughParabolaTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/HoughParabolaTest.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/ImagingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -1160,9 +1255,16 @@
       </item>
       <item path="tests/encoding_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="tests/eyelid_fix_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/files_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/find_eyelids_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/hough_parabola_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/imaging_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
