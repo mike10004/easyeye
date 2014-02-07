@@ -41,14 +41,33 @@ int CircleFinderConfig::max_radius()
     return nScale * max_radius_factor;
 }
 
-EyelidFinderConfig::EyelidFinderConfig()
-: iris_image_type(NIR_IRIS_STILL)
+// cvSmooth's default sigma is calculated based on kernel size 
+// http://docs.opencv.org/trunk/modules/imgproc/doc/filtering.html?highlight=smooth#smooth
+GaussConfig::GaussConfig() 
+    : Config(),
+        kernel_width(31), kernel_height(15), sigma_x(0.3 * (31 / 2 - 1) + 0.8)
 {
-    
+}
+
+GaussConfig::GaussConfig(int kernel_width_, int kernel_height_, double sigma_x_)
+    : Config(),
+        kernel_width(kernel_width_),
+        kernel_height(kernel_height_),
+        sigma_x(sigma_x_)
+{
+}
+
+EyelidFinderConfig::EyelidFinderConfig()
+: Config(), 
+        iris_image_type(NIR_IRIS_STILL), 
+        gauss_config(31, 15, 0.3 * (31 / 2 - 1) + 0.8), 
+        min_contour_count(70)
+{
 }
 
 ExtremaNoiseFinderConfig::ExtremaNoiseFinderConfig()
-    : highlight_threshold(250), lowlight_threshold(3)
+    : Config(), 
+        highlight_threshold(250), lowlight_threshold(3)
 {
-    
 }
+

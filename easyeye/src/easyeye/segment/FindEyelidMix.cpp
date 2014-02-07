@@ -1,5 +1,6 @@
 #include "FindEyelidMix.h"
 
+#include <sstream>
 #include "easyeye_segment.h"
 #include "../common/mylog.h"
 #include <iostream>
@@ -48,7 +49,7 @@ void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, E
     Mat bottom_eyelid = Imaging::GetROI(image, icl, icu-icl,
 			(int)(yPupil+rPupil+(bottomHeight*0.3)), (int)(bottomHeight*0.7));
 
-	CvPoint topPoint, bottomPoint;	
+	cv::Point2i topPoint, bottomPoint;	
 	topPoint.x = centerX;	
 	bottomPoint.x = centerX;
 
@@ -93,8 +94,8 @@ void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, E
 	int rightThres = doFindThres(rightImg, 100);
 
 	// Determine contour points
-	cv::Point2i xyLeft = findContourPoint(leftImg, leftThres, 1, dataType);//1:LEFT
-	cv::Point2i xyRight = findContourPoint(rightImg, rightThres, 2, dataType);//2:RIGHT
+	cv::Point2i xyLeft = findContourPoint(leftImg, leftThres, LEFT, dataType);//1:LEFT
+	cv::Point2i xyRight = findContourPoint(rightImg, rightThres, RIGHT, dataType);//2:RIGHT
 	cv::Point2i leftPoint = getCornerPoint(xyLeft, leftStartX, leftStartY, leftEndY, dataType);
 	cv::Point2i rightPoint= getCornerPoint(xyRight, rightStartX, rightStartY, rightEndY, dataType);
 	
@@ -213,59 +214,88 @@ int FindEyelidMix::doFindThres(const Mat& img, int thresRange)
 	  return threshold;
 }
 
-cv::Point2i FindEyelidMix::findContourPoint(const Mat& grayMatImg, int threshold, int locate, int mode)
+static string ToString(vector< vector<cv::Point> >& contours, int min_contour_count) 
+{
+    ostringstream out;
+    for (vector< vector<Point> >::iterator it = contours.begin(); 
+            it != contours.end(); ++it) {
+        vector<Point>& contour = *it;
+        int count = contour.size();
+        if (count >= min_contour_count) {
+            vector<cv::Point2i> arrPoint(contour);
+            for (size_t i = 0; i < contour.size(); i++) {
+                arrPoint[i] = contour[i];
+                out << contour[i].x << ' ' << contour[i].y << ' ';
+            }
+            out << endl;
+        }
+	}
+    return out.str();
+}
+
+static string CreateDiagLabel(const string& prefix, FindEyelidMix::EyelidPosition locate) {
+    string label(prefix);
+    label.append(locate == FindEyelidMix::LEFT ? "left" : "right");
+    return label;
+}
+
+cv::Point2i FindEyelidMix::findContourPoint(const Mat& grayMatImg, int threshold, EyelidPosition locate, int mode)
 {
 	cv::Point2i xyValue;	
-	if(locate == 1) // Left
-	{
+	if(locate == LEFT) {
 		xyValue.x = grayMatImg.cols;// setImg->width; // minimum
 		xyValue.y = -1;
-	}
-	else if(locate == 2) // Right
-	{
+	} else if(locate == RIGHT) {
 		xyValue.x = 0; // Minimum
 		xyValue.y = -1;		
 	}
 		
-	//cvSmooth(grayImg,grayImg, CV_GAUSSIAN, 31, 15);//best
-    int size1 = 31, size2 = 15;
-    cv::Size ksize(size1, size2);
-    // cvSmooth's default sigma is calculated based on kernel size 
-    // http://docs.opencv.org/trunk/modules/imgproc/doc/filtering.html?highlight=smooth#smooth
-    double sigmaX = 0.3 * (size1/2 - 1) + 0.8; 
+    cv::Size ksize(config_.gauss_config.kernel_width, config_.gauss_config.kernel_height);
+    double sigmaX = config_.gauss_config.sigma_x;
     cv::GaussianBlur(grayMatImg, grayMatImg, ksize, sigmaX);
+    diagnostician()->WriteImage(grayMatImg, CreateDiagLabel("eyelidgaussed", locate));
 	cv::threshold(grayMatImg, grayMatImg, threshold, 255, CV_THRESH_BINARY);
+    diagnostician()->WriteImage(grayMatImg, CreateDiagLabel("eyelidthreshed", locate));
     int find_contours_method = CV_LINK_RUNS, find_contours_mode = CV_RETR_LIST;
     vector< vector<Point> > contours;
 	cv::findContours(grayMatImg, contours, find_contours_mode, find_contours_method); //BEST  
-
+    if (!diagnostician()->disabled()) {
+        string label("eyelidcontours");
+        label.append(locate == LEFT ? "left" : "right");
+        string contours_str = ToString(contours, config_.min_contour_count);
+        diagnostician()->WriteText(contours_str, label);
+    }
 	/// \todo what about scale matter?
-	const int minContourCount = 70;
-    
+	const int minContourCount = config_.min_contour_count;
+    /**
+     * Here we iterate through the contours to find the contour point. 
+     * For each contour whose length is above a preset minimum, iterate
+     * through the points. If this is the left eye, then the contour point
+     * is the point with the minimum x-coordinate. If this is the right eye,
+     * then the contour point is the point with the maximum x-coordinate.
+     */
     for (vector< vector<Point> >::iterator it = contours.begin(); 
             it != contours.end(); ++it) {
         vector<Point>& contour = *it;
         int count = contour.size();
         if (count >= minContourCount) {
-            vector<cv::Point2i> arrPoint(contour);
-            for (size_t i = 0; i < contour.size(); i++) {
-                arrPoint[i] = contour[i];
-            }
             const int v = 1;				
             for (int i = 0; i < count -1; i = i + v) {
-                if (arrPoint[i].x ==0 || arrPoint[i].x == grayMatImg.cols - 1)  {
+                if (contour[i].x == 0 || contour[i].x == grayMatImg.cols - 1)  {
                     //cout << "mode=" << mode << " - x=" << arrPoint[i].x << " -- ignore" << endl;
                     continue;
                 }
-                if(arrPoint[i].x < xyValue.x && locate == 1) {// Left
-                    xyValue.x = arrPoint[i].x;
-                    xyValue.y = arrPoint[i].y;						
-                }
-                if(arrPoint[i].x > xyValue.x && locate == 2) {//Right
-                    xyValue.x = arrPoint[i].x;
-                    xyValue.y = arrPoint[i].y;
-                }	
-
+                if(locate == LEFT) {
+                    if (contour[i].x < xyValue.x) {// Left
+                        xyValue.x = contour[i].x;
+                        xyValue.y = contour[i].y;						
+                    }
+                } else if (locate == RIGHT) {
+                    if(contour[i].x > xyValue.x) {//Right
+                        xyValue.x = contour[i].x;
+                        xyValue.y = contour[i].y;
+                    }	
+                } else assert(false);
             }
         }
 	}
@@ -279,13 +309,13 @@ cv::Point2i FindEyelidMix::findContourPoint(const Mat& grayMatImg, int threshold
   	
 	if(xyValue.x < 2 || xyValue.x > grayMatImg.cols - 1)
 	{
-		if(locate == 1)
+		if(locate == LEFT)
 		{
 			xyValue.x = 1;
 //			cout << "Left ZERO Value" << endl;
             Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::findContourPoint Left ZERO Value\n");
 		}
-		if(locate == 2)
+		if(locate == RIGHT)
 		{			
 			xyValue.x = grayMatImg.cols - 1;
 //			cout << "Right ZERO Value" << endl;
