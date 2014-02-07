@@ -66,12 +66,15 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f10 \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f9 \
+	${TESTDIR}/TestFiles/f15 \
 	${TESTDIR}/TestFiles/f12 \
 	${TESTDIR}/TestFiles/f11 \
+	${TESTDIR}/TestFiles/f16 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f6 \
+	${TESTDIR}/TestFiles/f14 \
 	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f13
 
@@ -226,6 +229,10 @@ ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/EncodingTest.o ${TESTDIR}/tests/encodi
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
+${TESTDIR}/TestFiles/f15: ${TESTDIR}/tests/EyelidFixTest.o ${TESTDIR}/tests/eyelid_fix_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f15 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
+
 ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/FilesTest.o ${TESTDIR}/tests/files_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
@@ -233,6 +240,10 @@ ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/FilesTest.o ${TESTDIR}/tests/files_te
 ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/FindEyelidsTest.o ${TESTDIR}/tests/find_eyelids_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
+
+${TESTDIR}/TestFiles/f16: ${TESTDIR}/tests/HoughParabolaTest.o ${TESTDIR}/tests/hough_parabola_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f16 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/ImagingTest.o ${TESTDIR}/tests/imaging_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -249,6 +260,10 @@ ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/SegmentationSerializerTest.o ${TESTDIR
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/segmentation_correctness_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid 
+
+${TESTDIR}/TestFiles/f14: ${TESTDIR}/tests/TypesTest.o ${TESTDIR}/tests/types_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f14 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Release/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/utils_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -313,6 +328,18 @@ ${TESTDIR}/tests/encoding_test_runner.o: tests/encoding_test_runner.cc
 	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/encoding_test_runner.o tests/encoding_test_runner.cc
 
 
+${TESTDIR}/tests/EyelidFixTest.o: tests/EyelidFixTest.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/EyelidFixTest.o tests/EyelidFixTest.cc
+
+
+${TESTDIR}/tests/eyelid_fix_test_runner.o: tests/eyelid_fix_test_runner.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/eyelid_fix_test_runner.o tests/eyelid_fix_test_runner.cc
+
+
 ${TESTDIR}/tests/FilesTest.o: tests/FilesTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
@@ -335,6 +362,18 @@ ${TESTDIR}/tests/find_eyelids_test_runner.o: tests/find_eyelids_test_runner.cc
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/find_eyelids_test_runner.o tests/find_eyelids_test_runner.cc
+
+
+${TESTDIR}/tests/HoughParabolaTest.o: tests/HoughParabolaTest.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTest.o tests/HoughParabolaTest.cc
+
+
+${TESTDIR}/tests/hough_parabola_test_runner.o: tests/hough_parabola_test_runner.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/hough_parabola_test_runner.o tests/hough_parabola_test_runner.cc
 
 
 ${TESTDIR}/tests/ImagingTest.o: tests/ImagingTest.cc 
@@ -377,6 +416,18 @@ ${TESTDIR}/tests/segmentation_correctness_test.o: tests/segmentation_correctness
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/segmentation_correctness_test.o tests/segmentation_correctness_test.cc
+
+
+${TESTDIR}/tests/TypesTest.o: tests/TypesTest.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/TypesTest.o tests/TypesTest.cc
+
+
+${TESTDIR}/tests/types_test_runner.o: tests/types_test_runner.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../optimasek/include `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/types_test_runner.o tests/types_test_runner.cc
 
 
 ${TESTDIR}/tests/utils_test.o: tests/utils_test.cc 
@@ -666,12 +717,15 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easy
 	    ${TESTDIR}/TestFiles/f10 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f9 || true; \
+	    ${TESTDIR}/TestFiles/f15 || true; \
 	    ${TESTDIR}/TestFiles/f12 || true; \
 	    ${TESTDIR}/TestFiles/f11 || true; \
+	    ${TESTDIR}/TestFiles/f16 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
+	    ${TESTDIR}/TestFiles/f14 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f13 || true; \
 	else  \

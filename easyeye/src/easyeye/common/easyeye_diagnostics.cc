@@ -27,6 +27,11 @@ using cv::Scalar;
 using namespace easyeye;
 using std::string;
 using namespace cv;
+using mylog::Logs;
+using mylog::INFO;
+using mylog::TRACE;
+using mylog::WARN;
+using mylog::ERROR;
 
 Diagnostician::Diagnostician()
     : output_dir_("."),
@@ -190,6 +195,21 @@ void Diagnostician::set_write_original(bool write_original)
     write_original_ = write_original;
 }
 
+void Diagnostician::WriteText(const std::string& text, const std::string& label)
+{
+    if (disabled()) return;
+    string output_pathname = ToFilename(label, ".txt");
+    MaybeMakeDirs(output_dir_);
+    bool written = Files::Write(text, output_pathname);
+    if (!written) {
+        mylog::Logs::GetLogger().Log(mylog::INFO, "failed to write to text file at %s\n", output_pathname.c_str());
+    } else {
+        if (collect_pathnames_) {
+            files_written_.push_back(output_pathname);
+        }        
+    }
+}
+
 void Diagnostician::WriteImage(const cv::Mat& image, const string& label)
 {
     if (disabled()) return;
@@ -205,7 +225,9 @@ void Diagnostician::WriteImage(const cv::Mat& image, const string& label)
         if (verbose_) {
             cerr << "wrote " << output_pathname << endl;    
         }
-        files_written_.push_back(output_pathname);
+        if (collect_pathnames_) {
+            files_written_.push_back(output_pathname);
+        }
     } else if (!ok) {
         cerr << "writing failed on " << output_pathname << endl;
     }

@@ -32,6 +32,7 @@ public:
     void set_collect_pathnames(bool collect_pathnames);
     std::vector<std::string>& files_written();
     void WriteImage(const cv::Mat& image, const std::string& label);
+    void WriteText(const std::string& text, const std::string& label);
     void set_write_original(bool write_original);
     bool write_original() const;
     void set_eye_image_pathname(const std::string& eye_image_pathname);

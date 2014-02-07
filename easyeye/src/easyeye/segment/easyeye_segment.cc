@@ -110,6 +110,7 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
     
 	// Find the upper and lower eyelid(s)
 	FindEyelidMix eyelid_finder(config_.eyelid_finder_config);
+    eyelid_finder.set_diagnostician(diagnostician_);
 	eyelid_finder.doFindPoints(eyeImg, bpair, seg.eyelids_location);
     ExtremaNoiseFinder extrema_noise_finder(config_.extrema_noise_finder_config);
 	extrema_noise_finder.FindExtremaNoise(eyeImg).copyTo(seg.extrema_noise);

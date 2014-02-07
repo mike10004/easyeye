@@ -46,11 +46,24 @@ public:
     const static int AUTO_MAX_PUPIL_CENTER_OFFSET = 0;
 };
 
+class GaussConfig : public Config
+{
+public:
+    GaussConfig();
+    GaussConfig(int kernel_width_, int kernel_height_, double sigma_x_);
+    int kernel_width;
+    int kernel_height;
+    double sigma_x;
+};
+
 class EyelidFinderConfig : public Config
 {
 public:
     EyelidFinderConfig();
     IrisImageType iris_image_type;
+    GaussConfig gauss_config;
+    int min_contour_count;
+    
 };
 
 class ExtremaNoiseFinderConfig : public Config

@@ -30,6 +30,21 @@ public:
     void CopyFrom(const IntCircle& other);
     bool Equals(const IntCircle& other);
     void set(int x, int y, int r);
+    const static double DEFAULT_CENTER_TOLERANCE;
+    class Delta
+    {
+    public:
+        Delta();
+        Delta(double center_, int radius_);
+        double center;
+        int radius;
+        bool IsLessThanOrEqualTo(const Delta& other, double center_tolerance) const;
+        std::string ToString() const;
+    };
+    Delta ComputeDelta(const IntCircle& other) const;
+    bool Equals(const IntCircle& other, const IntCircle::Delta& max_delta, double center_tolerance) const;
+    bool Equals(const IntCircle& other, const IntCircle::Delta& max_delta) const;
+    static double ComputeDistance(const cv::Point2i& p, const cv::Point2i& q);
 };
 
 class BoundaryPair
@@ -37,12 +52,11 @@ class BoundaryPair
 public:
 	BoundaryPair();
 
-//	int irisX;
-//	int irisY;
-//	int irisR;
-//	int pupilX, pupilY, pupilR;
     void Describe(std::ostream& out) const;
     bool Equals(const BoundaryPair& other) const;
+    void ComputeDeltas(IntCircle::Delta& iris_delta, IntCircle::Delta& pupil_delta);
+    bool Equals(const BoundaryPair& other, const IntCircle::Delta& max_iris_delta, const IntCircle::Delta& max_pupil_delta) const;
+    bool Equals(const BoundaryPair& other, const IntCircle::Delta& max_iris_delta, const IntCircle::Delta& max_pupil_delta, double center_tolerance) const;
     void set_iris(const IntCircle& iris);
     void set_pupil(const IntCircle& pupil);
     IntCircle iris;
@@ -76,7 +90,7 @@ public:
     bool EqualsApprox(const EyelidsLocation& other) const;
     static const double DEFAULT_MAX_ANGLE_DELTA;
     bool Equals(const EyelidsLocation& other, double max_angle_delta) const;
-    bool Equals(const EyelidsLocation& other, int ellipse_deltas[], double max_angle_delta) const;
+    bool Equals(const EyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const;
     bool Equals(const EyelidsLocation& other, int ellipse_delta, double max_angle_delta) const;
     void Describe(std::ostream& out);
     std::string ToString();

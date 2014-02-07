@@ -62,9 +62,11 @@ public:
     const static int ANGLE_DEST_VAL_LEN = 1;
 	/// FUTURE WORK.
 	//Masek::IMAGE* removeReflections(IplImage* eyeImg, IplImage* noiseImg, int eyelashThres, int reflectThres);
-
+    enum EyelidPosition { LEFT = 1, RIGHT = 2 };
+    
 private:
 	const EyelidFinderConfig config_;
+
     
    /**
 	* Detects eyelid curves using Hough Transform.
@@ -79,7 +81,7 @@ private:
 	*               - \c 2 = video captured at a distance (distant-videos)
 	* @return Contour point
 	*/
-	static cv::Point2i findContourPoint(const cv::Mat& setImg, int threshold, int locate, 
+	cv::Point2i findContourPoint(const cv::Mat& setImg, int threshold, EyelidPosition locate, 
 									int dataType);
 	
     /**
