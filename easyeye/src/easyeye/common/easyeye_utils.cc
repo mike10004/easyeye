@@ -190,6 +190,29 @@ string Arrays::ToString(unsigned char const* array, size_t array_len, size_t pre
     return ss.str();
 }
 
+template<typename T>
+void Vectors::CopyFrom(T* array, std::vector<T>& dst, size_t limit) 
+{
+    for (size_t i = 0; i < limit; i++) {
+        dst.push_back(array[i]);
+    }
+}
+
+void Vectors::CopyTo(const vector<float>& src, float* array, size_t limit) {
+    for (size_t i = 0; i < limit && i < src.size(); i++) {
+        array[i] = src[i];
+    }
+}
+
+size_t Vectors::Cardinality(std::vector<std::vector<double> >& vectors)
+{
+    size_t card = 1;
+    for (size_t i = 0; i < vectors.size(); i++) {
+        card *= vectors[i].size();
+    }
+    return card;
+}
+
 void Vectors::CopyTo(const vector<unsigned char>& bytev, unsigned char* array, size_t limit)
 {
     for (size_t i = 0; i < limit && i < bytev.size(); i++) {
