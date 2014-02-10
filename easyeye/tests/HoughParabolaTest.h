@@ -13,8 +13,9 @@
 class HoughParabolaTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(HoughParabolaTest);
 
-    CPPUNIT_TEST(testComputeTransform);
-
+    CPPUNIT_TEST(testComputeTransformVertexFormRotated);
+    CPPUNIT_TEST(testComputeTransformStandardForm);
+    CPPUNIT_TEST(testComputeTransformVertexForm);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -24,7 +25,9 @@ public:
     void tearDown();
 
 private:
-    void testComputeTransform();
+    void testComputeTransformStandardForm();
+    void testComputeTransformVertexForm();
+    void testComputeTransformVertexFormRotated();
 };
 
 #endif	/* HOUGHPARABOLATEST_H */

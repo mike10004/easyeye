@@ -54,6 +54,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/segment/FindIrisCircle.o \
 	${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o \
+	${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o
 
 # Test Directory
@@ -72,6 +73,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f16 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f17 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f14 \
@@ -199,6 +201,11 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o: src/easyeye/segment/ea
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o src/easyeye/segment/easyeye_extrema_noise.cpp
 
+${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o: src/easyeye/segment/easyeye_eyelid_detection.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o src/easyeye/segment/easyeye_eyelid_detection.cc
+
 ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o: src/easyeye/segment/easyeye_segment.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
@@ -241,7 +248,7 @@ ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/FindEyelidsTest.o ${TESTDIR}/tests/fi
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f16: ${TESTDIR}/tests/HoughParabolaTest.o ${TESTDIR}/tests/hough_parabola_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f16: ${TESTDIR}/tests/HoughParabolaTest.o ${TESTDIR}/tests/HoughParabolaTransform.o ${TESTDIR}/tests/hough_parabola_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f16 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
@@ -252,6 +259,10 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/ImagingTest.o ${TESTDIR}/tests/imaging
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/MatchingTest.o ${TESTDIR}/tests/matching_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
+
+${TESTDIR}/TestFiles/f17: ${TESTDIR}/tests/RotatedShapeTest.o ${TESTDIR}/tests/rotated_shape_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f17 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/SegmentationSerializerTest.o ${TESTDIR}/tests/segment_serial_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -370,6 +381,12 @@ ${TESTDIR}/tests/HoughParabolaTest.o: tests/HoughParabolaTest.cc
 	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTest.o tests/HoughParabolaTest.cc
 
 
+${TESTDIR}/tests/HoughParabolaTransform.o: tests/HoughParabolaTransform.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTransform.o tests/HoughParabolaTransform.cc
+
+
 ${TESTDIR}/tests/hough_parabola_test_runner.o: tests/hough_parabola_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
@@ -398,6 +415,18 @@ ${TESTDIR}/tests/matching_test_runner.o: tests/matching_test_runner.cc
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../optimasek/include -I. -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/matching_test_runner.o tests/matching_test_runner.cc
+
+
+${TESTDIR}/tests/RotatedShapeTest.o: tests/RotatedShapeTest.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/RotatedShapeTest.o tests/RotatedShapeTest.cc
+
+
+${TESTDIR}/tests/rotated_shape_test_runner.o: tests/rotated_shape_test_runner.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/rotated_shape_test_runner.o tests/rotated_shape_test_runner.cc
 
 
 ${TESTDIR}/tests/SegmentationSerializerTest.o: tests/SegmentationSerializerTest.cc 
@@ -695,6 +724,19 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o: ${OBJECTDIR}/sr
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o src/easyeye/segment/easyeye_eyelid_detection.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o src/easyeye/segment/easyeye_eyelid_detection.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o src/easyeye/segment/easyeye_segment.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o`; \
@@ -723,6 +765,7 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easy
 	    ${TESTDIR}/TestFiles/f16 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f17 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f14 || true; \

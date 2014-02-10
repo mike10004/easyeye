@@ -27,6 +27,7 @@
         <itemPath>src/easyeye/segment/FindIrisCircle.h</itemPath>
         <itemPath>src/easyeye/segment/FindPupilCircleNew.h</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.h</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_eyelid_detection.h</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -63,6 +64,7 @@
         <itemPath>src/easyeye/segment/FindIrisCircle.cpp</itemPath>
         <itemPath>src/easyeye/segment/FindPupilCircleNew.cpp</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.cpp</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_eyelid_detection.cc</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.cc</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -131,6 +133,7 @@
                      kind="TEST">
         <itemPath>tests/HoughParabolaTest.cc</itemPath>
         <itemPath>tests/HoughParabolaTest.h</itemPath>
+        <itemPath>tests/HoughParabolaTransform.cc</itemPath>
         <itemPath>tests/hough_parabola_test_runner.cc</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="imaging" projectFiles="true" kind="TEST">
@@ -142,6 +145,14 @@
         <itemPath>tests/MatchingTest.cc</itemPath>
         <itemPath>tests/MatchingTest.h</itemPath>
         <itemPath>tests/matching_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f17"
+                     displayName="rotated_shape"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/RotatedShapeTest.cc</itemPath>
+        <itemPath>tests/RotatedShapeTest.h</itemPath>
+        <itemPath>tests/rotated_shape_test_runner.cc</itemPath>
       </logicalFolder>
       <logicalFolder name="f3"
                      displayName="segment_serial"
@@ -362,6 +373,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f16</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f17">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f17</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -631,6 +656,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/easyeye/segment/easyeye_eyelid_detection.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_eyelid_detection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/segment/easyeye_segment.cc"
             ex="false"
             tool="1"
@@ -668,6 +703,8 @@
       </item>
       <item path="tests/HoughParabolaTest.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests/HoughParabolaTransform.cc" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/ImagingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/ImagingTest.h" ex="false" tool="3" flavor2="0">
@@ -675,6 +712,10 @@
       <item path="tests/MatchingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/MatchingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/RotatedShapeTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/RotatedShapeTest.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/SegmentationSerializerTest.cc"
             ex="false"
@@ -715,6 +756,8 @@
       <item path="tests/imaging_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/matching_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/rotated_shape_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/segment_serial_test_runner.cc"
             ex="false"
@@ -921,6 +964,20 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f16</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f17">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f17</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -1185,6 +1242,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/easyeye/segment/easyeye_eyelid_detection.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/easyeye/segment/easyeye_eyelid_detection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/segment/easyeye_segment.cc"
             ex="false"
             tool="1"
@@ -1222,6 +1289,8 @@
       </item>
       <item path="tests/HoughParabolaTest.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests/HoughParabolaTransform.cc" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/ImagingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/ImagingTest.h" ex="false" tool="3" flavor2="0">
@@ -1229,6 +1298,10 @@
       <item path="tests/MatchingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/MatchingTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/RotatedShapeTest.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/RotatedShapeTest.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/SegmentationSerializerTest.cc"
             ex="false"
@@ -1269,6 +1342,8 @@
       <item path="tests/imaging_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/matching_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/rotated_shape_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/segment_serial_test_runner.cc"
             ex="false"
