@@ -143,7 +143,7 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
       return string();
 #   endif
   }
-  
+
 string Vectors::ToString(const vector<unsigned char>& bytes, size_t preview_len)
 {
     std::ostringstream ss;
@@ -190,6 +190,18 @@ string Arrays::ToString(unsigned char const* array, size_t array_len, size_t pre
     return ss.str();
 }
 
+void Vectors::Print(const std::vector<double>& v, std::ostream& out)
+{
+    out << '[';
+    if (!v.empty()) {
+        out << v[0];
+        for (size_t i = 1; i < v.size(); i++) {
+            out << ", " << v[i];
+        }
+    }
+    out << ']';
+}
+
 template<typename T>
 void Vectors::CopyFrom(T* array, std::vector<T>& dst, size_t limit) 
 {
@@ -206,9 +218,15 @@ void Vectors::CopyTo(const vector<float>& src, float* array, size_t limit) {
 
 size_t Vectors::Cardinality(std::vector<std::vector<double> >& vectors)
 {
+    if (vectors.empty()) {
+        return 0;
+    }
     size_t card = 1;
     for (size_t i = 0; i < vectors.size(); i++) {
         card *= vectors[i].size();
+        if (card == 0) {
+            break;
+        }
     }
     return card;
 }
