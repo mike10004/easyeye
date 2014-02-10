@@ -18,20 +18,25 @@ using namespace cv;
 using namespace std;
 using namespace cvmore::objdetect;
 
+namespace 
+{
+
 CPPUNIT_TEST_SUITE_REGISTRATION(RotatedShapeTest);
 
 class Rectangle : public ShapeInterface
 {
 public:
-    Rectangle() {}
+    enum FixedPoint { CENTER, RECT_ORIGIN, TRUE_ORIGIN };
+    Rectangle() : fixed_point(CENTER) {}
     ~Rectangle() {}
+    FixedPoint fixed_point;
     static const int kIndexULX = 0, kIndexULY = 1, kIndexWidth = 2, kIndexHeight = 3;
     bool Calculate(double t, const std::vector<double>& params, cv::Point2d& p) const
     {
         p.x = -1;
         p.y = -1;
         Point2d origin(params[kIndexULX], params[kIndexULY]);
-        Size size(params[kIndexWidth], params[kIndexHeight]);
+        Size_<double> size(params[kIndexWidth], params[kIndexHeight]);
         if (t < 0) {
             return false;
         } else if (t < 1) {
@@ -53,9 +58,17 @@ public:
     }
     
     Point2d ComputeFixedPoint(const std::vector<double>& params) const {
-        Point2d origin(params[kIndexULX], params[kIndexULY]);
-//        Size size(params[kIndexWidth], params[kIndexHeight]);
-        return origin;
+        Point2d rect_origin(params[kIndexULX], params[kIndexULY]);
+        if (fixed_point == CENTER) {
+            Size_<double> size(params[kIndexWidth], params[kIndexHeight]);
+            Point2d center(rect_origin.x + size.width / 2.0, rect_origin.y + size.height / 2.0);
+            return center;
+        } else if (fixed_point == RECT_ORIGIN) {
+            return rect_origin;
+        } else {
+            Point2d origin(0.0, 0.0);
+            return origin;
+        }
     }
 };
 
@@ -143,19 +156,7 @@ void Draw(const ShapeInterface& shape, const vector<double>& params, const vecto
     if (closure > 0) {
         num_drawn ++; // first point
     }
-    cerr << num_drawn << " points drawn onto image of dims " << image.rows << "x" << image.cols << endl;
-}
-
-RotatedShapeTest::RotatedShapeTest() {
-}
-
-RotatedShapeTest::~RotatedShapeTest() {
-}
-
-void RotatedShapeTest::setUp() {
-}
-
-void RotatedShapeTest::tearDown() {
+//    cerr << num_drawn << " points drawn onto image of dims " << image.rows << "x" << image.cols << endl;
 }
 
 static const string output_dir("/tmp/easyeye_tests_rotated_shape");
@@ -177,6 +178,49 @@ Mat CreateAndDraw(const ShapeInterface& shape, const vector<double>& params, con
     string output_pathname = GetOutputPathname(filename);
     cerr << cv::imwrite(output_pathname, image) << " " << output_pathname << endl;
     return image;
+}
+
+double Distance(const Point2d& a, const Point2d& b) {
+    return std::sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
+
+void AssertTolerablyEqual(const vector<Point2d> expected, const vector<Point2d>& actual, double tolerance)
+{
+    CPPUNIT_ASSERT_EQUAL(expected.size(), actual.size());
+    vector<bool> used(actual.size(), false);
+    for (size_t i = 0; i < expected.size(); i++) {
+        bool any_equal = false;
+        for (size_t j = 0; j < actual.size(); j++) {
+            double dist = Distance(expected[i], actual[j]);
+//            cerr << expected[i] << " <-> " << actual[j] << " = " << dist << endl;
+            if (!used[j] && dist < tolerance) {
+                used[j] = true;
+                any_equal = true;
+                break;
+            }
+        }
+        if (!any_equal) {
+            cerr << expected[i] << " has no matching point in actuals" << endl;
+        }
+        CPPUNIT_ASSERT(any_equal);
+    }
+    
+}
+
+
+
+}
+
+RotatedShapeTest::RotatedShapeTest() {
+}
+
+RotatedShapeTest::~RotatedShapeTest() {
+}
+
+void RotatedShapeTest::setUp() {
+}
+
+void RotatedShapeTest::tearDown() {
 }
 
 void RotatedShapeTest::testDrawUnrotatedLine() 
@@ -225,15 +269,43 @@ void RotatedShapeTest::testDrawUnrotatedRect() {
 
 void RotatedShapeTest::testDrawRotatedRect() {
     Rectangle rectangle;
+    rectangle.fixed_point = Rectangle::CENTER;
     vector<double> params(5, 0.0);
-    params[0] = 10; 
-    params[1] = 25;
-    params[2] = 80; 
-    params[3] = 50;
-    params[4] = M_PI_4;
-    vector<double> t_range = ParamRange::Incremental(0.0, 3.0, 1.0);
-    RotatedShape rotated(rectangle, 4);   
-    CreateAndDraw(rotated, params, t_range, "rotated.png");
+    double x = 40, y = 25, d = 20;
+    double w = d, h = d;
+    double angle_degrees = 45.0, angle_radians = M_PI_4;
+    params[0] = x; 
+    params[1] = y;
+    params[2] = w; 
+    params[3] = h;
+    params[4] = angle_radians;
+    vector<double> t_range = ParamRange::ScaledIncremental(0, 1, 4, 1.0);
+    vector<Point2d> unrotated_pts = ToPoints(rectangle, params, t_range);
+    cerr << "unrotated: ";
+    Print(unrotated_pts, cerr);
+    cerr << endl;
+    Size size(w, h);
+    CPPUNIT_ASSERT_EQUAL((size_t)4, t_range.size());
+    RotatedShape rotated_rect(rectangle, 4);   
+    Point2d center = rotated_rect.ComputeFixedPoint(params);
+    vector<Point2d> actual = ToPoints(rotated_rect, params, t_range);
+    RotatedRect cv_rotated_rect(center, size, angle_degrees);
+    Point2f expected_pts_array[4];
+    cv_rotated_rect.points(expected_pts_array);
+    vector<Point2d> expected_pts;
+    for (int i = 0; i < 4; i++) {
+        Point2d p(expected_pts_array[i].x, expected_pts_array[i].y);
+        expected_pts.push_back(p);
+    }
+    cerr << "expected: ";
+    Print(expected_pts, cerr);
+    cerr << endl;
+    cerr << "  actual: ";
+    Print(actual, cerr);
+    cerr << endl;
+    
+    AssertTolerablyEqual(expected_pts, actual, 0.01);
+    
+    CreateAndDraw(rotated_rect, params, t_range, "rotated-rectangle.png");
 }
-
 

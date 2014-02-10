@@ -13,10 +13,10 @@
 class RotatedShapeTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(RotatedShapeTest);
 
-    CPPUNIT_TEST(testDrawUnrotatedLine);
-    CPPUNIT_TEST(testDrawUnrotatedRect);
+//    CPPUNIT_TEST(testDrawUnrotatedLine);
+//    CPPUNIT_TEST(testDrawUnrotatedRect);
     CPPUNIT_TEST(testDrawRotatedRect);
-    CPPUNIT_TEST(testDrawRotatedLine);
+//    CPPUNIT_TEST(testDrawRotatedLine);
     CPPUNIT_TEST_SUITE_END();
 
 public:

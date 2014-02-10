@@ -35,6 +35,8 @@ void HoughParabolaTest::setUp() {
 void HoughParabolaTest::tearDown() {
 }
 
+namespace 
+{
 static const string output_dir = "/tmp/easyeye_hough_parabola_test";
 
 static string GetOutputPathname(const string& filename) {
@@ -128,6 +130,7 @@ vector<double> AssertTolerablyEqual(const vector<double> expected, const vector<
     for (size_t i = 0; i < expected.size(); i++) {
         CPPUNIT_ASSERT(diffs[i] <= tolerances[i]);
     }
+    return diffs;
 }
 
 vector<double> ToVector(double a, double b, double c) {
@@ -143,7 +146,7 @@ vector<double> ToVector(double a, double b, double c, double d) {
     v.push_back(d);
     return v;
 }
-
+}
 void HoughParabolaTest::testComputeTransformStandardForm() {
     double a = -0.05, b = 5.5, c = -75;    
     vector<double> params(3, 0.0);
@@ -201,9 +204,9 @@ void HoughParabolaTest::testComputeTransformVertexFormRotated()
     RotatedShape rotated_parabola(parabola, VertexFormParabola::kMaxIndex + 1);
     Mat image = CreateInputImage(rotated_parabola, params, "input-rotated.png");
     vector<double> a_range = ParamRange::ScaledIncremental(-10, 1, 20, 0.01);
-    vector<double> h_range = ParamRange::ScaledIncremental(0, 1, 100, 1.0);
-    vector<double> k_range = ParamRange::ScaledIncremental(0, 1, 100, 1.0);
-    vector<double> theta_range = ParamRange::ScaledIncremental(0, 5, 628 / 5, 0.01);
+    vector<double> h_range = ParamRange::ScaledIncremental(0, 2, 50, 1.0);
+    vector<double> k_range = ParamRange::ScaledIncremental(0, 2, 50, 1.0);
+    vector<double> theta_range = ParamRange::Incremental(0.0, M_PI * 2.0, M_PI * 2.0 / 16);
     
     HoughTransform hough_transform;
     hough_transform.AddParamRange(a_range);

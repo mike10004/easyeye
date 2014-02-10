@@ -8,6 +8,8 @@
 
 using easyeye::Vectors;
 using namespace cvmore::objdetect;
+using std::sin;
+using std::cos;
 using std::vector;
 using std::cerr;
 using std::endl;
@@ -332,20 +334,14 @@ cv::Point2d RotatedShape::ComputeFixedPoint(const std::vector<double>& params) c
 
 bool RotatedShape::Calculate(double t, const std::vector<double>& params, cv::Point2d& output) const
 {
-    double r11, r12, r21, r22;
-    double theta = params[theta_index_];
-    r11 = std::cos(theta);
-    r12 = -std::sin(theta);
-    r21 = std::cos(theta);
-    r22 = std::sin(theta);
     bool in_range = unrotated_->Calculate(t, params, output);
     cv::Point2d translation = unrotated_->ComputeFixedPoint(params);
-    output.x -= translation.x;
-    output.y -= translation.y;
-    output.x = r11 * output.x + r12 * output.y;
-    output.y = r21 * output.x + r22 * output.y;
-    output.x += translation.x;
-    output.y += translation.y;
+    double theta = params[theta_index_];
+    double x = output.x - translation.x;
+    double y = output.y - translation.y;
+    double sin_theta = sin(theta), cos_theta = cos(theta);
+    output.x = x * cos_theta - y * sin_theta + translation.x; 
+    output.y = x * sin_theta + y * cos_theta + translation.y;
     return in_range;
 }
 
