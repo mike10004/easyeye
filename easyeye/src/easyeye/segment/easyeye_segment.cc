@@ -48,11 +48,11 @@ Segmentation::Segmentation(const Segmentation& other)
 {
     other.extrema_noise.copyTo(extrema_noise);
     if (other.IsEyelidsLocationPresent()) {
-        if (Strings::Equals(other.eyelids_location().mask_creation_method(), VasirEyelidsLocation::kType)) {
+        if (Strings::Equals(other.eyelids_location().type(), VasirEyelidsLocation::kType)) {
             VasirEyelidsLocation* vel = new VasirEyelidsLocation(static_cast<VasirEyelidsLocation&>(*(other.eyelids_location_)));
             set_eyelids_location(vel);
         } else {
-            mylog::Logs::GetLogger().Log(mylog::ERROR, "copying eyelids location of type %s is not yet supported\n", other.eyelids_location().mask_creation_method());
+            mylog::Logs::GetLogger().Log(mylog::ERROR, "copying eyelids location of type %s is not yet supported\n", other.eyelids_location().type());
         }
     }
 }
@@ -224,7 +224,7 @@ void serial::SegmentationAdapter::ToJson(void* src, Json::Value& dst)
     Serialize(seg.extrema_noise, &sma, extrema_noise);
     dst["extrema_noise"] = extrema_noise;
     Json::Value eyelids_location;
-    string eyelids_location_type(seg.eyelids_location().mask_creation_method());
+    string eyelids_location_type(seg.eyelids_location().type());
     dst["eyelids_location_type"] = eyelids_location_type;
     if (Strings::Equals(eyelids_location_type, VasirEyelidsLocation::kType)) {
         const VasirEyelidsLocation& src_eyelids_location = static_cast<const VasirEyelidsLocation&>(seg.eyelids_location());

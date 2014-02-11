@@ -41,7 +41,7 @@ public:
     static const char* kType;
     VasirEyelidsLocation();
     virtual ~VasirEyelidsLocation();
-    const char* mask_creation_method() const;
+    const char* type() const;
     cv::Mat CreateNoiseMask(const cv::Mat& eye_image) const;
     int ellipse_vals[NUM_ELLIPSE_VALS];
     double angle;
@@ -99,10 +99,6 @@ public:
 	* @return Noise image
 	*/
     void doFindPoints(const cv::Mat& image, const BoundaryPair& bp, VasirEyelidsLocation& eyelids_location);
-//    static cv::Mat CreateNoiseImage(const cv::Mat& image, const EyelidsLocation& eyelids_location);
-    const static int ANGLE_DEST_VAL_LEN = 1;
-	/// FUTURE WORK.
-	//Masek::IMAGE* removeReflections(IplImage* eyeImg, IplImage* noiseImg, int eyelashThres, int reflectThres);
     enum EyelidPosition { LEFT = 1, RIGHT = 2 };
     
 private:

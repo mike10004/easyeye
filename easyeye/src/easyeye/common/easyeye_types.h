@@ -82,7 +82,7 @@ class EyelidsLocation
 public:
     EyelidsLocation();
     virtual ~EyelidsLocation();
-    virtual const char* mask_creation_method() const = 0;
+    virtual const char* type() const = 0;
     virtual cv::Mat CreateNoiseMask(const cv::Mat& eye_image) const = 0;
     virtual bool Equals(const EyelidsLocation& other) const = 0;
     virtual bool EqualsApprox(const EyelidsLocation& other) const = 0;

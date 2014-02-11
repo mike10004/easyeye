@@ -11,6 +11,7 @@
 #include <opencv2/core/core.hpp>
 #include <vector>
 #include "../common/easyeye_types.h"
+#include "../common/easyeye_config.h"
 
 namespace cvmore
 {
@@ -150,15 +151,51 @@ private:
 
 namespace easyeye
 {
+
+class VertexFormParabola
+{
+public:
+    VertexFormParabola();
+    VertexFormParabola(double a_, double h_, double k_);
+    const double a;
+    const double h;
+    const double k;
+    std::string ToString() const;
+    void Describe(std::ostream& out) const;
+};
     
 class DualParabolaEyelidsLocation : public EyelidsLocation
 {
 public:
     static const char* kType;
+    VertexFormParabola upper;
+    bool upper_present;
+    VertexFormParabola lower;
+    bool lower_present;
+    DualParabolaEyelidsLocation();
+    const char* type() const;
+    cv::Mat CreateNoiseMask(const cv::Mat& eye_image) const;
+    bool Equals(const EyelidsLocation& other) const;
+    bool EqualsApprox(const EyelidsLocation& other) const;
+    void Describe(std::ostream& out) const;
+    std::string ToString() const;
+    void Draw(cv::Mat& diagnostic_image, cv::Scalar color) const;
+};
+
+class DualParabolaEyelidFinder
+{
+public:
+    DualParabolaEyelidFinder(const EyelidFinderConfig& config);
+    virtual ~DualParabolaEyelidFinder();
+    DualParabolaEyelidsLocation FindEyelids(const cv::Mat& eye_image, const BoundaryPair& boundary_pair);
+private:
+    EyelidFinderConfig config_;
     
 };
-    
-}
+
+}            
+
+            
 
 #endif	/* EASYEYE_EYELID_DETECTION_H */
 

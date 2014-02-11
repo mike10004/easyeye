@@ -417,7 +417,7 @@ const double VasirEyelidsLocation::DEFAULT_MAX_ANGLE_DELTA = 0.1;
 
 bool VasirEyelidsLocation::Equals(const EyelidsLocation& other) const
 {
-    if (!Strings::Equals(mask_creation_method(), other.mask_creation_method())) {
+    if (!Strings::Equals(type(), other.type())) {
         return false;
     }
     return Equals(static_cast<const VasirEyelidsLocation&>(other), DEFAULT_MAX_ANGLE_DELTA);
@@ -425,7 +425,7 @@ bool VasirEyelidsLocation::Equals(const EyelidsLocation& other) const
 
 bool VasirEyelidsLocation::Equals(const VasirEyelidsLocation& other_location, double max_angle_delta) const
 {
-    if (strcmp(mask_creation_method(), other_location.mask_creation_method()) != 0) {
+    if (strcmp(type(), other_location.type()) != 0) {
         return false;
     }
     VasirEyelidsLocation const* other = static_cast<VasirEyelidsLocation const*>(&other_location);
@@ -473,7 +473,7 @@ bool VasirEyelidsLocation::Equals(const VasirEyelidsLocation& other, int ellipse
 
 bool VasirEyelidsLocation::EqualsApprox(const EyelidsLocation& other) const
 {
-    if (!Strings::Equals(mask_creation_method(), other.mask_creation_method())) {
+    if (!Strings::Equals(type(), other.type())) {
         return false;
     }
     return Equals(static_cast<const VasirEyelidsLocation&>(other), APPROX_ELLIPSE_DELTA, DEFAULT_MAX_ANGLE_DELTA);
@@ -533,7 +533,7 @@ void VasirEyelidsLocation::Draw(cv::Mat& eye_image, const Scalar color) const
       cv::ellipse(eye_image, center, bottom_size, angle, 180, 360, color, thickness, CV_AA, 0);
 }
 
-const char* VasirEyelidsLocation::mask_creation_method() const
+const char* VasirEyelidsLocation::type() const
 {
     return kType;
 }
