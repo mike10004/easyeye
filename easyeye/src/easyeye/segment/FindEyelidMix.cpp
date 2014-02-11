@@ -1,14 +1,18 @@
-#include "FindEyelidMix.h"
-
-#include <sstream>
-#include "easyeye_segment.h"
-#include "../common/mylog.h"
-#include <iostream>
 #include <string.h>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
+#include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <jsoncpp/json/json.h>
+#include <portability.h>
 #include "../common/easyeye_utils.h"
 #include "../common/easyeye_imaging.h"
-#include <algorithm>
+#include "../common/easyeye_serial.h"
+#include "../common/easyeye_types.h"
+#include "../common/mylog.h"
+#include "easyeye_segment.h"
+#include "FindEyelidMix.h"
 
 using mylog::Logs;
 using namespace cv;
@@ -21,7 +25,7 @@ FindEyelidMix::FindEyelidMix(EyelidFinderConfig config)
     
 }
 
-void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location)
+void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, VasirEyelidsLocation& eyelids_location)
 {
     int xPupil = bp.pupil.center.x, yPupil = bp.pupil.center.y, rPupil = bp.pupil.radius;
     int yIris = bp.iris.center.y, xIris = bp.iris.center.x, rIris = bp.iris.radius;
@@ -328,13 +332,13 @@ cv::Point2i FindEyelidMix::findContourPoint(const Mat& grayMatImg, int threshold
 
 
 // Image without noise
-Mat FindEyelidMix::getNoiseImage(const Mat& eye_image, const EyelidsLocation& eyelids_location)
+Mat VasirEyelidsLocation::getNoiseImage(const Mat& eye_image) const
 {
-      const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
-      int width = eyelids_location.ellipse_vals[2], 
-              topHeight = eyelids_location.ellipse_vals[3], 
-              bottomHeight = eyelids_location.ellipse_vals[4];
-      double angle = eyelids_location.angle;
+      const cv::Point2i center(center_x(), center_y());
+      int width = ellipse_vals[2], 
+              topHeight = ellipse_vals[3], 
+              bottomHeight = ellipse_vals[4];
+      double angle = angle;
       int rows = eye_image.rows, cols = eye_image.cols;
 	  // Create the mask for normalization
 //	  IplImage* maskImg = NULL;
@@ -366,7 +370,7 @@ Mat FindEyelidMix::getNoiseImage(const Mat& eye_image, const EyelidsLocation& ey
       return noise_image;
 }
 
-cv::Mat FindEyelidMix::CreateNoiseImage(const cv::Mat& image, const EyelidsLocation& eyelids_location)
+cv::Mat VasirEyelidsLocation::CreateNoiseMask(const cv::Mat& image) const
 {
 // Two methods
 //==================================================
@@ -378,9 +382,158 @@ cv::Mat FindEyelidMix::CreateNoiseImage(const cv::Mat& image, const EyelidsLocat
 
 	//2. Without rotating image => rotate image after segmenting the iris region
 	//Mark noise parts in image
-    Mat noise_image = getNoiseImage(image, eyelids_location);
+    Mat noise_image = getNoiseImage(image);
 	Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::doFindPoints ellipse = [%d %d %d %d %d], angle = %.4f\n",
-			eyelids_location.ellipse_vals[0], eyelids_location.ellipse_vals[1], eyelids_location.ellipse_vals[2], eyelids_location.ellipse_vals[3], eyelids_location.ellipse_vals[4], eyelids_location.angle);
+			ellipse_vals[0], ellipse_vals[1], ellipse_vals[2], 
+            ellipse_vals[3], ellipse_vals[4], angle);
 	return noise_image;
     
+}
+
+VasirEyelidsLocation::~VasirEyelidsLocation() 
+{
+}
+
+const char* VasirEyelidsLocation::kType = "vasir";
+
+VasirEyelidsLocation::VasirEyelidsLocation()
+{
+    angle = portability::Math::GetNaN();
+    for (int i = 0; i < NUM_ELLIPSE_VALS; i++) {
+        ellipse_vals[i] = 0;
+    }
+}
+
+int VasirEyelidsLocation::center_x() const{
+    return ellipse_vals[0];
+}
+
+int VasirEyelidsLocation::center_y() const
+{
+    return ellipse_vals[1];
+}
+
+const double VasirEyelidsLocation::DEFAULT_MAX_ANGLE_DELTA = 0.1;
+
+bool VasirEyelidsLocation::Equals(const EyelidsLocation& other) const
+{
+    if (!Strings::Equals(mask_creation_method(), other.mask_creation_method())) {
+        return false;
+    }
+    return Equals(static_cast<const VasirEyelidsLocation&>(other), DEFAULT_MAX_ANGLE_DELTA);
+}
+
+bool VasirEyelidsLocation::Equals(const VasirEyelidsLocation& other_location, double max_angle_delta) const
+{
+    if (strcmp(mask_creation_method(), other_location.mask_creation_method()) != 0) {
+        return false;
+    }
+    VasirEyelidsLocation const* other = static_cast<VasirEyelidsLocation const*>(&other_location);
+    return (abs(angle - other->angle) <= max_angle_delta) 
+            && (Arrays::CountNotEqual(ellipse_vals, other->ellipse_vals, NUM_ELLIPSE_VALS) == 0);
+}
+
+void VasirEyelidsLocation::Describe(ostream& out) const
+{
+    out << "EyelidsLocation{[" << ellipse_vals[0];
+    for (int i = 1; i < NUM_ELLIPSE_VALS; i++) {
+        out << ", " << ellipse_vals[i];
+    }
+    out << "], " << angle << "}";
+}
+
+string VasirEyelidsLocation::ToString() const
+{
+    ostringstream ss;
+    Describe(ss);
+    return ss.str();
+}
+
+bool VasirEyelidsLocation::Equals(const VasirEyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const
+{
+    if (abs(angle - other.angle) > max_angle_delta) {
+        return false;
+    }
+    for (int i = 0; i < NUM_ELLIPSE_VALS; i++) {
+        if (abs(ellipse_vals[i] - other.ellipse_vals[i]) > ellipse_deltas[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool VasirEyelidsLocation::Equals(const VasirEyelidsLocation& other, int ellipse_delta, double max_angle_delta) const
+{
+    int ellipse_deltas[NUM_ELLIPSE_VALS];
+    for (int i = 0; i < NUM_ELLIPSE_VALS; i++) {
+        ellipse_deltas[i] = ellipse_delta;
+    }
+    return Equals(other, ellipse_deltas, max_angle_delta);
+}
+
+bool VasirEyelidsLocation::EqualsApprox(const EyelidsLocation& other) const
+{
+    if (!Strings::Equals(mask_creation_method(), other.mask_creation_method())) {
+        return false;
+    }
+    return Equals(static_cast<const VasirEyelidsLocation&>(other), APPROX_ELLIPSE_DELTA, DEFAULT_MAX_ANGLE_DELTA);
+}
+
+
+void serial::VasirEyelidsLocationAdapter::ToJson(void* src, Json::Value& dst)
+{
+    VasirEyelidsLocation& data = *((VasirEyelidsLocation*)src);
+    Json::Value ellipse_vals(Json::arrayValue);
+    for (int i = 0; i < VasirEyelidsLocation::NUM_ELLIPSE_VALS; i++) {
+        ellipse_vals.append(data.ellipse_vals[i]);
+    }
+    dst["ellipse_vals"] = ellipse_vals;
+    dst["angle"] = data.angle;
+}
+
+bool serial::VasirEyelidsLocationAdapter::FromJson(const Json::Value& src, void* dst)
+{
+    VasirEyelidsLocation& data = *((VasirEyelidsLocation*)dst);
+    Json::Value nullValue;
+    Json::Value ellipse_vals = src.get("ellipse_vals", nullValue);
+    if (ellipse_vals.size() != VasirEyelidsLocation::NUM_ELLIPSE_VALS) {
+        return false;
+    }
+    for (int i = 0; i < VasirEyelidsLocation::NUM_ELLIPSE_VALS; i++) {
+        data.ellipse_vals[i] = ellipse_vals[i].asInt();
+    }
+    data.angle = src.get("angle", 0.0).asDouble();
+    return src.isMember("angle") && src.isMember("ellipse_vals");
+}
+
+void serial::Serialize(const VasirEyelidsLocation& src, Json::Value& dst)
+{
+    VasirEyelidsLocationAdapter a;
+    Serialize(src, &a, dst);
+}
+
+bool serial::Deserialize(const Json::Value& src, VasirEyelidsLocation& v)
+{
+    VasirEyelidsLocationAdapter a;
+    return Deserialize(src, &a, v);
+}
+
+void VasirEyelidsLocation::Draw(cv::Mat& eye_image, const Scalar color) const
+{
+      const cv::Point2i center(center_x(), center_y());
+      int width = ellipse_vals[2], 
+              topHeight = ellipse_vals[3], 
+              bottomHeight = ellipse_vals[4];
+      double angle = angle;
+      int rows = eye_image.rows, cols = eye_image.cols;
+      int thickness = 3;
+      cv::Size top_size(width, topHeight);
+      cv::Size bottom_size(width, bottomHeight);
+      cv::ellipse(eye_image, center, top_size,    angle, 0,   180, color, thickness, CV_AA, 0);
+      cv::ellipse(eye_image, center, bottom_size, angle, 180, 360, color, thickness, CV_AA, 0);
+}
+
+const char* VasirEyelidsLocation::mask_creation_method() const
+{
+    return kType;
 }

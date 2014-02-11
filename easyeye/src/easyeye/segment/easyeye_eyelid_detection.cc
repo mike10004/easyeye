@@ -375,3 +375,5 @@ cv::Point2d VertexFormParabola::ComputeFixedPoint(const std::vector<double>& par
     cv::Point2d v(params[kIndexH], params[kIndexK]);
     return v;
 }
+
+const char* easyeye::DualParabolaEyelidsLocation::kType = "dual_parabola";

@@ -10,6 +10,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <vector>
+#include "../common/easyeye_types.h"
 
 namespace cvmore
 {
@@ -147,7 +148,17 @@ private:
     }
 }
 
-
+namespace easyeye
+{
+    
+class DualParabolaEyelidsLocation : public EyelidsLocation
+{
+public:
+    static const char* kType;
+    
+};
+    
+}
 
 #endif	/* EASYEYE_EYELID_DETECTION_H */
 

@@ -62,32 +62,6 @@ bool serial::BoundaryPairAdapter::FromJson(const Json::Value& src, void* dst)
     return src.isMember("iris") && src.isMember("pupil");
 }
 
-void serial::EyelidsLocationAdapter::ToJson(void* src, Json::Value& dst)
-{
-    EyelidsLocation& data = *((EyelidsLocation*)src);
-    Json::Value ellipse_vals(Json::arrayValue);
-    for (int i = 0; i < EyelidsLocation::NUM_ELLIPSE_VALS; i++) {
-        ellipse_vals.append(data.ellipse_vals[i]);
-    }
-    dst["ellipse_vals"] = ellipse_vals;
-    dst["angle"] = data.angle;
-}
-
-bool serial::EyelidsLocationAdapter::FromJson(const Json::Value& src, void* dst)
-{
-    EyelidsLocation& data = *((EyelidsLocation*)dst);
-    Json::Value nullValue;
-    Json::Value ellipse_vals = src.get("ellipse_vals", nullValue);
-    if (ellipse_vals.size() != EyelidsLocation::NUM_ELLIPSE_VALS) {
-        return false;
-    }
-    for (int i = 0; i < EyelidsLocation::NUM_ELLIPSE_VALS; i++) {
-        data.ellipse_vals[i] = ellipse_vals[i].asInt();
-    }
-    data.angle = src.get("angle", 0.0d).asDouble();
-    return src.isMember("angle") && src.isMember("ellipse_vals");
-}
-
 void serial::Serialize(const cv::Point2i& p, Json::Value& dst)
 {
     PointAdapter a;
@@ -121,18 +95,6 @@ void serial::Serialize(const BoundaryPair& src, Json::Value& dst)
 bool serial::Deserialize(const Json::Value& src, BoundaryPair& v)
 {
     BoundaryPairAdapter a;
-    return Deserialize(src, &a, v);
-}
-
-void serial::Serialize(const EyelidsLocation& src, Json::Value& dst)
-{
-    EyelidsLocationAdapter a;
-    Serialize(src, &a, dst);
-}
-
-bool serial::Deserialize(const Json::Value& src, EyelidsLocation& v)
-{
-    EyelidsLocationAdapter a;
     return Deserialize(src, &a, v);
 }
 

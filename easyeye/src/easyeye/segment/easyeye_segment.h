@@ -28,17 +28,21 @@ class Segmentation
 public:
 	Segmentation();
 	virtual ~Segmentation();
-    
+    Segmentation(const Segmentation& other);
     typedef Result::ResultType Status;
     Status status;
 	BoundaryPair boundary_pair;
     std::vector<cv::Point2i> iris_boundary;
     std::vector<cv::Point2i> pupil_boundary;
-    EyelidsLocation eyelids_location;
     cv::SparseMat extrema_noise;
     void Describe(std::ostream& out) const;
     bool Equals(const Segmentation& other) const;
     bool Equals(const Segmentation& other, int radius_delta) const;
+    const EyelidsLocation& eyelids_location() const;
+    void set_eyelids_location(EyelidsLocation* eyelids_location);
+    bool IsEyelidsLocationPresent() const;
+private:
+    EyelidsLocation* eyelids_location_;
 };
 
 class SegmenterConfig : public Config

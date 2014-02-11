@@ -80,22 +80,15 @@ private:
 class EyelidsLocation
 {
 public:
-    static const int NUM_ELLIPSE_VALS = 5;
     EyelidsLocation();
-    int ellipse_vals[NUM_ELLIPSE_VALS];
-    double angle;
-    int center_x() const;
-    int center_y() const;
-    bool Equals(const EyelidsLocation& other) const;
-    bool EqualsApprox(const EyelidsLocation& other) const;
-    static const double DEFAULT_MAX_ANGLE_DELTA;
-    bool Equals(const EyelidsLocation& other, double max_angle_delta) const;
-    bool Equals(const EyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const;
-    bool Equals(const EyelidsLocation& other, int ellipse_delta, double max_angle_delta) const;
-    void Describe(std::ostream& out);
-    std::string ToString();
-private:
-    const static int APPROX_ELLIPSE_DELTA = 3;
+    virtual ~EyelidsLocation();
+    virtual const char* mask_creation_method() const = 0;
+    virtual cv::Mat CreateNoiseMask(const cv::Mat& eye_image) const = 0;
+    virtual bool Equals(const EyelidsLocation& other) const = 0;
+    virtual bool EqualsApprox(const EyelidsLocation& other) const = 0;
+    virtual void Describe(std::ostream& out) const = 0;
+    virtual std::string ToString() const = 0;
+    virtual void Draw(cv::Mat& diagnostic_image, cv::Scalar color) const = 0;
 };
 
 }

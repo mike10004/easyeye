@@ -35,14 +35,13 @@ Normalization::~Normalization()
 
 void Encoder::NormalizeIris(const Mat& src_eye_image, const Segmentation& segmentation, Normalization& result) 
 {
-    Mat noisified_eye_image = FindEyelidMix::CreateNoiseImage(src_eye_image, segmentation.eyelids_location);
-    SparseMatConstIterator_<uchar> it = segmentation.extrema_noise.begin<uchar>();
-    SparseMatConstIterator_<uchar> it_end = segmentation.extrema_noise.end<uchar>();
+    Mat noisified_eye_image = segmentation.eyelids_location().CreateNoiseMask(src_eye_image);
     double noise_indicator = portability::Math::GetNaN();
     uchar noise_color_u = (uchar) noise_indicator;
     assert(noise_color_u == 0);
     
-    for(; it != it_end; ++it)
+    for(SparseMatConstIterator_<uchar> it = segmentation.extrema_noise.begin<uchar>(); 
+            it != segmentation.extrema_noise.end<uchar>(); ++it)
     {
         // print element indices and the element value
         const SparseMat::Node* n = it.node();

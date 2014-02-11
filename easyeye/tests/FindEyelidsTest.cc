@@ -44,9 +44,9 @@ void FindEyelidsTest::testDetectionCorrectness() {
         EyelidFinderConfig config;
         FindEyelidMix eyelid_finder(config);
         const int max_delta[] = { 3, 3, 3, 3, 3 }; 
-        EyelidsLocation& expected = seg.eyelids_location;
+        const VasirEyelidsLocation& expected = static_cast<const VasirEyelidsLocation&>(seg.eyelids_location());
         cerr << i << " expected: " << expected.ToString() << endl;
-        EyelidsLocation actual;
+        VasirEyelidsLocation actual;
         eyelid_finder.doFindPoints(eye_image, seg.boundary_pair, actual);
         cerr << i << "   actual: " << actual.ToString() << endl;
         bool approx_equal = expected.Equals(actual, max_delta, 0.05);

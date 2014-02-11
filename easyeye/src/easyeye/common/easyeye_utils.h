@@ -137,6 +137,8 @@ private:
 class Strings
 {
 public:
+    static bool Equals(const std::string& a, const std::string& b);
+    static bool EqualsIgnoreCase(const std::string& a, const std::string& b);
     static std::vector<std::string> Split(const std::string &s, char delim);
     static std::vector<std::string> Split(const std::string &s, char delim, bool allow_empty);
     std::string Join(const std::list<std::string>& pieces, const std::string& delimiter);

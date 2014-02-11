@@ -59,7 +59,6 @@ void Encoder::EncodeIris(const Imaging::FloatImage& polar_array, const Imaging::
 
 	masek.encode(polarArray, noiseArray, config_.encodeScales, config_.minWaveLength,
 		config_.mult, config_.sigmaOnf, irisTemplate, irisMask);
-//		&(result.width), &(result.height));
 	result.status = Result::SUCCESS;
     Imaging::FreeFilter(polarArray);
     Imaging::FreeImage(noiseArray);

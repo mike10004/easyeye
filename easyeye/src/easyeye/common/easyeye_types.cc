@@ -165,73 +165,10 @@ IntCircle::IntCircle()
 
 EyelidsLocation::EyelidsLocation()
 {
-    angle = portability::Math::GetNaN();
-    for (int i = 0; i < NUM_ELLIPSE_VALS; i++) {
-        ellipse_vals[i] = 0;
-    }
+    
 }
 
-int EyelidsLocation::center_x() const{
-    return ellipse_vals[0];
-}
-
-int EyelidsLocation::center_y() const
+EyelidsLocation::~EyelidsLocation()
 {
-    return ellipse_vals[1];
-}
-
-const double EyelidsLocation::DEFAULT_MAX_ANGLE_DELTA = 0.1;
-
-bool EyelidsLocation::Equals(const EyelidsLocation& other) const
-{
-    return Equals(other, DEFAULT_MAX_ANGLE_DELTA);
-}
-
-bool EyelidsLocation::Equals(const EyelidsLocation& other, double max_angle_delta) const
-{
-    return (abs(angle - other.angle) <= max_angle_delta) 
-            && (Arrays::CountNotEqual(ellipse_vals, other.ellipse_vals, NUM_ELLIPSE_VALS) == 0);
-}
-
-void EyelidsLocation::Describe(ostream& out)
-{
-    out << "EyelidsLocation{[" << ellipse_vals[0];
-    for (int i = 1; i < NUM_ELLIPSE_VALS; i++) {
-        out << ", " << ellipse_vals[i];
-    }
-    out << "], " << angle << "}";
-}
-
-string EyelidsLocation::ToString()
-{
-    ostringstream ss;
-    Describe(ss);
-    return ss.str();
-}
-
-bool EyelidsLocation::Equals(const EyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const
-{
-    if (abs(angle - other.angle) > max_angle_delta) {
-        return false;
-    }
-    for (int i = 0; i < NUM_ELLIPSE_VALS; i++) {
-        if (abs(ellipse_vals[i] - other.ellipse_vals[i]) > ellipse_deltas[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool EyelidsLocation::Equals(const EyelidsLocation& other, int ellipse_delta, double max_angle_delta) const
-{
-    int ellipse_deltas[NUM_ELLIPSE_VALS];
-    for (int i = 0; i < NUM_ELLIPSE_VALS; i++) {
-        ellipse_deltas[i] = ellipse_delta;
-    }
-    return Equals(other, ellipse_deltas, max_angle_delta);
-}
-
-bool EyelidsLocation::EqualsApprox(const EyelidsLocation& other) const
-{
-    return Equals(other, APPROX_ELLIPSE_DELTA, DEFAULT_MAX_ANGLE_DELTA);
+    
 }

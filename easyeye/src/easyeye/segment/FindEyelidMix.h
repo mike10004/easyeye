@@ -22,15 +22,56 @@
 #ifndef FINDEYELIDMIX_H
 #define FINDEYELIDMIX_H
 
+#include <jsoncpp/json/json.h>
 #include "../common/easyeye_types.h"
+#include "../common/easyeye_serial.h"
 #include <opencv2/core/core.hpp>
 #include "Masek.h"
 #include "../common/easyeye_diagnostics.h"
 #include "../common/easyeye_config.h"
+#include "../common/easyeye_types.h"
 
 namespace easyeye
 {
 
+class VasirEyelidsLocation : public EyelidsLocation
+{
+public:
+    static const int NUM_ELLIPSE_VALS = 5;
+    static const char* kType;
+    VasirEyelidsLocation();
+    virtual ~VasirEyelidsLocation();
+    const char* mask_creation_method() const;
+    cv::Mat CreateNoiseMask(const cv::Mat& eye_image) const;
+    int ellipse_vals[NUM_ELLIPSE_VALS];
+    double angle;
+    int center_x() const;
+    int center_y() const;
+    bool Equals(const EyelidsLocation& other) const;
+    bool EqualsApprox(const EyelidsLocation& other) const;
+    static const double DEFAULT_MAX_ANGLE_DELTA;
+    bool Equals(const VasirEyelidsLocation& other, double max_angle_delta) const;
+    bool Equals(const VasirEyelidsLocation& other, const int ellipse_deltas[], double max_angle_delta) const;
+    bool Equals(const VasirEyelidsLocation& other, int ellipse_delta, double max_angle_delta) const;
+    void Describe(std::ostream& out) const;
+    std::string ToString() const;
+    void Draw(cv::Mat& eye_image, cv::Scalar color) const;
+private:
+    const static int APPROX_ELLIPSE_DELTA = 3;
+	/**
+	* Marks noise with zeros in an image.
+	*
+	* @param img Input Image
+	* @param center Center points of eyelid ellipse
+	* @param width Ellipse's width
+	* @param topHeight Upper ellipse's height
+	* @param bottomHeight Lower ellipse's height
+	* @param angle Ellipse's orientation
+	* @retrun Image with noise mark
+	*/
+	cv::Mat getNoiseImage(const cv::Mat& eye_image) const;
+};    
+    
 /**
  * Eyelids curve detection class.
  */
@@ -57,8 +98,8 @@ public:
 	*               - \c 2 = video captured at a distance (distant-videos)
 	* @return Noise image
 	*/
-    void doFindPoints(const cv::Mat& image, const BoundaryPair& bp, EyelidsLocation& eyelids_location);
-    static cv::Mat CreateNoiseImage(const cv::Mat& image, const EyelidsLocation& eyelids_location);
+    void doFindPoints(const cv::Mat& image, const BoundaryPair& bp, VasirEyelidsLocation& eyelids_location);
+//    static cv::Mat CreateNoiseImage(const cv::Mat& image, const EyelidsLocation& eyelids_location);
     const static int ANGLE_DEST_VAL_LEN = 1;
 	/// FUTURE WORK.
 	//Masek::IMAGE* removeReflections(IplImage* eyeImg, IplImage* noiseImg, int eyelashThres, int reflectThres);
@@ -133,20 +174,22 @@ private:
 	*/
 	double triLength(int a, int b);
 
-	/**
-	* Marks noise with zeros in an image.
-	*
-	* @param img Input Image
-	* @param center Center points of eyelid ellipse
-	* @param width Ellipse's width
-	* @param topHeight Upper ellipse's height
-	* @param bottomHeight Lower ellipse's height
-	* @param angle Ellipse's orientation
-	* @retrun Image with noise mark
-	*/
-	static cv::Mat getNoiseImage(const cv::Mat& eye_image, const EyelidsLocation& eyelids_location);
     
 };
+
+namespace serial
+{
+
+class VasirEyelidsLocationAdapter : public Adapter
+{
+public:
+    bool FromJson(const Json::Value& src, void* dst);
+    void ToJson(void* src, Json::Value& dst);
+};
+void Serialize(const VasirEyelidsLocation& c, Json::Value& dst);
+bool Deserialize(const Json::Value& src, VasirEyelidsLocation& dst);
+    
+}
 
 }
 

@@ -33,6 +33,23 @@ using mylog::TRACE;
 using mylog::WARN;
 using mylog::ERROR;
 
+namespace 
+{
+void MaybeMakeDirs(const string& dir) 
+{
+    if (!IOUtils::IsDirectory(dir)) {
+        int error_code;
+        bool now_exists = IOUtils::MakeDirs(dir, &error_code);
+        if (!now_exists) {
+            mylog::Logs::GetLogger().Log(mylog::INFO, "failed to create directory %s with error %d %s\n", dir.c_str(), error_code, strerror(error_code));
+        }
+    }
+}
+
+}
+
+
+
 Diagnostician::Diagnostician()
     : output_dir_("."),
     disabled_(false),
@@ -130,22 +147,6 @@ void Diagnostician::DumpEncodeOutput(const int width, const int height, const in
     }
 }
 
-static void DrawEyelidEllipse(cv::Mat& eye_image, const EyelidsLocation& eyelids_location, const Scalar color)
-{
-      const cv::Point2i center(eyelids_location.center_x(), eyelids_location.center_y());
-      int width = eyelids_location.ellipse_vals[2], 
-              topHeight = eyelids_location.ellipse_vals[3], 
-              bottomHeight = eyelids_location.ellipse_vals[4];
-      double angle = eyelids_location.angle;
-      int rows = eye_image.rows, cols = eye_image.cols;
-      int thickness = 3;
-      Size top_size(width, topHeight);
-      Size bottom_size(width, bottomHeight);
-      cv::ellipse(eye_image, center, top_size, angle, 0, 180, color, thickness, CV_AA, 0);
-      cv::ellipse(eye_image, center, bottom_size, angle, 180, 360, color, thickness, CV_AA, 0);
-}
-
-
 void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation& eyelids, cv::SparseMat& extrema_noise)
 {
     if (disabled()) return;
@@ -153,7 +154,7 @@ void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation&
             eyelid_color(0x0, 0xff, 0x0);
     int thickness = 2, line_type = 8;
     Mat eye_image = cv::imread(eye_image_pathname_, CV_LOAD_IMAGE_COLOR);
-    DrawEyelidEllipse(eye_image, eyelids, eyelid_color);
+    eyelids.Draw(eye_image, eyelid_color);
     SparseMatConstIterator_<uchar>
     it = extrema_noise.begin<uchar>(),
     it_end = extrema_noise.end<uchar>();
@@ -172,17 +173,6 @@ void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation&
     cv::circle(eye_image, iris_center, iris_radius, iris_color, thickness, line_type);
     cv::circle(eye_image, pupil_center, pupil_radius, pupil_color, thickness, line_type);
     WriteImage(eye_image, "segmentation");
-}
-
-static void MaybeMakeDirs(const string& dir) 
-{
-    if (!IOUtils::IsDirectory(dir)) {
-        int error_code;
-        bool now_exists = IOUtils::MakeDirs(dir, &error_code);
-        if (!now_exists) {
-            mylog::Logs::GetLogger().Log(mylog::INFO, "failed to create directory %s with error %d %s\n", dir.c_str(), error_code, strerror(error_code));
-        }
-    }
 }
 
 bool Diagnostician::write_original() const

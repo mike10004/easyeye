@@ -63,6 +63,10 @@ public:
     IrisImageType iris_image_type;
     GaussConfig gauss_config;
     int min_contour_count;
+    enum Method {
+        METHOD_ELLIPSE_CONTOUR, METHOD_HOUGH_PARABOLA
+    };
+    Method method;
     
 };
 

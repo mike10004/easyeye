@@ -16,6 +16,7 @@
 #include <Masek.h>
 #include "../common/mylog.h"
 #include "../common/base64.h"
+#include "easyeye_eyelid_detection.h"
 #include <iostream>
 #include <string>
 
@@ -26,12 +27,34 @@ using namespace easyeye;
 using namespace cv;
 
 Segmentation::Segmentation() 
-    : status(Result::NOT_YET_SET), boundary_pair(), eyelids_location(), extrema_noise()
+    : status(Result::NOT_YET_SET), boundary_pair(), eyelids_location_(NULL), extrema_noise()
 {
 }
 
 Segmentation::~Segmentation()
 {
+    if (eyelids_location_ != NULL) {
+        delete eyelids_location_;
+    }
+}
+//Array(const Array& other)
+//    : size(other.size), data(new int[other.size]) 
+//{
+//    std::copy(other.data, other.data + other.size, data); 
+//}
+
+Segmentation::Segmentation(const Segmentation& other)
+    : status(other.status), boundary_pair(other.boundary_pair), eyelids_location_(NULL), extrema_noise()
+{
+    other.extrema_noise.copyTo(extrema_noise);
+    if (other.IsEyelidsLocationPresent()) {
+        if (Strings::Equals(other.eyelids_location().mask_creation_method(), VasirEyelidsLocation::kType)) {
+            VasirEyelidsLocation* vel = new VasirEyelidsLocation(static_cast<VasirEyelidsLocation&>(*(other.eyelids_location_)));
+            set_eyelids_location(vel);
+        } else {
+            mylog::Logs::GetLogger().Log(mylog::ERROR, "copying eyelids location of type %s is not yet supported\n", other.eyelids_location().mask_creation_method());
+        }
+    }
 }
 
 void Segmentation::Describe(std::ostream& out) const
@@ -111,10 +134,17 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 	// Find the upper and lower eyelid(s)
 	FindEyelidMix eyelid_finder(config_.eyelid_finder_config);
     eyelid_finder.set_diagnostician(diagnostician_);
-	eyelid_finder.doFindPoints(eyeImg, bpair, seg.eyelids_location);
+    if (config_.eyelid_finder_config.method == EyelidFinderConfig::METHOD_ELLIPSE_CONTOUR) {
+        VasirEyelidsLocation* eyelids_location = new VasirEyelidsLocation();
+        seg.set_eyelids_location(eyelids_location);
+        eyelid_finder.doFindPoints(eyeImg, bpair, *eyelids_location);
+    } else {
+        mylog::Logs::GetLogger().Log(mylog::ERROR, "Segmenter::SegmentEyeImage "
+                "alternate eyelid detection methods not yet supported\n");
+    }
     ExtremaNoiseFinder extrema_noise_finder(config_.extrema_noise_finder_config);
 	extrema_noise_finder.FindExtremaNoise(eyeImg).copyTo(seg.extrema_noise);
-    diagnostician()->DumpSegOutput(seg.boundary_pair, seg.eyelids_location, seg.extrema_noise);
+    diagnostician()->DumpSegOutput(seg.boundary_pair, seg.eyelids_location(), seg.extrema_noise);
 	seg.status = Result::SUCCESS;
 }
 
@@ -158,9 +188,24 @@ bool serial::SegmentationAdapter::FromJson(const Json::Value& src, void* dst)
     if (!Deserialize(src["extrema_noise"], &sma, seg.extrema_noise)) {
         return false;
     }
-    if (!Deserialize(src["eyelids_location"], seg.eyelids_location)) {
+    string eyelids_location_type(VasirEyelidsLocation::kType);
+    if (src.isMember("eyelids_location_type")) {
+        eyelids_location_type.assign(src["eyelids_location_type"].asString());
+    }
+    if (eyelids_location_type.compare(VasirEyelidsLocation::kType) == 0) {
+        VasirEyelidsLocation* eyelids_location = new VasirEyelidsLocation();
+        seg.set_eyelids_location(eyelids_location);
+        if (!Deserialize(src["eyelids_location"], *eyelids_location)) {
+            return false;
+        }        
+    } else if (eyelids_location_type.compare(DualParabolaEyelidsLocation::kType) == 0) {
+        mylog::Logs::GetLogger().Log(mylog::ERROR, "serial::SegmentationAdapter::FromJson deserialization of eyelid location type %s is not yet supported\n", eyelids_location_type.c_str());
+        return false;
+    } else {
+        mylog::Logs::GetLogger().Log(mylog::ERROR, "serial::SegmentationAdapter::FromJson deserialization of eyelid location type %s is not yet supported\n", eyelids_location_type.c_str());
         return false;
     }
+    
     return src.isMember("status") 
             && src.isMember("boundary_pair") 
             && src.isMember("extrema_noise") 
@@ -179,7 +224,15 @@ void serial::SegmentationAdapter::ToJson(void* src, Json::Value& dst)
     Serialize(seg.extrema_noise, &sma, extrema_noise);
     dst["extrema_noise"] = extrema_noise;
     Json::Value eyelids_location;
-    Serialize(seg.eyelids_location, eyelids_location);
+    string eyelids_location_type(seg.eyelids_location().mask_creation_method());
+    dst["eyelids_location_type"] = eyelids_location_type;
+    if (Strings::Equals(eyelids_location_type, VasirEyelidsLocation::kType)) {
+        const VasirEyelidsLocation& src_eyelids_location = static_cast<const VasirEyelidsLocation&>(seg.eyelids_location());
+        Serialize(src_eyelids_location, eyelids_location);
+    } else {
+        mylog::Logs::GetLogger().Log(mylog::ERROR, "serial::SegmentationAdapter::ToJson serialization of eyelids location type %s is not yet supported\n", eyelids_location_type.c_str());
+    }
+
     dst["eyelids_location"] = eyelids_location;
 }
 
@@ -202,3 +255,24 @@ void Contours::AddAll(std::vector<Point>& from, std::vector<Point>& to)
         to.push_back(*it);
     }
 }
+
+void Segmentation::set_eyelids_location(EyelidsLocation* eyelids_location)
+{
+    if (eyelids_location_ != NULL) {
+        delete eyelids_location_;
+    }
+    eyelids_location_ = eyelids_location;
+}
+
+const EyelidsLocation& Segmentation::eyelids_location() const
+{
+    // This will segfault if the eyelids haven't been set.
+    // TODO: add API for checking whether eyelids have been set
+    return *eyelids_location_; 
+}
+
+bool Segmentation::IsEyelidsLocationPresent() const
+{
+    return eyelids_location_ != NULL;
+}
+

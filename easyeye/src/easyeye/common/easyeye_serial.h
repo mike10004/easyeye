@@ -66,28 +66,21 @@ namespace easyeye
             return Deserialize(src, adapter, data);
         }
 
-        class PointAdapter : public serial::Adapter 
+        class PointAdapter : public Adapter 
         {
         public:
             bool FromJson(const Json::Value& src, void* dst);
             void ToJson(void* src, Json::Value& dst);
         };
 
-        class BoundaryPairAdapter : public serial::Adapter 
-        {
-        public:
-            bool FromJson(const Json::Value& src, void* dst);
-            void ToJson(void* src, Json::Value& dst);
-        };
-
-        class EyelidsLocationAdapter : public serial::Adapter
+        class BoundaryPairAdapter : public Adapter 
         {
         public:
             bool FromJson(const Json::Value& src, void* dst);
             void ToJson(void* src, Json::Value& dst);
         };
         
-        class IntCircleAdapter : public serial::Adapter 
+        class IntCircleAdapter : public Adapter 
         {
         public:
             bool FromJson(const Json::Value& src, void* dst);
@@ -100,8 +93,6 @@ namespace easyeye
         bool Deserialize(const Json::Value& src, IntCircle& dst);
         void Serialize(const BoundaryPair& c, Json::Value& dst);
         bool Deserialize(const Json::Value& src, BoundaryPair& dst);
-        void Serialize(const EyelidsLocation& c, Json::Value& dst);
-        bool Deserialize(const Json::Value& src, EyelidsLocation& dst);
         
     }
 }

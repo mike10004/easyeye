@@ -51,7 +51,7 @@ void SegmentationSerializerTest::testSerializeAndDeserialize() {
     cerr << endl;
     CPPUNIT_ASSERT(ok);
     CPPUNIT_ASSERT(expected.boundary_pair.Equals(actual.boundary_pair));
-    CPPUNIT_ASSERT(expected.eyelids_location.Equals(actual.eyelids_location));
+    CPPUNIT_ASSERT(expected.eyelids_location().Equals(actual.eyelids_location()));
     CPPUNIT_ASSERT_EQUAL(expected.status, actual.status);
 }
 

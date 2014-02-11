@@ -546,3 +546,8 @@ std::string Files::GetDirname(const std::string& pathname)
     PathInfo p = GetPathInfo(pathname);
     return p.dirname;
 }
+
+bool Strings::Equals(const std::string& a, const std::string& b)
+{
+    return a.compare(b) == 0;
+}
