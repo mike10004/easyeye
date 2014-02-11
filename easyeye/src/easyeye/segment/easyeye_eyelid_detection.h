@@ -163,16 +163,22 @@ public:
     std::string ToString() const;
     void Describe(std::ostream& out) const;
 };
-    
+
+class EyelidBoundary
+{
+public:
+    EyelidBoundary();
+    VertexFormParabola shape;
+    bool present;
+};
+
 class DualParabolaEyelidsLocation : public EyelidsLocation
 {
 public:
-    static const char* kType;
-    VertexFormParabola upper;
-    bool upper_present;
-    VertexFormParabola lower;
-    bool lower_present;
     DualParabolaEyelidsLocation();
+    static const char* kType;
+    EyelidBoundary upper;
+    EyelidBoundary lower;
     const char* type() const;
     cv::Mat CreateNoiseMask(const cv::Mat& eye_image) const;
     bool Equals(const EyelidsLocation& other) const;
@@ -187,10 +193,12 @@ class DualParabolaEyelidFinder
 public:
     DualParabolaEyelidFinder(const EyelidFinderConfig& config);
     virtual ~DualParabolaEyelidFinder();
-    DualParabolaEyelidsLocation FindEyelids(const cv::Mat& eye_image, const BoundaryPair& boundary_pair);
-private:
+    virtual DualParabolaEyelidsLocation FindEyelids(const cv::Mat& eye_image, const BoundaryPair& boundary_pair);
+protected:
+    enum EyelidType { EYELID_UPPER, EYELID_LOWER };
+    virtual cv::Mat MakeRegionMask(const cv::Mat& eye_image, const BoundaryPair& boundary_pair, EyelidType eyelid_type);
+    virtual EyelidBoundary DetectEyelidBoundary(const cv::Mat& eye_image, const cv::Mat& region_mask, EyelidType eyelid_type);
     EyelidFinderConfig config_;
-    
 };
 
 }            
