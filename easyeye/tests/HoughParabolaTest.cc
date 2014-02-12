@@ -16,10 +16,11 @@
 #include <ctime>
 #include "../src/easyeye/segment/easyeye_eyelid_detection.h"
 
+using easyeye::Vectors;
+using easyeye::IOUtils;
 using namespace cvmore::objdetect;
 using namespace cv;
 using namespace std;
-using namespace easyeye;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HoughParabolaTest);
 
@@ -187,7 +188,7 @@ void HoughParabolaTest::testComputeTransformVertexForm() {
     cerr << "transforming..." << endl;
     vector<double> best = hough_transform.Compute(image, parabola);
     cerr << "best fit: ";
-    Vectors::Print(best, cerr);
+    easyeye::Vectors::Print(best, cerr);
     cerr << endl;
     CreateOutputImage(parabola, best, image, "output-vertexform.png");
     vector<double> tolerances = ToVector(0.011, 5, 5);
