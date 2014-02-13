@@ -65,6 +65,7 @@
         <itemPath>src/easyeye/segment/FindPupilCircleNew.cpp</itemPath>
         <itemPath>src/easyeye/segment/easyeye_extrema_noise.cpp</itemPath>
         <itemPath>src/easyeye/segment/easyeye_eyelid_detection.cc</itemPath>
+        <itemPath>src/easyeye/segment/easyeye_eyelid_finder.cc</itemPath>
         <itemPath>src/easyeye/segment/easyeye_segment.cc</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -100,6 +101,14 @@
         <itemPath>tests/DiagnosticsTest.cpp</itemPath>
         <itemPath>tests/DiagnosticsTest.h</itemPath>
         <itemPath>tests/diagnostics_test_runner.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f19"
+                     displayName="dual_parabola_eyelid_finder"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/DualParabolaEyelidFinderTest.cc</itemPath>
+        <itemPath>tests/DualParabolaEyelidFinderTest.h</itemPath>
+        <itemPath>tests/dual_parabola_eyelid_finder_test_runner.cc</itemPath>
       </logicalFolder>
       <logicalFolder name="f9" displayName="encoding" projectFiles="true" kind="TEST">
         <itemPath>tests/EncodingTest.cc</itemPath>
@@ -145,6 +154,12 @@
         <itemPath>tests/MatchingTest.cc</itemPath>
         <itemPath>tests/MatchingTest.h</itemPath>
         <itemPath>tests/matching_test_runner.cc</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f18"
+                     displayName="parabola_ranges"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/eyelid_parabola_ranges_analysis.cc</itemPath>
       </logicalFolder>
       <logicalFolder name="f17"
                      displayName="rotated_shape"
@@ -218,6 +233,7 @@
             <pElem>../optimasek/include</pElem>
             <pElem>.</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <archiverTool>
         </archiverTool>
@@ -387,6 +403,35 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f17</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f18">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f18</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f19">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f19</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -666,6 +711,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/easyeye/segment/easyeye_eyelid_finder.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/segment/easyeye_segment.cc"
             ex="false"
             tool="1"
@@ -682,6 +732,16 @@
       <item path="tests/DiagnosticsTest.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/DiagnosticsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/DualParabolaEyelidFinderTest.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/DualParabolaEyelidFinderTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="tests/EncodingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -740,9 +800,19 @@
       </item>
       <item path="tests/diagnostics_test_runner.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="tests/dual_parabola_eyelid_finder_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="tests/encoding_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/eyelid_fix_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/eyelid_parabola_ranges_analysis.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/files_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -803,6 +873,7 @@
           <incDir>
             <pElem>../optimasek/include</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -978,6 +1049,35 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f17</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f18">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f18</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f19">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f19</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -1252,6 +1352,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/easyeye/segment/easyeye_eyelid_finder.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="src/easyeye/segment/easyeye_segment.cc"
             ex="false"
             tool="1"
@@ -1268,6 +1373,16 @@
       <item path="tests/DiagnosticsTest.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/DiagnosticsTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/DualParabolaEyelidFinderTest.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/DualParabolaEyelidFinderTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="tests/EncodingTest.cc" ex="false" tool="1" flavor2="0">
       </item>
@@ -1326,9 +1441,19 @@
       </item>
       <item path="tests/diagnostics_test_runner.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="tests/dual_parabola_eyelid_finder_test_runner.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="tests/encoding_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/eyelid_fix_test_runner.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/eyelid_parabola_ranges_analysis.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/files_test_runner.cc" ex="false" tool="1" flavor2="0">
       </item>

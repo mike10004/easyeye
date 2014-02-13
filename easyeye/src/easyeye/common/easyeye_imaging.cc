@@ -9,9 +9,55 @@
 #include "../common/mylog.h"
 
 using namespace easyeye;
-using namespace std;
 using namespace cv;
 using mylog::Logs;
+using cvmore::Pixels;
+
+int Pixels::Clamp(int value, int min_inclusive, int max_inclusive)
+{
+	if(value < min_inclusive)
+		value = min_inclusive;
+	if(value > max_inclusive)
+		value = max_inclusive;	
+	return value;
+}
+
+uchar Pixels::Clamp(int value, uchar min_inclusive, uchar max_inclusive) 
+{
+    if (value < (int) min_inclusive) {
+        return min_inclusive;
+    }
+    if (value > (int) max_inclusive) {
+        return max_inclusive;
+    }
+    return (uchar) value;
+}
+
+uchar Pixels::Clamp(int value)
+{
+    return Clamp(value, (uchar)0, (uchar)0xff);
+}
+
+float Pixels::Interpolate(const Mat& img, double px, double py)
+{ // http://stackoverflow.com/questions/13299409/how-to-get-the-image-pixel-at-real-locations-in-opencv
+    assert(!img.empty());
+    int x = (int)px;
+    int y = (int)py;
+
+    int x0 = cv::borderInterpolate(x,   img.cols, cv::BORDER_REFLECT_101);
+    int x1 = cv::borderInterpolate(x+1, img.cols, cv::BORDER_REFLECT_101);
+    int y0 = cv::borderInterpolate(y,   img.rows, cv::BORDER_REFLECT_101);
+    int y1 = cv::borderInterpolate(y+1, img.rows, cv::BORDER_REFLECT_101);
+
+    float a = px - (float)x;
+    float c = py - (float)y;
+
+    float b = ((img.at<uchar>(y0, x0) * (1.f - a) 
+            + img.at<uchar>(y0, x1) * a) * (1.f - c)
+            + (img.at<uchar>(y1, x0) * (1.f - a) 
+            + img.at<uchar>(y1, x1) * a) * c);
+    return b;
+} 
 
 Mat Imaging::CreateGrayImage(int nrows, int ncols)
 {
@@ -109,16 +155,6 @@ Mat Imaging::GetROI(const Mat& src, int startX, int width, int startY, int heigh
     return roi;
 }
 
-static int clamp(int value, int min_inclusive, int max_inclusive)
-{
-	if(value < min_inclusive)
-		value = min_inclusive;
-	if(value > max_inclusive)
-		value = max_inclusive;	
-	return value;
-}
-
-
 void Imaging::myRect(const cv::Mat& image, int x, int y, int radius, int* destVal)
 {  
 	int startX, endX, startY, endY;
@@ -127,10 +163,10 @@ void Imaging::myRect(const cv::Mat& image, int x, int y, int radius, int* destVa
     startY = y-radius;// Y starting point
 	endY = y+radius;// Y end point
 	
-	destVal[0] = clamp(startX, 1, image.cols);
-	destVal[1] = clamp(endX, 1, image.cols);	
-	destVal[2] = clamp(startY, 1, image.rows);
-	destVal[3] = clamp(endY, 1, image.rows);
+	destVal[0] = Pixels::Clamp(startX, 1, image.cols);
+	destVal[1] = Pixels::Clamp(endX, 1, image.cols);	
+	destVal[2] = Pixels::Clamp(startY, 1, image.rows);
+	destVal[3] = Pixels::Clamp(endY, 1, image.rows);
 }
 
 bool Imaging::IsGray(const Mat& image) 
@@ -274,10 +310,10 @@ void Imaging::CopyToMat(Masek::IMAGE* src, cv::Mat& dst)
 
 long Imaging::Round(FloatDataType float_value)
 {
-    return (long)roundf(float_value);
+    return (long) roundf(float_value);
 }
 
-uchar Imaging::Clamp(long value, uchar min_inclusive, uchar max_inclusive)
+uchar Pixels::Clamp(long value, uchar min_inclusive, uchar max_inclusive)
 {
     if (value < min_inclusive) {
         return min_inclusive;
@@ -297,10 +333,10 @@ void Imaging:: myXYRect(const cv::Mat& image, int x, int y, int width, int heigh
 	endY = y+height;// Y end point
 
 	// Debugging
-	destVal[0] = clamp(startX, 1, image.cols);
-	destVal[1] = clamp(endX, 1, image.cols);	
-	destVal[2] = clamp(startY, 1, image.rows);
-	destVal[3] = clamp(endY, 1, image.rows);
+	destVal[0] = Pixels::Clamp(startX, 1, image.cols);
+	destVal[1] = Pixels::Clamp(endX, 1, image.cols);	
+	destVal[2] = Pixels::Clamp(startY, 1, image.rows);
+	destVal[3] = Pixels::Clamp(endY, 1, image.rows);
 }
 
 float Imaging::myMean(const Mat& img)
@@ -319,7 +355,7 @@ float Imaging::myMean(const Mat& img)
 
 int Imaging::getValue(int value, int maxSize)
 {
-    return clamp(value, 1, maxSize);
+    return Pixels::Clamp(value, 1, maxSize);
 }
 
 float Imaging::mySD(const cv::Mat& image, double n, float mean)
@@ -362,8 +398,8 @@ Imaging::EyeImageROI Imaging::GetEyeImageROI(const cv::Mat& eye_img, cv::Point2i
 			
 	if(center.x != 0 && center.y != 0 && cr != 0)
 	{
-		CvPoint newCircle;
-		int newRadius= cr;
+		cv::Point2i newCircle;
+//		int newRadius= cr;
 		
 		// Set ROI in the assumed iris area
 		int startX, endX, startY, endY;
@@ -413,4 +449,20 @@ Imaging::EyeImageROI Imaging::GetEyeImageROI(const cv::Mat& eye_img, cv::Point2i
 				setVal.rect.width, setVal.rect.height, setVal.rect.x, setVal.rect.y,
 				setVal.p.x, setVal.p.y);
 	return setVal;
+}
+
+uchar Pixels::Clamp(double value, uchar min_inclusive, uchar max_inclusive)
+{
+    if (value <= min_inclusive) {
+        return min_inclusive;
+    }
+    if (value >= max_inclusive) {
+        return max_inclusive;
+    }
+    return (uchar) round(value);
+}
+
+uchar Pixels::Clamp(double value)
+{
+    return Clamp(value, (uchar) 0x0, (uchar) 0xff);
 }

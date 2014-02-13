@@ -104,7 +104,9 @@ public:
     bool Equals(const Encoding& other) const;
     void CopyFrom(int width, int height, int nscales, int* irisTemplate, int* irisMask);
 private:
-    int width_, height_, nscales_;
+    int width_;
+    int height_;
+    int nscales_;
     const static char * key_width; //= "width";
     const static char * key_height; //= "height";
     const static char * key_irisTemplate;// = "irisTemplate";

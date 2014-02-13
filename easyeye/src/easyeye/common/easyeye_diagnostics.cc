@@ -32,6 +32,7 @@ using mylog::INFO;
 using mylog::TRACE;
 using mylog::WARN;
 using mylog::ERROR;
+using cvmore::Pixels;
 
 namespace 
 {
@@ -52,13 +53,13 @@ void MaybeMakeDirs(const string& dir)
 
 Diagnostician::Diagnostician()
     : output_dir_("."),
-    disabled_(false),
-    verbose_(true),
-    num_images_written_(0),
-    eye_image_pathname_(),
-    text_output_stream_(cerr),
-    image_format_suffix_(".png"),
+        disabled_(false),
+        verbose_(true),
         collect_pathnames_(false), 
+        num_images_written_(0),
+        eye_image_pathname_(),
+        text_output_stream_(cerr),
+        image_format_suffix_(".png"),
         write_original_(false),
         original_written_(false)
 {
@@ -163,7 +164,7 @@ void Diagnostician::DumpSegOutput(const BoundaryPair& bp, const EyelidsLocation&
         // print element indices and the element value
         const SparseMat::Node* n = it.node();
         int y = n->idx[0], x = n->idx[1];
-        uchar value = it.value<uchar>();
+//        uchar value = it.value<uchar>();
         Vec3b* p = eye_image.ptr<Vec3b>(y, x);
         for (int j = 0; j < 3; j++) p[j] = noise_color[j];
     }
@@ -212,14 +213,12 @@ void Diagnostician::WriteImage(const cv::Mat& image, const string& label)
     MaybeMakeDirs(output_dir_);
     bool ok = cv::imwrite(output_pathname, image);
     if (ok) {
-        if (verbose_) {
-            cerr << "wrote " << output_pathname << endl;    
-        }
+        Logs::GetLogger().Log(TRACE, "diagnostics: %s %s\n", label.c_str(), output_pathname.c_str());
         if (collect_pathnames_) {
             files_written_.push_back(output_pathname);
         }
     } else if (!ok) {
-        cerr << "writing failed on " << output_pathname << endl;
+        Logs::GetLogger().Log(WARN, "diagnostics: failed to write %s\n", output_pathname.c_str());
     }
 }
 
@@ -277,4 +276,39 @@ DiagnosticsCreator::DiagnosticsCreator()
 DiagnosticsCreator::~DiagnosticsCreator()
 {
     
+}
+
+namespace 
+{
+    Vec3b ToResultColor(uchar base_color, uchar overlay_value, const DiagnosticArt::MaskColoring& coloring)
+    {
+        if (overlay_value != 0) {
+            Vec3b same_color(base_color, base_color, base_color);
+            return same_color;
+        }
+        double alpha = ((double) coloring.color[3]) / 255.0;
+        double complement = 1.0 - alpha;
+        Vec3b result_color;
+        for (int i = 0; i < 3; i++) {
+            result_color[i] = Pixels::Clamp(alpha * coloring.color[i] + complement * base_color);
+        }
+        return result_color;
+    }
+}
+
+Mat DiagnosticArt::Compose(const Mat& base_image, const Mat& mask_overlay, DiagnosticArt::MaskColoring mask_color)
+{
+    Mat result_image;
+    cv::cvtColor(base_image, result_image, CV_GRAY2RGB);
+    for (int y = 0; y < base_image.rows; y++) {
+        Mat base_row = base_image.row(y);
+        Mat result_row = result_image.row(y);
+        Mat overlay_row = mask_overlay.row(y);
+        for (int x = 0; x < base_image.cols; x++) {
+            uchar base_color = base_row.at<uchar>(x);
+            uchar overlay_color = overlay_row.at<uchar>(x);
+            result_row.at<Vec3b>(x) = ToResultColor(base_color, overlay_color, mask_color);
+        }
+    }
+    return result_image;
 }

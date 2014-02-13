@@ -38,7 +38,7 @@ bool IsValidDims(const int width, const int height) {
 static bool FromPackedBase64(const string& encoded_values_str, int* dst, size_t num_dst_values)
 {
     Base64 codec;
-    int expected_num_bytes = num_dst_values / 8;
+    size_t expected_num_bytes = num_dst_values / 8;
     vector<unsigned char> byte_vector;
     bool valid_encoding = codec.Decode(encoded_values_str, byte_vector);
     if (!valid_encoding) {

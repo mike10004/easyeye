@@ -67,7 +67,9 @@ public:
         METHOD_ELLIPSE_CONTOUR, METHOD_HOUGH_PARABOLA
     };
     Method method;
-    
+    float upper_search_region_iris_height_proportion;
+    float lower_search_region_iris_height_proportion;
+    float lateral_search_region_iris_width_proportion;
 };
 
 class ExtremaNoiseFinderConfig : public Config

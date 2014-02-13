@@ -104,7 +104,7 @@ void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, V
 	cv::Point2i rightPoint= getCornerPoint(xyRight, rightStartX, rightStartY, rightEndY, dataType);
 	
 	// Get the coordinates in the original image
-	int xx1, yy1, xx2, yy2;
+	int xx1, yy1;//, xx2, yy2;
 	xx1 = abs(rightPoint.x - leftPoint.x);
 	yy1 = abs(leftPoint.y - rightPoint.y);
 		
@@ -123,9 +123,9 @@ void FindEyelidMix::doFindPoints(const cv::Mat& image, const BoundaryPair& bp, V
 	// M of BottomLine
 	const cv::Point2i center((int)(leftPoint.x +rightPoint.x)/2, (int)(leftPoint.y +rightPoint.y)/2);
 	// Left, top line (lLine)	
-	xx2 = abs(topPoint.x - leftPoint.x);
-	yy2 = abs(leftPoint.y - topPoint.y);
-	double leftTopLine = triLength(xx2, yy2);
+//	xx2 = abs(topPoint.x - leftPoint.x);
+//	yy2 = abs(leftPoint.y - topPoint.y);
+//	double leftTopLine = triLength(xx2, yy2);
 
 	eyelids_location.ellipse_vals[0] = center.x;
 	eyelids_location.ellipse_vals[1] = center.y;
@@ -338,7 +338,7 @@ Mat VasirEyelidsLocation::getNoiseImage(const Mat& eye_image) const
       int width = ellipse_vals[2], 
               topHeight = ellipse_vals[3], 
               bottomHeight = ellipse_vals[4];
-      double angle = angle;
+//      double angle = angle;
       int rows = eye_image.rows, cols = eye_image.cols;
 	  // Create the mask for normalization
 //	  IplImage* maskImg = NULL;
@@ -383,7 +383,8 @@ cv::Mat VasirEyelidsLocation::CreateNoiseMask(const cv::Mat& image) const
 	//2. Without rotating image => rotate image after segmenting the iris region
 	//Mark noise parts in image
     Mat noise_image = getNoiseImage(image);
-	Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::doFindPoints ellipse = [%d %d %d %d %d], angle = %.4f\n",
+	Logs::GetLogger().Log(mylog::DEBUG, "FindEyelidMix::doFindPoints "
+            "ellipse = [%d %d %d %d %d], angle = %.4f\n",
 			ellipse_vals[0], ellipse_vals[1], ellipse_vals[2], 
             ellipse_vals[3], ellipse_vals[4], angle);
 	return noise_image;
@@ -524,8 +525,8 @@ void VasirEyelidsLocation::Draw(cv::Mat& eye_image, const Scalar color) const
       int width = ellipse_vals[2], 
               topHeight = ellipse_vals[3], 
               bottomHeight = ellipse_vals[4];
-      double angle = angle;
-      int rows = eye_image.rows, cols = eye_image.cols;
+//      double angle = angle;
+//      int rows = eye_image.rows, cols = eye_image.cols;
       int thickness = 3;
       cv::Size top_size(width, topHeight);
       cv::Size bottom_size(width, bottomHeight);

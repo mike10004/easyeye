@@ -67,15 +67,25 @@ int Encoding::nscales() const
     return nscales_;
 }
 
-Encoding::Encoding() : width_(0), height_(0), nscales_(0), status(Result::NOT_YET_SET), irisTemplate(NULL), irisMask(NULL)
+Encoding::Encoding() 
+    :   status(Result::NOT_YET_SET), 
+        irisTemplate(NULL), 
+        irisMask(NULL),
+        width_(0), 
+        height_(0), 
+        nscales_(0)
+        
 {
 }
 
 Encoding::Encoding(const int nscales, const int angularResolution, const int radialResolution)
-    : width_(CalculateTemplateWidth(nscales, angularResolution)),
+    :   status(Result::NOT_YET_SET), 
+        irisTemplate(NULL),
+        irisMask(NULL),
+        width_(CalculateTemplateWidth(nscales, angularResolution)),
         height_(CalculateTemplateHeight(radialResolution)),
-        nscales_(nscales),
-        status(Result::NOT_YET_SET)
+        nscales_(nscales)
+        
 {
     int num_bytes = sizeof(int) * width_ * height_;
 	irisTemplate = (int*) malloc(num_bytes);
@@ -83,19 +93,22 @@ Encoding::Encoding(const int nscales, const int angularResolution, const int rad
 }
 
 Encoding::Encoding(const EncoderConfig& encoder_config)
-    : width_(CalculateTemplateWidth(encoder_config.encodeScales, encoder_config.angularRes)),
+    :   status(Result::NOT_YET_SET),
+        irisTemplate(NULL),
+        irisMask(NULL),
+        width_(CalculateTemplateWidth(encoder_config.encodeScales, encoder_config.angularRes)),
         height_(CalculateTemplateHeight(encoder_config.radialRes)),
-        nscales_(encoder_config.encodeScales),
-        status(Result::NOT_YET_SET)
+        nscales_(encoder_config.encodeScales)
+        
 {
-	irisTemplate = (int*) malloc(sizeof(int) * width_ * height_);
-	irisMask = (int*) malloc(sizeof(int) * width_ * height_);
+	irisTemplate = new int[width_ * height_];
+	irisMask = new int[width_ * height_];
 }
 
 Encoding::~Encoding()
 {
-	free(irisTemplate);
-	free(irisMask);
+	delete irisTemplate;
+	delete irisMask;
 }
 
 bool Encoding::IsCongruent(const Encoding& other) const
@@ -123,10 +136,12 @@ char getTemplateOrMaskChar(const int value, bool *printedError) {
 void Encoding::CopyFrom(int width, int height, int nscales, int* irisTemplate_, int* irisMask_)
 {
     if (irisTemplate != NULL) {
-        free(irisTemplate);
+        delete irisTemplate;
+        irisTemplate = NULL;
     }
     if (irisMask != NULL) {
-        free(irisMask);
+        delete irisMask;
+        irisMask = NULL;
     }
     width_ = width;
     height_ = height;

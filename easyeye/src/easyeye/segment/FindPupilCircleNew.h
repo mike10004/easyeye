@@ -108,7 +108,7 @@ private:
     *     (Biggest circle-> 0:x, 1:y, 2:radius, Secondary circle->3:x, 4:y, 5:radius,)
     */
 	int getPupilPosition(std::vector< std::vector<cv::Point> >& contours, 
-            int minCount, int maxCount, float size, IntCircle& primary, IntCircle& candidate);
+            size_t minCount, size_t maxCount, float size, IntCircle& primary, IntCircle& candidate);
 
 	/**
 	* Determines the maximum contour count.

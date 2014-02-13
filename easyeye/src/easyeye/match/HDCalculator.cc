@@ -11,8 +11,13 @@ using namespace easyeye;
 using mylog::Logs;
 
 HDCalculator::HDCalculator(const Encoding& e1, const Encoding& e2) 
-    : e1_(e1), e2_(e2), width_(e1.width()), height_(e1.height()), 
-        shifted_e2_(), maxShiftX(10), maxShiftY(3)
+    :   maxShiftX(10), 
+        maxShiftY(3),
+        e1_(e1), 
+        e2_(e2), 
+        width_(e1.width()), 
+        height_(e1.height()), 
+        shifted_e2_() 
 {
     shifted_e2_.CopyFrom(e2.width(), e2.height(), e2.nscales(), e2.irisTemplate, e2.irisMask);
     if (!e1_.IsCongruent(e2_)) {

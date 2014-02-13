@@ -62,7 +62,9 @@ EyelidFinderConfig::EyelidFinderConfig()
         iris_image_type(NIR_IRIS_STILL), 
         gauss_config(31, 15, 0.3 * (31 / 2 - 1) + 0.8), 
         min_contour_count(70),
-        method(METHOD_ELLIPSE_CONTOUR)
+        method(METHOD_ELLIPSE_CONTOUR),
+        upper_search_region_iris_height_proportion(0.5f),
+        lower_search_region_iris_height_proportion(0.2f)
 {
 }
 

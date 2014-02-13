@@ -460,7 +460,7 @@ static string ParseFilenameStem(const string& base)
     if (base.find_first_not_of('.') == string::npos) {
         return base;
     }
-    int last_dot_pos = base.find_last_of('.');
+    size_t last_dot_pos = base.find_last_of('.');
     if (last_dot_pos == string::npos || last_dot_pos == 0 ) {
         return base; // name like "hello" or ".bashrc"
     }
@@ -475,7 +475,7 @@ static string ParseFilenameExtension(const string& base)
     if (base.find_first_not_of('.') == string::npos) {
         return string("");
     }
-    int last_dot_pos = base.find_last_of('.');
+    size_t last_dot_pos = base.find_last_of('.');
     if (last_dot_pos == string::npos || last_dot_pos == 0) {
         return string(""); // no extension, e.g. "hello" or ".bashrc"
     }
@@ -491,7 +491,8 @@ void Files::ParsePathInfo(const std::string& pathname, PathInfo& path_info)
     char* basename_dst = basename(basename_src);
     path_info.dirname.assign(dirname_dst);
     path_info.filename.assign(basename_dst);
-    delete dirname_src, basename_src;
+    delete dirname_src;
+    delete basename_src;
     path_info.filename_stem.assign(ParseFilenameStem(path_info.filename));
     path_info.filename_extension.assign(ParseFilenameExtension(path_info.filename));
 }

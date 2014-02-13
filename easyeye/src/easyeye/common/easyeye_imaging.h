@@ -18,6 +18,25 @@
 #include "../common/base64.h"
 #include <string>
 
+namespace cvmore
+{
+
+    class Pixels
+{
+public:
+    static float Interpolate(const cv::Mat& img, double px, double py);
+    static uchar Clamp(int value, uchar min, uchar max);
+    static uchar Clamp(int value);
+    static int Clamp(int value, int min_inclusive, int max_inclusive);
+    static uchar Clamp(double value, uchar min_inclusive, uchar max_inclusive);
+    static uchar Clamp(double value);
+    static uchar Clamp(long value, uchar min_inclusive, uchar max_inclusive);
+private:
+    Pixels();
+};
+    
+}
+
 namespace easyeye
 {
 
@@ -67,7 +86,6 @@ namespace easyeye
         static void CopyToMat(Masek::IMAGE* src, cv::Mat& dst);
         static void CopyToMat(Masek::filter* src, cv::Mat& dst);
         static long Round(FloatDataType float_value);
-        static uchar Clamp(long value, uchar min_inclusive, uchar max_inclusive);
         static void myXYRect(const cv::Mat& image, int x, int y, int width, int height, int* destVal);
         static float myMean(const cv::Mat& img);
         static int getValue(int value, int maxSize);

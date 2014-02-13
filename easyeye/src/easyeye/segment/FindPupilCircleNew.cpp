@@ -168,9 +168,9 @@ void FindPupilCircleNew::getCoordinates(const Mat& eye_image,
         vector<Point>& contour_coordinates)
 {
     contour_coordinates.clear();
-    const int limitRadius = config_.max_radius();
+//    const int limitRadius = config_.max_radius();
     const int nScale = config_.nScale;
-    const IrisImageType dataType = config_.iris_image_type;
+//    const IrisImageType dataType = config_.iris_image_type;
     Mat destImg = eye_image.clone();
     primary.set(0, 0, 0);
     candidate.set(0, 0, 0);
@@ -200,12 +200,12 @@ void FindPupilCircleNew::getCoordinates(const Mat& eye_image,
     Contours::AddAll(winning_contour, contour_coordinates);
 }
 
-int FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contours, int minCount, 
-										  int maxCount, float size, IntCircle& primary, IntCircle& candidate)
+int FindPupilCircleNew::getPupilPosition(vector< vector<cv::Point2i> >& contours, size_t minCount, 
+										  size_t maxCount, float size, IntCircle& primary, IntCircle& candidate)
 {	
     const int limitRadius = config_.max_radius();
-    const int nScale = config_.nScale;
-    const IrisImageType dataType = config_.iris_image_type;
+//    const int nScale = config_.nScale;
+//    const IrisImageType dataType = config_.iris_image_type;
 	cv::Point2i center;
 	int radius;
     int winner = -1;

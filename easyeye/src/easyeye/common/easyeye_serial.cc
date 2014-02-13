@@ -124,7 +124,7 @@ void BitPacking::Pack(int* src, const size_t len, unsigned char* dst)
     }
     unsigned char b;
     int srcval;
-    for (int i = 0; i < len/ 8; i++) {
+    for (size_t i = 0; i < len/ 8; i++) {
         b = 0;
         for (int j = 0; j < 8; j++) {
             srcval = src[i * 8 + j];

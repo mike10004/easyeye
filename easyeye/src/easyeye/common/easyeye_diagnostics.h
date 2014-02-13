@@ -64,6 +64,42 @@ protected:
     Diagnostician inactive_diagnostician_;
 };
 
+class DiagnosticArt
+{
+public:
+    class MaskColoring 
+    {
+    public:
+        /*
+         * 4-component vector (BGRA or RGBA)
+         */
+        cv::Vec4b color;
+        /*
+         * value in interval [0,1]
+         */
+        double pinch;
+        MaskColoring() : color(0, 0, 0, 0xff), pinch(1.0) {}
+        MaskColoring(cv::Vec4b color_) : color(color_), pinch(1.0) {}
+        MaskColoring(cv::Vec4b color_, double pinch_) : color(color_), pinch(pinch_) {}
+        uchar GetPinched(uchar in_color) 
+        {
+            int int_in_color = in_color - 0x80;
+            int int_out_color = ((int) round(int_in_color * pinch)) + 0x80;
+            return (uchar) int_out_color;
+        }
+    };
+    /**
+     * 
+     * @param base_image CV_8UC1 image
+     * @param mask_overlay CV_8UC1 image
+     * @param masked_color with RGBA scalar
+     * @return 
+     */
+    static cv::Mat Compose(const cv::Mat& base_image, const cv::Mat& mask_overlay, MaskColoring masked_color);
+private:
+    DiagnosticArt();
+};
+
 } // end namespace easyeye
 
 #endif	/* DIAGNOSTICS_H */

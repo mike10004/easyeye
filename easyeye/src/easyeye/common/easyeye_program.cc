@@ -275,7 +275,7 @@ const OptionSpec Program::null_option_spec_("", 0, NONE);
 
 const OptionSpec& Program::FindSpec(char short_form) const
 {
-    for (int i = 0; i < option_specs_.size(); i++) {
+    for (size_t i = 0; i < option_specs_.size(); i++) {
         if (short_form == option_specs_[i].short_form) {
             return option_specs_[i];
         }

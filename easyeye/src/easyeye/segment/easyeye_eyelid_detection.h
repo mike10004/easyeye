@@ -12,9 +12,11 @@
 #include <vector>
 #include "../common/easyeye_types.h"
 #include "../common/easyeye_config.h"
+#include "../common/easyeye_diagnostics.h"
 
 namespace cvmore
 {
+    
     namespace objdetect
     {
         
@@ -29,14 +31,6 @@ public:
     static std::vector<double> MakeRangeFromImage(const cv::Mat& image);
 private:
     ParamRange();
-};
-
-class Pixels
-{
-public:
-    static float Interpolate(const cv::Mat& img, double px, double py);
-private:
-    Pixels();
 };
 
 class MaskInterface
@@ -157,11 +151,12 @@ class VertexFormParabola
 public:
     VertexFormParabola();
     VertexFormParabola(double a_, double h_, double k_);
-    const double a;
-    const double h;
-    const double k;
+    double a;
+    double h;
+    double k;
     std::string ToString() const;
     void Describe(std::ostream& out) const;
+    void set(double a_, double h_, double k_);
 };
 
 class EyelidBoundary
@@ -188,16 +183,22 @@ public:
     void Draw(cv::Mat& diagnostic_image, cv::Scalar color) const;
 };
 
-class DualParabolaEyelidFinder
+class DualParabolaEyelidFinder : public DiagnosticsCreator
 {
 public:
     DualParabolaEyelidFinder(const EyelidFinderConfig& config);
     virtual ~DualParabolaEyelidFinder();
-    virtual DualParabolaEyelidsLocation FindEyelids(const cv::Mat& eye_image, const BoundaryPair& boundary_pair);
-protected:
+    virtual DualParabolaEyelidsLocation FindEyelids(const cv::Mat& eye_image, 
+            const BoundaryPair& boundary_pair);
     enum EyelidType { EYELID_UPPER, EYELID_LOWER };
-    virtual cv::Mat MakeRegionMask(const cv::Mat& eye_image, const BoundaryPair& boundary_pair, EyelidType eyelid_type);
-    virtual EyelidBoundary DetectEyelidBoundary(const cv::Mat& eye_image, const cv::Mat& region_mask, EyelidType eyelid_type);
+protected:
+    static std::string ToString(EyelidType eyelid_type);
+    virtual cv::Mat MakeRegionMask(const cv::Mat& eye_image, 
+            const BoundaryPair& boundary_pair, EyelidType eyelid_type);
+    virtual EyelidBoundary DetectEyelidBoundary(const cv::Mat& eye_image, 
+            const cv::Mat& region_mask, EyelidType eyelid_type);
+    virtual EyelidBoundary MaskAndDetect(const cv::Mat& eye_image, const BoundaryPair& boundary_pair, 
+        EyelidType eyelid_type)    ;
     EyelidFinderConfig config_;
 };
 

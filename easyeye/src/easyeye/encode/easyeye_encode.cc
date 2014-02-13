@@ -19,13 +19,14 @@
 using mylog::Logs;
 using namespace easyeye;
 using namespace cv;
+
 EncoderConfig::EncoderConfig() : Config(), 
+        radialRes(DEFAULT_RADIAL_RES), 
+        angularRes(DEFAULT_ANGULAR_RES),
         encodeScales(DEFAULT_NSCALES), 
         minWaveLength(18), 
         mult(1), 
-        sigmaOnf(0.5), 
-        radialRes(DEFAULT_RADIAL_RES), 
-        angularRes(DEFAULT_ANGULAR_RES)
+        sigmaOnf(0.5)
 {
 }
 

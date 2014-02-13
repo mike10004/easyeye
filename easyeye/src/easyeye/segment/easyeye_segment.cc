@@ -27,7 +27,10 @@ using namespace easyeye;
 using namespace cv;
 
 Segmentation::Segmentation() 
-    : status(Result::NOT_YET_SET), boundary_pair(), eyelids_location_(NULL), extrema_noise()
+    : status(Result::NOT_YET_SET), 
+        boundary_pair(), 
+        extrema_noise(),
+        eyelids_location_(NULL)
 {
 }
 
@@ -44,7 +47,10 @@ Segmentation::~Segmentation()
 //}
 
 Segmentation::Segmentation(const Segmentation& other)
-    : status(other.status), boundary_pair(other.boundary_pair), eyelids_location_(NULL), extrema_noise()
+    :   status(other.status), 
+        boundary_pair(other.boundary_pair), 
+        extrema_noise(),
+        eyelids_location_(NULL)
 {
     other.extrema_noise.copyTo(extrema_noise);
     if (other.IsEyelidsLocationPresent()) {
@@ -150,8 +156,8 @@ void Segmenter::SegmentEyeImage(cv::Mat& eyeImg, Segmentation& seg)
 
 SegmenterConfig::SegmenterConfig()
       : Config(), 
-        iris_finder_config(), 
         pupil_finder_config(),
+        iris_finder_config(), 
         eyelid_finder_config(), 
         extrema_noise_finder_config()
 {

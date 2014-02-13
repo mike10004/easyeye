@@ -25,7 +25,7 @@ public:
     int num_unmasked_bits;
     int num_different_bits;
     int common_bits_differential;
-    int y_shift, x_shift;
+    int x_shift, y_shift;
     double hd;
     void Reset();
     void CopyFrom(const MatchInfo& other);

@@ -1,4 +1,5 @@
 #include "easyeye_eyelid_detection.h"
+#include "../common/easyeye_imaging.h"
 #include <opencv2/core/core.hpp>
 #include "../common/easyeye_utils.h"
 #include <vector>
@@ -49,34 +50,16 @@ std::vector<double> ParamRange::ScaledIncremental(int min, int step,
     return Scaled(values, scalar);
 }
 
-
-float Pixels::Interpolate(const Mat& img, double px, double py)
-{ // http://stackoverflow.com/questions/13299409/how-to-get-the-image-pixel-at-real-locations-in-opencv
-    assert(!img.empty());
-    int x = (int)px;
-    int y = (int)py;
-
-    int x0 = cv::borderInterpolate(x,   img.cols, cv::BORDER_REFLECT_101);
-    int x1 = cv::borderInterpolate(x+1, img.cols, cv::BORDER_REFLECT_101);
-    int y0 = cv::borderInterpolate(y,   img.rows, cv::BORDER_REFLECT_101);
-    int y1 = cv::borderInterpolate(y+1, img.rows, cv::BORDER_REFLECT_101);
-
-    float a = px - (float)x;
-    float c = py - (float)y;
-
-    float b = ((img.at<uchar>(y0, x0) * (1.f - a) 
-            + img.at<uchar>(y0, x1) * a) * (1.f - c)
-            + (img.at<uchar>(y1, x0) * (1.f - a) 
-            + img.at<uchar>(y1, x1) * a) * c);
-    return b;
-} 
-
 HoughTransform::HoughTransform() 
-        : debug_(false),
-        mask_(NULL),
+    :   debug_(false),
         param_ranges_(), 
+        mask_(NULL),
+        accumulator(),
+        normalized_accumulator(),
+        candidate_magnitudes(),
         num_params(0),
-        max_candidates_(1)
+        max_candidates_(1),
+        normalized_(false)
 {
 }
 
@@ -91,7 +74,7 @@ bool DefaultMask::CanVote(int x, int y) const
 
 float HoughTransform::GetPixelValue(const Mat& image, double x, double y) const 
 {
-    return Pixels::Interpolate(image, x, y);
+    return cvmore::Pixels::Interpolate(image, x, y);
 }
 
 bool HoughTransform::IsInsideIntLimits(double value) {
@@ -121,7 +104,7 @@ bool HoughTransform::AdvanceParameterIndices(int* param_indices)
     bool bump = true;
     for (int i = (int) num_params - 1; i >= 0 && bump; i--) {
         param_indices[i] = param_indices[i] + 1;
-        bump = param_indices[i] >= param_ranges_[i].size();
+        bump = param_indices[i] >= (int) param_ranges_[i].size();
         if (bump) {
             param_indices[i] = 0;
         }
@@ -131,7 +114,7 @@ bool HoughTransform::AdvanceParameterIndices(int* param_indices)
 
 void HoughTransform::SetParameterValues(int* param_indices, vector<double>& param_values) 
 {
-    for (int i = 0; i < num_params; i++) {
+    for (size_t i = 0; i < num_params; i++) {
         param_values[i] = param_ranges_[i][param_indices[i]];
     }
 }

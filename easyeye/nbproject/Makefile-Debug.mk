@@ -55,6 +55,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o \
+	${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder.o \
 	${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o
 
 # Test Directory
@@ -66,6 +67,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f10 \
 	${TESTDIR}/TestFiles/f5 \
+	${TESTDIR}/TestFiles/f19 \
 	${TESTDIR}/TestFiles/f9 \
 	${TESTDIR}/TestFiles/f15 \
 	${TESTDIR}/TestFiles/f12 \
@@ -73,6 +75,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f16 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f18 \
 	${TESTDIR}/TestFiles/f17 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f6 \
@@ -109,107 +112,112 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libeasyeye.a: ${OBJECTFILES}
 ${OBJECTDIR}/src/easyeye/common/base64.o: src/easyeye/common/base64.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/base64.o src/easyeye/common/base64.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/base64.o src/easyeye/common/base64.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_config.o: src/easyeye/common/easyeye_config.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_config.o src/easyeye/common/easyeye_config.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_config.o src/easyeye/common/easyeye_config.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o: src/easyeye/common/easyeye_diagnostics.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o src/easyeye/common/easyeye_diagnostics.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o src/easyeye/common/easyeye_diagnostics.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o: src/easyeye/common/easyeye_imaging.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o src/easyeye/common/easyeye_imaging.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o src/easyeye/common/easyeye_imaging.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_program.o: src/easyeye/common/easyeye_program.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program.o src/easyeye/common/easyeye_program.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o: src/easyeye/common/easyeye_serial.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o src/easyeye/common/easyeye_serial.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o src/easyeye/common/easyeye_serial.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_types.o: src/easyeye/common/easyeye_types.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_types.o src/easyeye/common/easyeye_types.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_types.o src/easyeye/common/easyeye_types.cc
 
 ${OBJECTDIR}/src/easyeye/common/easyeye_utils.o: src/easyeye/common/easyeye_utils.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_utils.o src/easyeye/common/easyeye_utils.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_utils.o src/easyeye/common/easyeye_utils.cc
 
 ${OBJECTDIR}/src/easyeye/common/mylog.o: src/easyeye/common/mylog.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/common
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/mylog.o src/easyeye/common/mylog.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/mylog.o src/easyeye/common/mylog.cc
 
 ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o: src/easyeye/encode/easyeye_encode.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o src/easyeye/encode/easyeye_encode.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o src/easyeye/encode/easyeye_encode.cc
 
 ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o: src/easyeye/encode/easyeye_encoding.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o src/easyeye/encode/easyeye_encoding.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o src/easyeye/encode/easyeye_encoding.cc
 
 ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o: src/easyeye/encode/easyeye_encoding_serial.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o src/easyeye/encode/easyeye_encoding_serial.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o src/easyeye/encode/easyeye_encoding_serial.cc
 
 ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o: src/easyeye/encode/easyeye_normalize.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/encode
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o src/easyeye/encode/easyeye_normalize.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o src/easyeye/encode/easyeye_normalize.cc
 
 ${OBJECTDIR}/src/easyeye/match/HDCalculator.o: src/easyeye/match/HDCalculator.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/match
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/HDCalculator.o src/easyeye/match/HDCalculator.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/HDCalculator.o src/easyeye/match/HDCalculator.cc
 
 ${OBJECTDIR}/src/easyeye/match/easyeye_match.o: src/easyeye/match/easyeye_match.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/match
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/easyeye_match.o src/easyeye/match/easyeye_match.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/easyeye_match.o src/easyeye/match/easyeye_match.cc
 
 ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix.o: src/easyeye/segment/FindEyelidMix.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix.o src/easyeye/segment/FindEyelidMix.cpp
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix.o src/easyeye/segment/FindEyelidMix.cpp
 
 ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle.o: src/easyeye/segment/FindIrisCircle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle.o src/easyeye/segment/FindIrisCircle.cpp
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle.o src/easyeye/segment/FindIrisCircle.cpp
 
 ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o: src/easyeye/segment/FindPupilCircleNew.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o src/easyeye/segment/FindPupilCircleNew.cpp
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o src/easyeye/segment/FindPupilCircleNew.cpp
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o: src/easyeye/segment/easyeye_extrema_noise.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o src/easyeye/segment/easyeye_extrema_noise.cpp
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o src/easyeye/segment/easyeye_extrema_noise.cpp
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o: src/easyeye/segment/easyeye_eyelid_detection.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o src/easyeye/segment/easyeye_eyelid_detection.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o src/easyeye/segment/easyeye_eyelid_detection.cc
+
+${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder.o: src/easyeye/segment/easyeye_eyelid_finder.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder.o src/easyeye/segment/easyeye_eyelid_finder.cc
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o: src/easyeye/segment/easyeye_segment.cc 
 	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o src/easyeye/segment/easyeye_segment.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o src/easyeye/segment/easyeye_segment.cc
 
 # Subprojects
 .build-subprojects:
@@ -231,6 +239,10 @@ ${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/CommonSerialTest.o ${TESTDIR}/tests/c
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/DiagnosticsTest.o ${TESTDIR}/tests/diagnostics_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
+
+${TESTDIR}/TestFiles/f19: ${TESTDIR}/tests/DualParabolaEyelidFinderTest.o ${TESTDIR}/tests/dual_parabola_eyelid_finder_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f19 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
 ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/EncodingTest.o ${TESTDIR}/tests/encoding_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -260,6 +272,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/MatchingTest.o ${TESTDIR}/tests/matchi
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
 
+${TESTDIR}/TestFiles/f18: ${TESTDIR}/tests/eyelid_parabola_ranges_analysis.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f18 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid 
+
 ${TESTDIR}/TestFiles/f17: ${TESTDIR}/tests/RotatedShapeTest.o ${TESTDIR}/tests/rotated_shape_test_runner.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f17 $^ ${LDLIBSOPTIONS} ../optimasek/dist/Debug/GNU-Linux-x86/liboptimasek.a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -ljsoncpp -luuid `cppunit-config --libs`   
@@ -288,193 +304,211 @@ ${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/VasirComparisonTest.o ${TESTDIR}/test
 ${TESTDIR}/tests/base64_test.o: tests/base64_test.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/base64_test.o tests/base64_test.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/base64_test.o tests/base64_test.cc
 
 
 ${TESTDIR}/tests/BitPackingTest.o: tests/BitPackingTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/BitPackingTest.o tests/BitPackingTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/BitPackingTest.o tests/BitPackingTest.cc
 
 
 ${TESTDIR}/tests/bitpacking_test_runner.o: tests/bitpacking_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/bitpacking_test_runner.o tests/bitpacking_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/bitpacking_test_runner.o tests/bitpacking_test_runner.cc
 
 
 ${TESTDIR}/tests/CommonSerialTest.o: tests/CommonSerialTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/CommonSerialTest.o tests/CommonSerialTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/CommonSerialTest.o tests/CommonSerialTest.cc
 
 
 ${TESTDIR}/tests/common_serial_test_runner.o: tests/common_serial_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/common_serial_test_runner.o tests/common_serial_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/common_serial_test_runner.o tests/common_serial_test_runner.cc
 
 
 ${TESTDIR}/tests/DiagnosticsTest.o: tests/DiagnosticsTest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/DiagnosticsTest.o tests/DiagnosticsTest.cpp
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/DiagnosticsTest.o tests/DiagnosticsTest.cpp
 
 
 ${TESTDIR}/tests/diagnostics_test_runner.o: tests/diagnostics_test_runner.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/diagnostics_test_runner.o tests/diagnostics_test_runner.cpp
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/diagnostics_test_runner.o tests/diagnostics_test_runner.cpp
+
+
+${TESTDIR}/tests/DualParabolaEyelidFinderTest.o: tests/DualParabolaEyelidFinderTest.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/DualParabolaEyelidFinderTest.o tests/DualParabolaEyelidFinderTest.cc
+
+
+${TESTDIR}/tests/dual_parabola_eyelid_finder_test_runner.o: tests/dual_parabola_eyelid_finder_test_runner.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/dual_parabola_eyelid_finder_test_runner.o tests/dual_parabola_eyelid_finder_test_runner.cc
 
 
 ${TESTDIR}/tests/EncodingTest.o: tests/EncodingTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/EncodingTest.o tests/EncodingTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/EncodingTest.o tests/EncodingTest.cc
 
 
 ${TESTDIR}/tests/encoding_test_runner.o: tests/encoding_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/encoding_test_runner.o tests/encoding_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/encoding_test_runner.o tests/encoding_test_runner.cc
 
 
 ${TESTDIR}/tests/EyelidFixTest.o: tests/EyelidFixTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/EyelidFixTest.o tests/EyelidFixTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/EyelidFixTest.o tests/EyelidFixTest.cc
 
 
 ${TESTDIR}/tests/eyelid_fix_test_runner.o: tests/eyelid_fix_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/eyelid_fix_test_runner.o tests/eyelid_fix_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/eyelid_fix_test_runner.o tests/eyelid_fix_test_runner.cc
 
 
 ${TESTDIR}/tests/FilesTest.o: tests/FilesTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/FilesTest.o tests/FilesTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/FilesTest.o tests/FilesTest.cc
 
 
 ${TESTDIR}/tests/files_test_runner.o: tests/files_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/files_test_runner.o tests/files_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/files_test_runner.o tests/files_test_runner.cc
 
 
 ${TESTDIR}/tests/FindEyelidsTest.o: tests/FindEyelidsTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/FindEyelidsTest.o tests/FindEyelidsTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/FindEyelidsTest.o tests/FindEyelidsTest.cc
 
 
 ${TESTDIR}/tests/find_eyelids_test_runner.o: tests/find_eyelids_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/find_eyelids_test_runner.o tests/find_eyelids_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/find_eyelids_test_runner.o tests/find_eyelids_test_runner.cc
 
 
 ${TESTDIR}/tests/HoughParabolaTest.o: tests/HoughParabolaTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTest.o tests/HoughParabolaTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTest.o tests/HoughParabolaTest.cc
 
 
 ${TESTDIR}/tests/HoughParabolaTransform.o: tests/HoughParabolaTransform.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTransform.o tests/HoughParabolaTransform.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/HoughParabolaTransform.o tests/HoughParabolaTransform.cc
 
 
 ${TESTDIR}/tests/hough_parabola_test_runner.o: tests/hough_parabola_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/hough_parabola_test_runner.o tests/hough_parabola_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/hough_parabola_test_runner.o tests/hough_parabola_test_runner.cc
 
 
 ${TESTDIR}/tests/ImagingTest.o: tests/ImagingTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/ImagingTest.o tests/ImagingTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/ImagingTest.o tests/ImagingTest.cc
 
 
 ${TESTDIR}/tests/imaging_test_runner.o: tests/imaging_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/imaging_test_runner.o tests/imaging_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/imaging_test_runner.o tests/imaging_test_runner.cc
 
 
 ${TESTDIR}/tests/MatchingTest.o: tests/MatchingTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/MatchingTest.o tests/MatchingTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/MatchingTest.o tests/MatchingTest.cc
 
 
 ${TESTDIR}/tests/matching_test_runner.o: tests/matching_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/matching_test_runner.o tests/matching_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/matching_test_runner.o tests/matching_test_runner.cc
+
+
+${TESTDIR}/tests/eyelid_parabola_ranges_analysis.o: tests/eyelid_parabola_ranges_analysis.cc 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/eyelid_parabola_ranges_analysis.o tests/eyelid_parabola_ranges_analysis.cc
 
 
 ${TESTDIR}/tests/RotatedShapeTest.o: tests/RotatedShapeTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/RotatedShapeTest.o tests/RotatedShapeTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/RotatedShapeTest.o tests/RotatedShapeTest.cc
 
 
 ${TESTDIR}/tests/rotated_shape_test_runner.o: tests/rotated_shape_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/rotated_shape_test_runner.o tests/rotated_shape_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/rotated_shape_test_runner.o tests/rotated_shape_test_runner.cc
 
 
 ${TESTDIR}/tests/SegmentationSerializerTest.o: tests/SegmentationSerializerTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/SegmentationSerializerTest.o tests/SegmentationSerializerTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/SegmentationSerializerTest.o tests/SegmentationSerializerTest.cc
 
 
 ${TESTDIR}/tests/segment_serial_test_runner.o: tests/segment_serial_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/segment_serial_test_runner.o tests/segment_serial_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/segment_serial_test_runner.o tests/segment_serial_test_runner.cc
 
 
 ${TESTDIR}/tests/segmentation_correctness_test.o: tests/segmentation_correctness_test.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/segmentation_correctness_test.o tests/segmentation_correctness_test.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/segmentation_correctness_test.o tests/segmentation_correctness_test.cc
 
 
 ${TESTDIR}/tests/TypesTest.o: tests/TypesTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/TypesTest.o tests/TypesTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/TypesTest.o tests/TypesTest.cc
 
 
 ${TESTDIR}/tests/types_test_runner.o: tests/types_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/types_test_runner.o tests/types_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/types_test_runner.o tests/types_test_runner.cc
 
 
 ${TESTDIR}/tests/utils_test.o: tests/utils_test.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/utils_test.o tests/utils_test.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/utils_test.o tests/utils_test.cc
 
 
 ${TESTDIR}/tests/VasirComparisonTest.o: tests/VasirComparisonTest.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/VasirComparisonTest.o tests/VasirComparisonTest.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/VasirComparisonTest.o tests/VasirComparisonTest.cc
 
 
 ${TESTDIR}/tests/vasir_comparison_test_runner.o: tests/vasir_comparison_test_runner.cc 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/vasir_comparison_test_runner.o tests/vasir_comparison_test_runner.cc
+	$(COMPILE.cc) -g -Wall -I../optimasek/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/vasir_comparison_test_runner.o tests/vasir_comparison_test_runner.cc
 
 
 ${OBJECTDIR}/src/easyeye/common/base64_nomain.o: ${OBJECTDIR}/src/easyeye/common/base64.o src/easyeye/common/base64.cc 
@@ -485,7 +519,7 @@ ${OBJECTDIR}/src/easyeye/common/base64_nomain.o: ${OBJECTDIR}/src/easyeye/common
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/base64_nomain.o src/easyeye/common/base64.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/base64_nomain.o src/easyeye/common/base64.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/base64.o ${OBJECTDIR}/src/easyeye/common/base64_nomain.o;\
 	fi
@@ -498,7 +532,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_config_nomain.o: ${OBJECTDIR}/src/easyey
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_config_nomain.o src/easyeye/common/easyeye_config.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_config_nomain.o src/easyeye/common/easyeye_config.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_config.o ${OBJECTDIR}/src/easyeye/common/easyeye_config_nomain.o;\
 	fi
@@ -511,7 +545,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o: ${OBJECTDIR}/src/e
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o src/easyeye/common/easyeye_diagnostics.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o src/easyeye/common/easyeye_diagnostics.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics.o ${OBJECTDIR}/src/easyeye/common/easyeye_diagnostics_nomain.o;\
 	fi
@@ -524,7 +558,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o: ${OBJECTDIR}/src/easye
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o src/easyeye/common/easyeye_imaging.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o src/easyeye/common/easyeye_imaging.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_imaging.o ${OBJECTDIR}/src/easyeye/common/easyeye_imaging_nomain.o;\
 	fi
@@ -537,7 +571,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o: ${OBJECTDIR}/src/easye
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o src/easyeye/common/easyeye_program.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o src/easyeye/common/easyeye_program.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_program.o ${OBJECTDIR}/src/easyeye/common/easyeye_program_nomain.o;\
 	fi
@@ -550,7 +584,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_serial_nomain.o: ${OBJECTDIR}/src/easyey
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_serial_nomain.o src/easyeye/common/easyeye_serial.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_serial_nomain.o src/easyeye/common/easyeye_serial.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_serial.o ${OBJECTDIR}/src/easyeye/common/easyeye_serial_nomain.o;\
 	fi
@@ -563,7 +597,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_types_nomain.o: ${OBJECTDIR}/src/easyeye
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_types_nomain.o src/easyeye/common/easyeye_types.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_types_nomain.o src/easyeye/common/easyeye_types.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_types.o ${OBJECTDIR}/src/easyeye/common/easyeye_types_nomain.o;\
 	fi
@@ -576,7 +610,7 @@ ${OBJECTDIR}/src/easyeye/common/easyeye_utils_nomain.o: ${OBJECTDIR}/src/easyeye
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_utils_nomain.o src/easyeye/common/easyeye_utils.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/easyeye_utils_nomain.o src/easyeye/common/easyeye_utils.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/easyeye_utils.o ${OBJECTDIR}/src/easyeye/common/easyeye_utils_nomain.o;\
 	fi
@@ -589,7 +623,7 @@ ${OBJECTDIR}/src/easyeye/common/mylog_nomain.o: ${OBJECTDIR}/src/easyeye/common/
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/mylog_nomain.o src/easyeye/common/mylog.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/common/mylog_nomain.o src/easyeye/common/mylog.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/common/mylog.o ${OBJECTDIR}/src/easyeye/common/mylog_nomain.o;\
 	fi
@@ -602,7 +636,7 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_encode_nomain.o: ${OBJECTDIR}/src/easyey
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode_nomain.o src/easyeye/encode/easyeye_encode.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode_nomain.o src/easyeye/encode/easyeye_encode.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_encode.o ${OBJECTDIR}/src/easyeye/encode/easyeye_encode_nomain.o;\
 	fi
@@ -615,7 +649,7 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o: ${OBJECTDIR}/src/easy
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o src/easyeye/encode/easyeye_encoding.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o src/easyeye/encode/easyeye_encoding.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding.o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_nomain.o;\
 	fi
@@ -628,7 +662,7 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o: ${OBJECTDIR}/s
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o src/easyeye/encode/easyeye_encoding_serial.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o src/easyeye/encode/easyeye_encoding_serial.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial.o ${OBJECTDIR}/src/easyeye/encode/easyeye_encoding_serial_nomain.o;\
 	fi
@@ -641,7 +675,7 @@ ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o: ${OBJECTDIR}/src/eas
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o src/easyeye/encode/easyeye_normalize.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o src/easyeye/encode/easyeye_normalize.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize.o ${OBJECTDIR}/src/easyeye/encode/easyeye_normalize_nomain.o;\
 	fi
@@ -654,7 +688,7 @@ ${OBJECTDIR}/src/easyeye/match/HDCalculator_nomain.o: ${OBJECTDIR}/src/easyeye/m
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/HDCalculator_nomain.o src/easyeye/match/HDCalculator.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/HDCalculator_nomain.o src/easyeye/match/HDCalculator.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/match/HDCalculator.o ${OBJECTDIR}/src/easyeye/match/HDCalculator_nomain.o;\
 	fi
@@ -667,7 +701,7 @@ ${OBJECTDIR}/src/easyeye/match/easyeye_match_nomain.o: ${OBJECTDIR}/src/easyeye/
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/easyeye_match_nomain.o src/easyeye/match/easyeye_match.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/match/easyeye_match_nomain.o src/easyeye/match/easyeye_match.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/match/easyeye_match.o ${OBJECTDIR}/src/easyeye/match/easyeye_match_nomain.o;\
 	fi
@@ -680,7 +714,7 @@ ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix_nomain.o: ${OBJECTDIR}/src/easyey
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix_nomain.o src/easyeye/segment/FindEyelidMix.cpp;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix_nomain.o src/easyeye/segment/FindEyelidMix.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix.o ${OBJECTDIR}/src/easyeye/segment/FindEyelidMix_nomain.o;\
 	fi
@@ -693,7 +727,7 @@ ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle_nomain.o: ${OBJECTDIR}/src/easye
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle_nomain.o src/easyeye/segment/FindIrisCircle.cpp;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle_nomain.o src/easyeye/segment/FindIrisCircle.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle.o ${OBJECTDIR}/src/easyeye/segment/FindIrisCircle_nomain.o;\
 	fi
@@ -706,7 +740,7 @@ ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o: ${OBJECTDIR}/src/e
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o src/easyeye/segment/FindPupilCircleNew.cpp;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o src/easyeye/segment/FindPupilCircleNew.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew.o ${OBJECTDIR}/src/easyeye/segment/FindPupilCircleNew_nomain.o;\
 	fi
@@ -719,7 +753,7 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o: ${OBJECTDIR}/sr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o src/easyeye/segment/easyeye_extrema_noise.cpp;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o src/easyeye/segment/easyeye_extrema_noise.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise.o ${OBJECTDIR}/src/easyeye/segment/easyeye_extrema_noise_nomain.o;\
 	fi
@@ -732,9 +766,22 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o: ${OBJECTDIR}
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o src/easyeye/segment/easyeye_eyelid_detection.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o src/easyeye/segment/easyeye_eyelid_detection.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection.o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_detection_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder.o src/easyeye/segment/easyeye_eyelid_finder.cc 
+	${MKDIR} -p ${OBJECTDIR}/src/easyeye/segment
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder_nomain.o src/easyeye/segment/easyeye_eyelid_finder.cc;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder.o ${OBJECTDIR}/src/easyeye/segment/easyeye_eyelid_finder_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o src/easyeye/segment/easyeye_segment.cc 
@@ -745,7 +792,7 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easy
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o src/easyeye/segment/easyeye_segment.cc;\
+	    $(COMPILE.cc) -g -Wall -I../optimasek/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o src/easyeye/segment/easyeye_segment.cc;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/easyeye/segment/easyeye_segment.o ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o;\
 	fi
@@ -758,6 +805,7 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easy
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f10 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
+	    ${TESTDIR}/TestFiles/f19 || true; \
 	    ${TESTDIR}/TestFiles/f9 || true; \
 	    ${TESTDIR}/TestFiles/f15 || true; \
 	    ${TESTDIR}/TestFiles/f12 || true; \
@@ -765,6 +813,7 @@ ${OBJECTDIR}/src/easyeye/segment/easyeye_segment_nomain.o: ${OBJECTDIR}/src/easy
 	    ${TESTDIR}/TestFiles/f16 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f18 || true; \
 	    ${TESTDIR}/TestFiles/f17 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
