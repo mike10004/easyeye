@@ -211,7 +211,25 @@ bool serial::SegmentationAdapter::FromJson(const Json::Value& src, void* dst)
         mylog::Logs::GetLogger().Log(mylog::ERROR, "serial::SegmentationAdapter::FromJson deserialization of eyelid location type %s is not yet supported\n", eyelids_location_type.c_str());
         return false;
     }
-    
+    if (src.isMember("pupil_boundary")) {
+        Json::Value pupil_boundary = src["pupil_boundary"];
+        if (!pupil_boundary.isArray()) {
+            return false;
+        }
+        Json::Value invalid(0);
+        for (Json::ArrayIndex i = 0; i < pupil_boundary.size(); i++) {
+            Json::Value point_src = pupil_boundary.get(i, invalid);
+            cv::Point2i point_dst;
+            if (point_src.isObject()) {
+                if (!serial::Deserialize(point_src, point_dst)) {
+                    return false;
+                }
+                seg.pupil_boundary.push_back(point_dst);
+            } else {
+                return false;
+            }
+        }
+    }
     return src.isMember("status") 
             && src.isMember("boundary_pair") 
             && src.isMember("extrema_noise") 
@@ -240,6 +258,15 @@ void serial::SegmentationAdapter::ToJson(void* src, Json::Value& dst)
     }
 
     dst["eyelids_location"] = eyelids_location;
+    if (!seg.pupil_boundary.empty()) {
+        Json::Value pupil_boundary;
+        for (size_t i = 0; i < seg.pupil_boundary.size(); i++) {
+            Json::Value point;
+            serial::Serialize(seg.pupil_boundary[i], point);
+            pupil_boundary.append(point);
+        }
+        dst["pupil_boundary"] = pupil_boundary;
+    }
 }
 
 string serial::Serialize(const Segmentation& data)

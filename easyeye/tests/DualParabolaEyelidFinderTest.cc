@@ -43,7 +43,7 @@ namespace
     
 const char* diagnostics_dir = "/tmp/easyeye_tests_dual_parabola";    
     
-void testDetectEyelids(const string& eye_image_pathname, const cv::Mat& eye_image, const BoundaryPair& boundary_pair) 
+void testDetectEyelids(const string& eye_image_pathname, const cv::Mat& eye_image, const Segmentation& segmentation) 
 {
     Diagnostician diags;
     diags.set_write_original(true);
@@ -51,13 +51,16 @@ void testDetectEyelids(const string& eye_image_pathname, const cv::Mat& eye_imag
     diags.set_eye_image_pathname(eye_image_pathname);
     CPPUNIT_ASSERT(IOUtils::MakeDirs(diagnostics_dir));
     EyelidFinderConfig config;
-    DualParabolaEyelidFinder finder(config);
-    finder.set_diagnostician(&diags);
-    DualParabolaEyelidsLocation eyelids_location = finder.FindEyelids(eye_image, boundary_pair);
+    DualParabolaEyelidFinder upper_finder(config, DualParabolaEyelidFinder::EYELID_UPPER);
+    upper_finder.set_diagnostician(&diags);
+    DualParabolaEyelidFinder lower_finder(config, DualParabolaEyelidFinder::EYELID_LOWER);
+    lower_finder.set_diagnostician(&diags);
+    EyelidBoundary upper_boundary = upper_finder.FindEyelid(eye_image, segmentation);
+    EyelidBoundary lower_boundary = lower_finder.FindEyelid(eye_image, segmentation);
 }
 }
 
-void DualParabolaEyelidFinderTest::testMethod() {
+void DualParabolaEyelidFinderTest::testDetectEyelidsAsDualParabolas() {
     mylog::Logs::GetLogger().set_level(mylog::DEBUG);
     for (int i = 0; i < NUM_SAMPLES; i++) {
         string eye_image_pathname(eye_image_files[i]);
@@ -67,11 +70,8 @@ void DualParabolaEyelidFinderTest::testMethod() {
         string segmentation_json = Files::Read(serialized_segmentations[i]);
         Segmentation segmentation;
         CPPUNIT_ASSERT(serial::Deserialize(segmentation_json, segmentation));
-        testDetectEyelids(eye_image_pathname, eye_image, segmentation.boundary_pair);
+        testDetectEyelids(eye_image_pathname, eye_image, segmentation);
     }
 }
 
-void DualParabolaEyelidFinderTest::testFailedMethod() {
-//    CPPUNIT_ASSERT(false);
-}
 

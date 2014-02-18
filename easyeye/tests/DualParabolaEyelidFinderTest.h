@@ -13,8 +13,7 @@
 class DualParabolaEyelidFinderTest : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(DualParabolaEyelidFinderTest);
 
-    CPPUNIT_TEST(testMethod);
-    CPPUNIT_TEST(testFailedMethod);
+    CPPUNIT_TEST(testDetectEyelidsAsDualParabolas);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -25,8 +24,7 @@ public:
     void tearDown();
 
 private:
-    void testMethod();
-    void testFailedMethod();
+    void testDetectEyelidsAsDualParabolas();
 };
 
 #endif	/* DUALPARABOLAEYELIDFINDERTEST_H */

@@ -34,7 +34,6 @@ using cv::Mat;
 CPPUNIT_TEST_SUITE_REGISTRATION(EncodingTest);
 
 static bool write_encodings = false;
-static int numSegmented = 0;
 
 static void testSerializeAndDeserialize(Encoding* encoding)
 {

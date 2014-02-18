@@ -26,7 +26,7 @@ static const char* output_dir = "/tmp/easyeye_tests_segmenter";
 
 BoundaryPair expected_boundary_pairs[10];
 
-static bool write_segmentation_serializations = false;
+static bool write_segmentation_serializations = true;
 
 void populateExpectedBoundaryPairs() 
 {

@@ -13,6 +13,7 @@
 #include "../common/easyeye_types.h"
 #include "../common/easyeye_config.h"
 #include "../common/easyeye_diagnostics.h"
+#include "easyeye_segment.h"
 
 namespace cvmore
 {
@@ -186,20 +187,28 @@ public:
 class DualParabolaEyelidFinder : public DiagnosticsCreator
 {
 public:
-    DualParabolaEyelidFinder(const EyelidFinderConfig& config);
-    virtual ~DualParabolaEyelidFinder();
-    virtual DualParabolaEyelidsLocation FindEyelids(const cv::Mat& eye_image, 
-            const BoundaryPair& boundary_pair);
     enum EyelidType { EYELID_UPPER, EYELID_LOWER };
+    DualParabolaEyelidFinder(const EyelidFinderConfig& config, EyelidType eyelid_type_);
+    virtual ~DualParabolaEyelidFinder();
+    virtual EyelidBoundary FindEyelid(const cv::Mat& eye_image, 
+            const Segmentation& segmentation);
+    const EyelidFinderConfig config();
 protected:
     static std::string ToString(EyelidType eyelid_type);
-    virtual cv::Mat MakeRegionMask(const cv::Mat& eye_image, 
-            const BoundaryPair& boundary_pair, EyelidType eyelid_type);
-    virtual EyelidBoundary DetectEyelidBoundary(const cv::Mat& eye_image, 
-            const cv::Mat& region_mask, EyelidType eyelid_type);
-    virtual EyelidBoundary MaskAndDetect(const cv::Mat& eye_image, const BoundaryPair& boundary_pair, 
-        EyelidType eyelid_type)    ;
+    virtual void MakeRegionMask(const cv::Mat& eye_image, 
+        const Segmentation& segmentation, 
+        cv::Mat& mask, 
+        cv::Rect& vertex_range);
+    virtual EyelidBoundary DetectBoundary(const cv::Mat& eye_image, 
+            const cv::Mat& region_mask, 
+            const cv::Rect& vertex_range);
     EyelidFinderConfig config_;
+private:
+    const EyelidType eyelid_type;
+    void DrawMaskDiagnostics(const cv::Mat& eye_image, const cv::Mat& mask, const cv::Rect& vertex_range);
+    void DrawCannyDiagnostic(const cv::Mat& eye_image, const cv::Mat& detected_edges, 
+            const cv::Mat& mask, const cv::Rect& vertex_range);
+    
 };
 
 }            
