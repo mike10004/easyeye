@@ -64,7 +64,23 @@ EyelidFinderConfig::EyelidFinderConfig()
         min_contour_count(70),
         method(METHOD_ELLIPSE_CONTOUR),
         upper_search_region_iris_height_proportion(0.5f),
-        lower_search_region_iris_height_proportion(0.2f)
+        lower_search_region_iris_height_proportion(0.2f),
+        upper_parabola_vertex_min_relative(0.2f, 0.0f),
+        upper_parabola_vertex_max_relative(0.8f, 0.9f),
+        lower_parabola_vertex_min_relative(0.2f, 0.1f),
+        lower_parabola_vertex_max_relative(0.8f, 1.0f),
+        upper_parabola_a_min(0.001f),
+        upper_parabola_a_max(0.02f),
+        upper_parabola_a_step(0.0025f),
+        lower_parabola_a_min(-0.02f),
+        lower_parabola_a_max(-0.001f),
+        lower_parabola_a_step(0.0025f), 
+        upper_parabola_theta_min(M_PI / -10.0),
+        upper_parabola_theta_max(M_PI / 10.0),
+        upper_parabola_theta_step(M_PI / 50.0),
+        lower_parabola_theta_min(M_PI / -10.0),
+        lower_parabola_theta_max(M_PI / 10.0),
+        lower_parabola_theta_step(M_PI / 50.0)
 {
 }
 

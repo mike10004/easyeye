@@ -67,9 +67,63 @@ public:
         METHOD_ELLIPSE_CONTOUR, METHOD_HOUGH_PARABOLA
     };
     Method method;
+    
+    /**
+     * Height of the upper eyelid search region, as a proportion of iris
+     * height. The top of the search region is the top of the iris.
+     */
     float upper_search_region_iris_height_proportion;
+    
+    /**
+     * Height of the lower eyelid search region, as a proportion of iris 
+     * height. The bottom of the search region is the bottom of the iris.
+     */
     float lower_search_region_iris_height_proportion;
+    
+    /**
+     * Factor that determines the width of the upper and lower eyelid search 
+     * regions. The search region width is the width of the iris plus a 
+     * lateral extension on either side. This value determines how far to 
+     * extend the search region on either side of the iris.
+     */
     float lateral_search_region_iris_width_proportion;
+    
+    /**
+     * Factor that determines the coordinates of the upper-left corner of the 
+     * search range for the upper parabola vertex.
+     */
+    cv::Point2f upper_parabola_vertex_min_relative;
+
+    /**
+     * Factor that determines the coordinates of the lower-right corner of the 
+     * search range for the upper parabola vertex.
+     */
+    cv::Point2f upper_parabola_vertex_max_relative;
+     
+    /**
+     * Factor that determines the coordinates of the upper-left corner of the 
+     * search range for the lower parabola vertex.
+     */
+    cv::Point2f lower_parabola_vertex_min_relative;
+
+    /**
+     * Factor that determines the coordinates of the lower-right corner of the 
+     * search range for the lower parabola vertex.
+     */
+    cv::Point2f lower_parabola_vertex_max_relative;
+    
+    float upper_parabola_a_min;
+    float upper_parabola_a_max;
+    float upper_parabola_a_step;
+    float lower_parabola_a_min;
+    float lower_parabola_a_max;
+    float lower_parabola_a_step;
+    double upper_parabola_theta_min;
+    double upper_parabola_theta_max;
+    double upper_parabola_theta_step;
+    double lower_parabola_theta_min;
+    double lower_parabola_theta_max;
+    double lower_parabola_theta_step;
 };
 
 class ExtremaNoiseFinderConfig : public Config
