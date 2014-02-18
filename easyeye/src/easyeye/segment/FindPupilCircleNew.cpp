@@ -39,7 +39,7 @@ static bool IsValidPupil(const IntCircle& pupil) {
  * the limit -- is used
  */
 IntCircle FindPupilCircleNew::doDetect(const cv::Mat& eye_image,
-        std::vector<cv::Point> contour_coordinates)
+        std::vector<cv::Point>& contour_coordinates)
 {	
     if (!Imaging::IsGray(eye_image)) {
         Logs::GetLogger().Log(mylog::WARN, "FindPupilCircleNew::doDetect image is not " 

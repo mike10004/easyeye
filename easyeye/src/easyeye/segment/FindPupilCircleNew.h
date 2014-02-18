@@ -49,7 +49,7 @@ public:
 	*               - \c 1 = classic still image
 	*               - \c 2 = video captured at a distance (distant-videos)
 	*/
-	IntCircle doDetect(const cv::Mat& img, std::vector<cv::Point> contour_coordinates);	
+	IntCircle doDetect(const cv::Mat& img, std::vector<cv::Point>& contour_coordinates);	
 	const static int DEST_VAL_LEN = 6;
 private:
     PupilFinderConfig config_;
