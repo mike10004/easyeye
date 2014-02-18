@@ -91,11 +91,33 @@ public:
     /**
      * 
      * @param base_image CV_8UC1 image
-     * @param mask_overlay CV_8UC1 image
-     * @param masked_color with RGBA scalar
+     * @param mask_overlay CV_8UC1 image where pixel value of zero represents 
+     * masked area and nonzero represents unchanged area
+     * @param masked_color with BGRA scalar color 
      * @return 
      */
     static cv::Mat Compose(const cv::Mat& base_image, const cv::Mat& mask_overlay, MaskColoring masked_color);
+    
+    /**
+     * 
+     * @param base_image_to_draw_on CV_8UC3
+     * @param mask_overlay CV_8UC1
+     * @param masked_color
+     */
+    static void ComposeOn(cv::Mat& base_image_to_draw_on, const cv::Mat& mask_overlay, MaskColoring masked_color);
+    
+    /**
+     * Computes the values of a vector representing a pixel whose original
+     * (base) color may blended with a mask coloring, depending on the overlay
+     * color that indicates whether it is masked.
+     * @param base_color the original 8-bit gray pixel color
+     * @param overlay_value 
+     * @param coloring
+     * @return 
+     */
+    static cv::Vec3b ToResultColor(uchar base_color, uchar overlay_value, const MaskColoring& coloring);
+    static cv::Vec3b ToResultColor(cv::Vec3b base_color, uchar overlay_value, const MaskColoring& coloring);
+    
 private:
     DiagnosticArt();
 };

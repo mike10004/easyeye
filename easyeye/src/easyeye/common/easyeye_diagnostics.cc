@@ -278,36 +278,73 @@ DiagnosticsCreator::~DiagnosticsCreator()
     
 }
 
-namespace 
+Vec3b DiagnosticArt::ToResultColor(Vec3b base_color, uchar overlay_value, 
+        const DiagnosticArt::MaskColoring& coloring)
 {
-    Vec3b ToResultColor(uchar base_color, uchar overlay_value, const DiagnosticArt::MaskColoring& coloring)
-    {
-        if (overlay_value != 0) {
-            Vec3b same_color(base_color, base_color, base_color);
-            return same_color;
+    if (overlay_value != 0) {
+        return base_color;
+    }
+    double alpha = ((double) coloring.color[3]) / 255.0;
+    double complement = 1.0 - alpha;
+    Vec3b result_color;
+    for (int i = 0; i < 3; i++) {
+        result_color[i] = Pixels::Clamp(alpha * coloring.color[i] + complement * base_color[i]);
+    }
+    return result_color;
+    
+}
+
+Vec3b DiagnosticArt::ToResultColor(uchar base_color, uchar overlay_value, 
+        const DiagnosticArt::MaskColoring& coloring)
+{
+    if (overlay_value != 0) {
+        Vec3b same_color(base_color, base_color, base_color);
+        return same_color;
+    }
+    double alpha = ((double) coloring.color[3]) / 255.0;
+    double complement = 1.0 - alpha;
+    Vec3b result_color;
+    for (int i = 0; i < 3; i++) {
+        result_color[i] = Pixels::Clamp(alpha * coloring.color[i] + complement * base_color);
+    }
+    return result_color;
+}
+
+void DiagnosticArt::ComposeOn(Mat& base_image, const Mat& mask_overlay, MaskColoring mask_color)
+{
+    for (int y = 0; y < base_image.rows; y++) {
+        Mat base_row = base_image.row(y);
+        Mat overlay_row = mask_overlay.row(y);
+        for (int x = 0; x < base_image.cols; x++) {
+            uchar overlay_color = overlay_row.at<uchar>(x);
+            Vec3b base_color = base_row.at<Vec3b>(x);
+            base_row.at<Vec3b>(x) = ToResultColor(base_color, overlay_color, mask_color);
         }
-        double alpha = ((double) coloring.color[3]) / 255.0;
-        double complement = 1.0 - alpha;
-        Vec3b result_color;
-        for (int i = 0; i < 3; i++) {
-            result_color[i] = Pixels::Clamp(alpha * coloring.color[i] + complement * base_color);
-        }
-        return result_color;
     }
 }
 
 Mat DiagnosticArt::Compose(const Mat& base_image, const Mat& mask_overlay, DiagnosticArt::MaskColoring mask_color)
 {
     Mat result_image;
-    cv::cvtColor(base_image, result_image, CV_GRAY2RGB);
+    bool gray = base_image.elemSize() == 1; // uchar
+    if (gray) {
+        cv::cvtColor(base_image, result_image, CV_GRAY2BGR);
+    } else {
+        base_image.copyTo(result_image);
+    }
     for (int y = 0; y < base_image.rows; y++) {
         Mat base_row = base_image.row(y);
         Mat result_row = result_image.row(y);
         Mat overlay_row = mask_overlay.row(y);
         for (int x = 0; x < base_image.cols; x++) {
-            uchar base_color = base_row.at<uchar>(x);
             uchar overlay_color = overlay_row.at<uchar>(x);
-            result_row.at<Vec3b>(x) = ToResultColor(base_color, overlay_color, mask_color);
+            if (gray) {
+                uchar base_color = base_row.at<uchar>(x);
+                result_row.at<Vec3b>(x) = ToResultColor(base_color, overlay_color, mask_color);
+            } else {
+                Vec3b base_color = base_row.at<Vec3b>(x);
+                result_row.at<Vec3b>(x) = ToResultColor(base_color, overlay_color, mask_color);
+            }
         }
     }
     return result_image;
