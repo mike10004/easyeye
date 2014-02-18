@@ -202,23 +202,79 @@ bool serial::GrayImageAdapter::FromJson(const Json::Value& src, void* dst)
 bool serial::SparseMatAdapter::FromJson(const Json::Value& src, void* dst)
 {
     SparseMat& dest_sm = *((SparseMat*)dst);
-    Mat dest_m;
-    GrayImageAdapter gia;
-    if (!gia.FromJson(src, (void*)&dest_m)) {
-        return false;
+    if (serialize_as_gray_image_) {
+        Mat dest_m;
+        GrayImageAdapter gia;
+        if (!gia.FromJson(src, (void*)&dest_m)) {
+            return false;
+        }
+        SparseMat tmp(dest_m);
+        tmp.copyTo(dest_sm);
+        return true;
+    } else {
+        Json::Value invalid(0);
+        int idx[2];
+        
+        int num_dimensions = 2;
+        int sizes[2];
+        sizes[0] = src["rows"].asInt();
+        sizes[1] = src["cols"].asInt();
+        dest_sm.create(num_dimensions, sizes, CV_8UC1);
+        Json::Value cells = src["cells"];
+        Json::ArrayIndex num_cells = cells.size();
+        for (Json::ArrayIndex i = 0; i < num_cells; i++) {
+            Json::Value cell = cells.get(i, invalid);
+            if (cell.isObject()) {
+                idx[0] = cell["r"].asInt();
+                idx[1] = cell["c"].asInt();
+                dest_sm.ref<uchar>(idx) = (uchar) cell["v"].asInt();
+            } else {
+                return false;
+            }
+        }
+        return src.isMember("cells") && src.isMember("rows") && src.isMember("cols");
     }
-    SparseMat tmp(dest_m);
-    tmp.copyTo(dest_sm);
-    return true;
 }
 
 void serial::SparseMatAdapter::ToJson(void* src, Json::Value& dst)
 {
     SparseMat& sm = *((SparseMat*)src);
-    Mat m;
-    sm.convertTo(m, CV_8UC1);
-    GrayImageAdapter gia;
-    gia.ToJson((void*)&m, dst);
+    if (serialize_as_gray_image_) {
+        Mat m;
+        sm.convertTo(m, CV_8UC1);
+        GrayImageAdapter gia;
+        gia.ToJson((void*)&m, dst);
+    } else {
+        Json::Value cells;
+        for(SparseMatConstIterator_<uchar> it = sm.begin<uchar>(); it != sm.end<uchar>(); ++it) {
+            const SparseMat::Node* n = it.node();
+            int row = n->idx[0], col = n->idx[1];        
+            uchar value = it.value<uchar>();
+            Json::Value cell;
+            cell["r"] = row;
+            cell["c"] = col;
+            cell["v"] = value;
+            cells.append(cell);
+        }
+        dst["cells"] = cells;
+        const int* matrix_size = sm.size();
+        dst["rows"] = matrix_size[0];
+        dst["cols"] = matrix_size[1];
+    }
+}
+
+serial::SparseMatAdapter::SparseMatAdapter() : serialize_as_gray_image_(false)
+{
+}
+
+bool serial::SparseMatAdapter::serialize_as_gray_image() const
+{
+    return serialize_as_gray_image_;
+}
+
+void serial::SparseMatAdapter::set_serialize_as_gray_image(bool serialize_as_gray_image)
+{
+    serialize_as_gray_image_ = serialize_as_gray_image;
 }
 
 Mat Imaging::CopyFromFilter(Masek::filter* filter)

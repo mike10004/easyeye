@@ -92,7 +92,25 @@ namespace easyeye
         static float mySD(const cv::Mat& image, double n, float mean);
         static EyeImageROI GetEyeImageROI(const cv::Mat& eye_img, cv::Point2i center,
         		int cr, int xLimit, int yLimit);
+//        static size_t CountPixelsOfValue(const cv::Mat& image, uchar value);
+//        static size_t CountPixelsOfValue(const cv::Mat& image, cv::Vec3b value);
+        template <typename T>
+        static size_t CountPixelsOfValue(const cv::Mat& image, T value)
+        {
+            size_t count = 0;
+            for (int y = 0; y < image.rows; y++) {
+                cv::Mat row = image.row(y);
+                for (int x = 0; x < image.cols; x++) {
+                    if (row.at<T>(x) == value) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
     };
+    
 
     namespace serial 
     {
@@ -106,8 +124,13 @@ namespace easyeye
         class SparseMatAdapter : public Adapter
         {
         public:
+            SparseMatAdapter();
             bool FromJson(const Json::Value& src, void* dst);
             void ToJson(void* src, Json::Value& dst);
+            void set_serialize_as_gray_image(bool serialize_as_gray_image);
+            bool serialize_as_gray_image() const;
+        private:
+            bool serialize_as_gray_image_;
         };
     }
 }
