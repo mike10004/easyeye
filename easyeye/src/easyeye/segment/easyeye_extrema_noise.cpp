@@ -18,17 +18,22 @@ bool ExtremaNoiseFinder::IsExtreme(unsigned char value)
             || value > config_.highlight_threshold;
 }
 
-static const int TWO_DIMENSIONS = 2;
-
-SparseMat ExtremaNoiseFinder::FindExtremaNoise(Mat& eyeImg)
+namespace 
+{
+const int TWO_DIMENSIONS = 2;
+}
+SparseMat ExtremaNoiseFinder::FindExtremaNoise(const Mat& eyeImg)
 {
     int size[] = {eyeImg.rows, eyeImg.cols};
     SparseMat extrema_points(TWO_DIMENSIONS, size, CV_8UC1);
+    int idx[2];
     for (int y = 0; y < eyeImg.rows; y++) {
         Mat row = eyeImg.row(y);
+        idx[0] = y;
         for (int x = 0; x < eyeImg.cols; x++) {
-            if (IsExtreme(eyeImg.at<uchar>(y, x))) {
-                row.at<uchar>(x) = 255;
+            idx[1] = x;
+            if (IsExtreme(row.at<uchar>(x))) {
+                extrema_points.ref<uchar>(idx) = 0xff;
             }
         }
     }

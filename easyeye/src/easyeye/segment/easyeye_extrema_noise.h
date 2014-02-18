@@ -46,7 +46,7 @@ public:
 	* @return points probably containing eyelashes or reflections
 	*/
     
-  cv::SparseMat FindExtremaNoise(cv::Mat& eyeImg);
+  cv::SparseMat FindExtremaNoise(const cv::Mat& eyeImg);
   bool IsExtreme(unsigned char value);
 private:
     ExtremaNoiseFinderConfig config_;
