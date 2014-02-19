@@ -65,6 +65,7 @@ EyelidFinderConfig::EyelidFinderConfig()
         method(METHOD_ELLIPSE_CONTOUR),
         upper_search_region_iris_height_proportion(0.5f),
         lower_search_region_iris_height_proportion(0.2f),
+        lateral_search_region_iris_width_proportion(0.25f),
         upper_parabola_vertex_min_relative(0.2f, 0.0f),
         upper_parabola_vertex_max_relative(0.8f, 0.9f),
         lower_parabola_vertex_min_relative(0.2f, 0.1f),
