@@ -93,11 +93,29 @@ void DualParabolaEyelidFinder::DrawCannyDiagnostic(const Mat& eye_image, const M
     diagnostician()->WriteImage(mask_on_edges_on_eye, label);
 }
 
-void DualParabolaEyelidFinder::DrawBoundaryDiagnostic(const cv::Mat& eye_image, const VertexFormParabola& parabola)
+void DualParabolaEyelidFinder::DrawBoundaryDiagnostic(const cv::Mat& eye_image, const EyelidBoundary& boundary)
 {
     VertexFormParabolaShape parabola_shape;
     RotatedShape rotated_parabola_shape(parabola_shape, VertexFormParabolaShape::kMaxIndex + 1);
-    
+    cvmore::objdetect::ShapeArtist artist;
+    if (boundary.present) {
+        Scalar green(0x0, 0xff, 0x0, 0xff);
+        artist.set_color(green);
+    } else {
+        Scalar red(0x0, 0x0, 0xff, 0xff);
+        artist.set_color(red);
+    }
+    Mat eye_image_copy;
+    eye_image.copyTo(eye_image_copy);
+    vector<double> t_range = ParamRange::ScaledIncremental(0, 1, eye_image.cols, 1.0);
+    vector<double> params;
+    params.push_back(boundary.shape.a);
+    params.push_back(boundary.shape.h);
+    params.push_back(boundary.shape.k);
+    params.push_back(boundary.shape.theta);
+    artist.Draw(eye_image_copy, rotated_parabola_shape, t_range, params);
+    const char* label = eyelid_type == EYELID_UPPER ? "eyelidresultupper" : "eyelidresultlower";
+    diagnostician()->WriteImage(eye_image_copy, label);
 }
 
 EyelidBoundary DualParabolaEyelidFinder::FindEyelid(const cv::Mat& eye_image, const Segmentation& segmentation)
@@ -109,6 +127,7 @@ EyelidBoundary DualParabolaEyelidFinder::FindEyelid(const cv::Mat& eye_image, co
     DrawMaskDiagnostics(eye_image, mask, vertex_range);
     EyelidBoundary eyelid_boundary = DetectBoundary(eye_image, segmentation, 
             mask, vertex_range);
+    DrawBoundaryDiagnostic(eye_image, eyelid_boundary);
     return eyelid_boundary;
 }
 
@@ -118,7 +137,7 @@ Rect DualParabolaEyelidFinder::CreateSearchRegion(const cv::Mat& eye_image, cons
     int iris_height = iris.radius * 2;
     int iris_width = iris.radius * 2;
     Range iris_rows(iris.center.y - iris.radius, iris.center.y + iris.radius);
-    int lateral_extension = config_.lateral_search_region_iris_width_proportion * iris_width;
+    int lateral_extension = (int) config_.lateral_search_region_iris_width_proportion * iris_width;
     int lateral_min = std::max(0, iris.center.x - iris.radius - lateral_extension);
     int lateral_max = std::min(eye_image.cols, iris.center.x + iris.radius + lateral_extension);
     Range search_region_cols(lateral_min, lateral_max);

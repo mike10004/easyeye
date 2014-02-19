@@ -70,6 +70,7 @@ public:
     virtual void Draw(cv::Mat& image, ShapeInterface& shape, const std::vector<double>& t_range, const std::vector<double>& params) const;    
     void set_closed(bool closed);
     bool closed() const;
+    void set_color(cv::Scalar color);
 private:
     bool closed_;
     int thickness_;
@@ -236,7 +237,7 @@ private:
     void DrawMaskDiagnostics(const cv::Mat& eye_image, const cv::Mat& mask, const cv::Rect& vertex_range);
     void DrawCannyDiagnostic(const cv::Mat& eye_image, const cv::Mat& detected_edges, 
             const cv::Mat& mask, const cv::Rect& vertex_range);
-    void DrawBoundaryDiagnostic(const cv::Mat& eye_image, const VertexFormParabola& parabola);
+    void DrawBoundaryDiagnostic(const cv::Mat& eye_image, const EyelidBoundary& boundary);
 };
 
 }            

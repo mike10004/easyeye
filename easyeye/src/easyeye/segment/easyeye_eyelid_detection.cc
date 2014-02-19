@@ -302,6 +302,11 @@ ShapeArtist::ShapeArtist()
 {
 }
 
+void ShapeArtist::set_color(cv::Scalar color)
+{
+    color_ = color;
+}
+
 ShapeArtist::~ShapeArtist()
 {
 }
