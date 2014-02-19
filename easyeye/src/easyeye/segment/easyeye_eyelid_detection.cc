@@ -126,11 +126,10 @@ void HoughTransform::set_mask(const MaskInterface& mask)
 
 void HoughTransform::Compute(const cv::Mat& image, 
         const ShapeInterface& shape, 
-        const std::vector<double>& t_range, 
-        std::vector<std::vector<double> >& candidates)
+        const std::vector<double>& t_range, Results& results)
 {
     Accumulate(image, shape, t_range);
-    GatherCandidates(candidates);
+    GatherCandidates(results);
 }
 
 void HoughTransform::Accumulate(const cv::Mat& image, 
@@ -156,6 +155,8 @@ void HoughTransform::Accumulate(const cv::Mat& image,
     MaskInterface const* mask;
     if (mask_ == NULL) {
         mask = &default_mask;
+    } else {
+        mask = mask_;
     }
     size_t cardinality = Vectors::Cardinality(param_ranges_);
     if (debug_) {
@@ -195,21 +196,26 @@ void HoughTransform::Accumulate(const cv::Mat& image,
     delete param_indices;
 }
 
-void HoughTransform::GatherCandidates(std::vector<vector<double> >& candidates)
+void HoughTransform::GatherCandidates(Results& results)
 {
     Mat accumulator_copy = accumulator.clone();
     const int ndims = num_params;
-    while (candidates.size() < max_candidates()) {
+    while (results.candidates.size() < max_candidates()) {
         int* max_index = new int[ndims];
         double max_accumulated;
         cv::minMaxIdx(accumulator_copy, NULL, &max_accumulated, NULL, max_index);
+        vector<int> max_indices;
+        Vectors::CopyFrom(max_index, max_indices, ndims);
+        results.indices.push_back(max_indices);
         vector<double> best_param_values;
         for (int i = 0; i < ndims; i++) {
             best_param_values.push_back(param_ranges_[i][max_index[i]]);
         }
-        candidates.push_back(best_param_values);
+        results.candidates.push_back(best_param_values);
+        results.vote_totals.push_back(max_accumulated);
         if (debug_) {
-            cerr << "hough: max accumulation at index " << max_index[0] << ' ' << max_index[1] << ' ' << max_index[2] << " = " << max_accumulated << endl;
+            cerr << "hough: max accumulation at index " << max_index[0] 
+                    << ' ' << max_index[1] << ' ' << max_index[2] << " = " << max_accumulated << endl;
         }
         accumulator_copy.at<float>(max_index) = 0.f;
         delete max_index;
@@ -226,16 +232,15 @@ vector<double> HoughTransform::Compute(const cv::Mat& image,
         const ShapeInterface& shape, 
         const std::vector<double>& t_range)
 {
-   vector< vector<double> > candidates;
-   Compute(image, shape, t_range, candidates);
-   return candidates[0];
+    Results results;
+   Compute(image, shape, t_range, results);
+   return results.candidates[0];
 }
 
 void HoughTransform::Compute(const cv::Mat& image, 
-        const ShapeInterface& shape, 
-        std::vector<std::vector<double> >& candidates)
+        const ShapeInterface& shape, HoughTransform::Results& results)
 {
-    Compute(image, shape, ParamRange::MakeRangeFromImage(image), candidates);
+    Compute(image, shape, ParamRange::MakeRangeFromImage(image), results);
 }
 
 vector<double> ParamRange::MakeRangeFromImage(const cv::Mat& image)
@@ -247,16 +252,16 @@ vector<double> ParamRange::MakeRangeFromImage(const cv::Mat& image)
     return range;
 }
 
-StandardFormParabola::StandardFormParabola()
+StandardFormParabolaShape::StandardFormParabolaShape()
 {
     
 }
 
-StandardFormParabola::~StandardFormParabola()
+StandardFormParabolaShape::~StandardFormParabolaShape()
 {
     
 }
-bool StandardFormParabola::Calculate(double t, const std::vector<double>& params, cv::Point2d& output) const 
+bool StandardFormParabolaShape::Calculate(double t, const std::vector<double>& params, cv::Point2d& output) const 
 {
     double a = params[0], b = params[1], c = params[2];
     output.x = t;
@@ -290,6 +295,40 @@ ShapeInterface::ShapeInterface()
 
 ShapeInterface::~ShapeInterface() 
 {
+}
+
+ShapeArtist::ShapeArtist()
+    : closed_(false), thickness_(3), color_(cv::Scalar(0xff, 0xff, 0x0, 0xff))
+{
+}
+
+ShapeArtist::~ShapeArtist()
+{
+}
+
+static bool InBounds(const cv::Point2d& point, const cv::Mat& image)
+{
+    int x = cvRound(point.x);
+    int y = cvRound(point.y);
+    return (0 <= x) && (x < image.cols) && (0 <= y) && (y < image.rows);
+}
+
+void ShapeArtist::Draw(cv::Mat& image, ShapeInterface& shape, 
+        const std::vector<double>& t_range, const std::vector<double>& params) const
+{
+    cv::Point2d curr;
+    cv::Point2d prev;
+    bool prev_ok = false, curr_ok = false;
+    if (!t_range.empty()) {
+        prev_ok = shape.Calculate(t_range[0], params, prev);
+        for (size_t i = 1; i < t_range.size(); i++) {
+            double t = t_range[i];
+            curr_ok = shape.Calculate(t, params, curr);
+            if (prev_ok && curr_ok && InBounds(prev, image) && InBounds(curr, image)) {
+                cv::line(image, prev, curr, color_, thickness_);
+            }
+        }
+    }
 }
 
 const cv::Point2d ShapeInterface::kOrigin(0.0, 0.0);
@@ -328,15 +367,15 @@ bool RotatedShape::Calculate(double t, const std::vector<double>& params, cv::Po
     return in_range;
 }
 
-VertexFormParabola::VertexFormParabola() 
+VertexFormParabolaShape::VertexFormParabolaShape() 
 {
 }
 
-VertexFormParabola::~VertexFormParabola()
+VertexFormParabolaShape::~VertexFormParabolaShape()
 {
 }
 
-bool VertexFormParabola::Calculate(double t, const std::vector<double>& params, cv::Point2d& p) const
+bool VertexFormParabolaShape::Calculate(double t, const std::vector<double>& params, cv::Point2d& p) const
 {
     double a = params[kIndexA], h = params[kIndexH], k = params[kIndexK];
     p.x = t;
@@ -344,7 +383,7 @@ bool VertexFormParabola::Calculate(double t, const std::vector<double>& params, 
     return true;
 }
 
-cv::Point2d StandardFormParabola::ComputeFixedPoint(const std::vector<double>& params) const
+cv::Point2d StandardFormParabolaShape::ComputeFixedPoint(const std::vector<double>& params) const
 {
     cv::Point2d v;
     double b = params[kIndexB], a = params[kIndexA];
@@ -353,10 +392,17 @@ cv::Point2d StandardFormParabola::ComputeFixedPoint(const std::vector<double>& p
     return v;
 }
 
-cv::Point2d VertexFormParabola::ComputeFixedPoint(const std::vector<double>& params) const
+cv::Point2d VertexFormParabolaShape::ComputeFixedPoint(const std::vector<double>& params) const
 {
     cv::Point2d v(params[kIndexH], params[kIndexK]);
     return v;
 }
 
 const char* easyeye::DualParabolaEyelidsLocation::kType = "dual_parabola";
+
+size_t HoughTransform::Results::size() const
+{
+    assert(candidates.size() == vote_totals.size());
+    assert(candidates.size() == indices.size());
+    return candidates.size();
+}

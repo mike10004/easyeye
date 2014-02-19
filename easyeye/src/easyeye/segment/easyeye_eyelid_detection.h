@@ -62,6 +62,20 @@ public:
     static const cv::Point2d kOrigin;
 };
 
+class ShapeArtist
+{
+public:
+    ShapeArtist();
+    virtual ~ShapeArtist();
+    virtual void Draw(cv::Mat& image, ShapeInterface& shape, const std::vector<double>& t_range, const std::vector<double>& params) const;    
+    void set_closed(bool closed);
+    bool closed() const;
+private:
+    bool closed_;
+    int thickness_;
+    cv::Scalar color_;
+};
+
 class HoughTransform
 {
 public:
@@ -79,6 +93,14 @@ public:
     void set_mask(const MaskInterface& mask);
     const MaskInterface& mask() const; 
     void AddParamRange(const std::vector<double>& param_range);
+    class Results
+    {
+    public:
+        std::vector< std::vector<double> > candidates;
+        std::vector< std::vector<int> > indices;
+        std::vector<float> vote_totals;
+        size_t size() const;
+    };
 protected:
     bool debug_;
 private:
@@ -94,35 +116,35 @@ private:
     bool AdvanceParameterIndices(int* param_indices);
     void SetParameterValues(int* param_indices, std::vector<double>& param_values);
     void Accumulate(const cv::Mat& image, const ShapeInterface& shape, const std::vector<double>& t_range);
-    void GatherCandidates(std::vector< std::vector<double> >& candidates);
+    void GatherCandidates(Results& results);
 public:
     void Compute(const cv::Mat& image, const ShapeInterface& shape, 
             const std::vector<double>& t_range, 
-            std::vector< std::vector<double> >& candidates);
+            Results& results);
     std::vector<double> Compute(const cv::Mat& image, 
             const ShapeInterface& shape, 
             const std::vector<double>& t_range);
     void Compute(const cv::Mat& image, const ShapeInterface& shape,  
-            std::vector< std::vector<double> >& candidates);
+            Results& results);
     std::vector<double> Compute(const cv::Mat& image, const ShapeInterface& shape);
 };
 
-class VertexFormParabola : public ShapeInterface
+class VertexFormParabolaShape : public ShapeInterface
 {
 public:
-    VertexFormParabola();
-    virtual ~VertexFormParabola();
+    VertexFormParabolaShape();
+    virtual ~VertexFormParabolaShape();
     virtual bool Calculate(double t, const std::vector<double>& params, cv::Point2d& output) const;
     virtual cv::Point2d ComputeFixedPoint(const std::vector<double>& params) const;
     static const int kIndexA = 0, kIndexH = 1, kIndexK = 2;
     static const int kMaxIndex = kIndexK;
 };
 
-class StandardFormParabola : public ShapeInterface
+class StandardFormParabolaShape : public ShapeInterface
 {
 public:
-    StandardFormParabola();
-    virtual ~StandardFormParabola();
+    StandardFormParabolaShape();
+    virtual ~StandardFormParabolaShape();
     virtual bool Calculate(double t, const std::vector<double>& params, cv::Point2d& output) const;
     virtual cv::Point2d ComputeFixedPoint(const std::vector<double>& params) const;
     static const int kIndexA = 0, kIndexB = 1, kIndexC = 2;
@@ -152,12 +174,14 @@ class VertexFormParabola
 public:
     VertexFormParabola();
     VertexFormParabola(double a_, double h_, double k_);
+    VertexFormParabola(double a_, double h_, double k_, double theta_);
     double a;
     double h;
     double k;
+    double theta;
     std::string ToString() const;
     void Describe(std::ostream& out) const;
-    void set(double a_, double h_, double k_);
+    void set(double a_, double h_, double k_, double theta_);
 };
 
 class EyelidBoundary
@@ -166,6 +190,8 @@ public:
     EyelidBoundary();
     VertexFormParabola shape;
     bool present;
+    std::string ToString() const;
+    void Describe(std::ostream& out) const;
 };
 
 class DualParabolaEyelidsLocation : public EyelidsLocation
@@ -195,11 +221,13 @@ public:
     const EyelidFinderConfig config();
 protected:
     static std::string ToString(EyelidType eyelid_type);
+    cv::Rect CreateSearchRegion(const cv::Mat& eye_image, const Segmentation& segmentation);
     virtual void MakeRegionMask(const cv::Mat& eye_image, 
         const Segmentation& segmentation, 
         cv::Mat& mask, 
         cv::Rect& vertex_range);
     virtual EyelidBoundary DetectBoundary(const cv::Mat& eye_image, 
+            const Segmentation& segmentation,
             const cv::Mat& region_mask, 
             const cv::Rect& vertex_range);
     EyelidFinderConfig config_;
@@ -208,7 +236,7 @@ private:
     void DrawMaskDiagnostics(const cv::Mat& eye_image, const cv::Mat& mask, const cv::Rect& vertex_range);
     void DrawCannyDiagnostic(const cv::Mat& eye_image, const cv::Mat& detected_edges, 
             const cv::Mat& mask, const cv::Rect& vertex_range);
-    
+    void DrawBoundaryDiagnostic(const cv::Mat& eye_image, const VertexFormParabola& parabola);
 };
 
 }            

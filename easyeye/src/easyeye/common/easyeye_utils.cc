@@ -144,14 +144,69 @@ bool IOUtils::pathname_stat_has_mode(const string& path, const int queryMode, in
 #   endif
   }
 
-string Vectors::ToString(const vector<unsigned char>& bytes, size_t preview_len)
+string Vectors::ToString(const vector<unsigned char>& bytes)
 {
-    std::ostringstream ss;
-    ss.width(2);
-    for (size_t i = 0; i < preview_len && i < bytes.size() ;i++) {
-        ss << (int) (bytes[i]) << ' ';
-    }
+    return ToString(bytes, bytes.size());
+}
+  
+string Vectors::ToString(const vector<double>& values)
+{
+    return ToString(values, values.size());
+}
+  
+string Vectors::ToString(const vector<unsigned char>& bytes, size_t limit)
+{
+    ostringstream ss;
+    Print(bytes, ss, limit);
     return ss.str();
+}
+
+string Vectors::ToString(const vector<double>& values, size_t limit)
+{
+    ostringstream ss;
+    Print(values, ss, limit);
+    return ss.str();
+}
+
+void Vectors::Print(const std::vector<unsigned char>& bytes, std::ostream& out)
+{
+    Print(bytes, out, bytes.size());
+}
+
+void Vectors::Print(const std::vector<unsigned char>& bytes, std::ostream& out, size_t limit)
+{
+    out << '[';
+    if (!bytes.empty()) {
+        out.width(2);
+        out << (int) (bytes[0]);
+        for (size_t i = 1; i < limit && i < bytes.size() ;i++) {
+            out << ", " << (int) (bytes[i]);
+        }
+        if (limit < bytes.size()) {
+            out << ", ...";
+        }
+    }
+    out << ']';
+}
+
+void Vectors::Print(const std::vector<double>& values, std::ostream& out)
+{
+    Print(values, out, values.size());
+}
+
+void Vectors::Print(const std::vector<double>& values, std::ostream& out, size_t limit)
+{
+    out << '[';
+    if (!values.empty()) {
+        out << values[0];
+        for (size_t i = 1; i < limit && i < values.size() ;i++) {
+            out << ", " << values[i];
+        }
+        if (limit < values.size()) {
+            out << ", ...";
+        }
+    }
+    out << ']';
 }
 
 string Arrays::ToString(int const* array, size_t array_len, size_t preview_len)
@@ -190,20 +245,7 @@ string Arrays::ToString(unsigned char const* array, size_t array_len, size_t pre
     return ss.str();
 }
 
-void Vectors::Print(const std::vector<double>& v, std::ostream& out)
-{
-    out << '[';
-    if (!v.empty()) {
-        out << v[0];
-        for (size_t i = 1; i < v.size(); i++) {
-            out << ", " << v[i];
-        }
-    }
-    out << ']';
-}
-
-template<typename T>
-void Vectors::CopyFrom(T* array, std::vector<T>& dst, size_t limit) 
+void Vectors::CopyFrom(int* array, std::vector<int>& dst, size_t limit) 
 {
     for (size_t i = 0; i < limit; i++) {
         dst.push_back(array[i]);

@@ -56,6 +56,16 @@ public:
     double sigma_x;
 };
 
+class RangeParams
+{
+public:
+    RangeParams();
+    RangeParams(double minimum_, double maximum_, double step);
+    double minimum;
+    double maximum;
+    double step;
+};
+
 class EyelidFinderConfig : public Config
 {
 public:
@@ -112,18 +122,17 @@ public:
      */
     cv::Point2f lower_parabola_vertex_max_relative;
     
-    float upper_parabola_a_min;
-    float upper_parabola_a_max;
-    float upper_parabola_a_step;
-    float lower_parabola_a_min;
-    float lower_parabola_a_max;
-    float lower_parabola_a_step;
-    double upper_parabola_theta_min;
-    double upper_parabola_theta_max;
-    double upper_parabola_theta_step;
-    double lower_parabola_theta_min;
-    double lower_parabola_theta_max;
-    double lower_parabola_theta_step;
+    RangeParams upper_parabola_a_range;
+    RangeParams lower_parabola_a_range;
+    RangeParams upper_parabola_h_range;
+    RangeParams lower_parabola_h_range;
+    RangeParams upper_parabola_k_range;
+    RangeParams lower_parabola_k_range;
+    RangeParams upper_parabola_theta_range;
+    RangeParams lower_parabola_theta_range;
+    int eyelid_hough_dilation_kernel_size;
+    float upper_eyelid_hough_vote_total_min;
+    float lower_eyelid_hough_vote_total_min;
 };
 
 class ExtremaNoiseFinderConfig : public Config

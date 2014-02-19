@@ -152,7 +152,7 @@ void HoughParabolaTest::testComputeTransformStandardForm() {
     double a = -0.05, b = 5.5, c = -75;    
     vector<double> params(3, 0.0);
     params[0] = a; params[1] = b; params[2] = c;
-    StandardFormParabola parabola;
+    StandardFormParabolaShape parabola;
     Mat image = CreateInputImage(parabola, params, "input-standardform.png");
     vector<double> a_range = ParamRange::ScaledIncremental(-10, 1, 20, 0.01);
     vector<double> b_range = ParamRange::ScaledIncremental(500, 10, 10, 0.01);
@@ -175,7 +175,7 @@ void HoughParabolaTest::testComputeTransformVertexForm() {
     double a = -0.05, h = 50, k = 25;    
     vector<double> params(3, 0.0);
     params[0] = a; params[1] = h; params[2] = k;
-    VertexFormParabola parabola;
+    VertexFormParabolaShape parabola;
     Mat image = CreateInputImage(parabola, params, "input-vertexform.png");
     vector<double> a_range = ParamRange::ScaledIncremental(-10, 1, 20, 0.01);
     vector<double> h_range = ParamRange::ScaledIncremental(0, 1, 100, 1.0);
@@ -201,8 +201,8 @@ void HoughParabolaTest::testComputeTransformVertexFormRotated()
     double theta = M_PI / 3;
     vector<double> params(4, 0.0);
     params[0] = a; params[1] = h; params[2] = k; params[3] = theta;
-    VertexFormParabola parabola;
-    RotatedShape rotated_parabola(parabola, VertexFormParabola::kMaxIndex + 1);
+    VertexFormParabolaShape parabola;
+    RotatedShape rotated_parabola(parabola, VertexFormParabolaShape::kMaxIndex + 1);
     Mat image = CreateInputImage(rotated_parabola, params, "input-rotated.png");
     vector<double> a_range = ParamRange::ScaledIncremental(-10, 1, 20, 0.01);
     vector<double> h_range = ParamRange::ScaledIncremental(0, 2, 50, 1.0);

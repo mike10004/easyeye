@@ -123,12 +123,18 @@ private:
 class Vectors
 {
 public:
+    static void Print(const std::vector<unsigned char>& v, std::ostream& out, size_t limit);
+    static void Print(const std::vector<unsigned char>& v, std::ostream& out);
+    static void Print(const std::vector<double>& v, std::ostream& out, size_t limit);
     static void Print(const std::vector<double>& v, std::ostream& out);
-    static std::string ToString(const std::vector<unsigned char>& bytes, size_t preview_len);
+    static std::string ToString(const std::vector<unsigned char>& bytes, size_t limit);
+    static std::string ToString(const std::vector<unsigned char>& bytes);
+    static std::string ToString(const std::vector<double>& values, size_t limit);
+    static std::string ToString(const std::vector<double>& values);
     static void CopyTo(const std::vector<unsigned char>& bytev, unsigned char* array, size_t limit);
     static void AddAll(char** src_array, const size_t array_len, std::vector<std::string>& dst);
     static void CopyTo(const std::vector<float>& src, float* array, size_t limit);
-    template <typename T> static void CopyFrom(T* src, std::vector<T>& dst, size_t limit);
+    static void CopyFrom(int* src, std::vector<int>& dst, size_t limit);
     static size_t Cardinality(std::vector< std::vector<double> >& vectors);
 private:
     Vectors();
