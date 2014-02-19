@@ -253,8 +253,9 @@ EyelidBoundary DualParabolaEyelidFinder::DetectBoundary(const cv::Mat& eye_image
             eyelid_params[VertexFormParabolaShape::kIndexH], 
             eyelid_params[VertexFormParabolaShape::kIndexK], 
             eyelid_params[VertexFormParabolaShape::kMaxIndex + 1]);
-    Logs::GetLogger().Log(mylog::DEBUG, "DualParabolaEyelidFinder::DetectBoundary result = %s with vote total %f\n", 
-            eyelid_boundary.ToString().c_str(), results.vote_totals[0]);
+    Logs::GetLogger().Log(mylog::DEBUG, "DualParabolaEyelidFinder::DetectBoundary " 
+            "result = %s at indices %s with vote total %f\n", 
+            eyelid_boundary.ToString().c_str(), Vectors::ToString(results.indices[0]).c_str(), results.vote_totals[0]);
     return eyelid_boundary;
 }
 

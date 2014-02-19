@@ -149,22 +149,10 @@ string Vectors::ToString(const vector<unsigned char>& bytes)
     return ToString(bytes, bytes.size());
 }
   
-string Vectors::ToString(const vector<double>& values)
-{
-    return ToString(values, values.size());
-}
-  
 string Vectors::ToString(const vector<unsigned char>& bytes, size_t limit)
 {
     ostringstream ss;
     Print(bytes, ss, limit);
-    return ss.str();
-}
-
-string Vectors::ToString(const vector<double>& values, size_t limit)
-{
-    ostringstream ss;
-    Print(values, ss, limit);
     return ss.str();
 }
 
@@ -189,12 +177,56 @@ void Vectors::Print(const std::vector<unsigned char>& bytes, std::ostream& out, 
     out << ']';
 }
 
+string Vectors::ToString(const vector<double>& values)
+{
+    return ToString(values, values.size());
+}
+  
+string Vectors::ToString(const vector<double>& values, size_t limit)
+{
+    ostringstream ss;
+    Print(values, ss, limit);
+    return ss.str();
+}
+
 void Vectors::Print(const std::vector<double>& values, std::ostream& out)
 {
     Print(values, out, values.size());
 }
 
 void Vectors::Print(const std::vector<double>& values, std::ostream& out, size_t limit)
+{
+    out << '[';
+    if (!values.empty()) {
+        out << values[0];
+        for (size_t i = 1; i < limit && i < values.size() ;i++) {
+            out << ", " << values[i];
+        }
+        if (limit < values.size()) {
+            out << ", ...";
+        }
+    }
+    out << ']';
+}
+
+string Vectors::ToString(const vector<int>& values)
+{
+    return ToString(values, values.size());
+}
+  
+string Vectors::ToString(const vector<int>& values, size_t limit)
+{
+    ostringstream ss;
+    Print(values, ss, limit);
+    return ss.str();
+}
+
+void Vectors::Print(const std::vector<int>& values, std::ostream& out)
+{
+    Print(values, out, values.size());
+}
+
+void Vectors::Print(const std::vector<int>& values, std::ostream& out, size_t limit)
 {
     out << '[';
     if (!values.empty()) {
